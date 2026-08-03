@@ -1,0 +1,1611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/DominumNetwork/Dominum@main/src/assets/images/transparent-dominum.png">
+    <title>Lithium.SH</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        /* ── Reset & Base ── */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #0b0a16;
+            --bg2: #12101f;
+            --accent: #7a5cff;
+            --accent2: #5a3fd9;
+            --blue: #00bfff;
+            --text: #e6e6ff;
+            --text2: #a8a8d0;
+            --surface: rgba(255, 255, 255, 0.05);
+            --surface2: rgba(255, 255, 255, 0.08);
+            --border: rgba(255, 255, 255, 0.08);
+            --radius: 16px;
+            --shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            --transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --font: 'Inter', sans-serif;
+            --font-display: 'Orbitron', sans-serif;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font);
+            min-height: 100vh;
+            padding: 1.5rem;
+            transition: background var(--transition), color var(--transition);
+            overflow-x: hidden;
+        }
+
+        /* ── Scrollbar ── */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg2);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 10px;
+        }
+
+        /* ── Header ── */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.8rem 1.8rem;
+            background: var(--surface);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin-bottom: 1.8rem;
+            transition: background var(--transition), border var(--transition);
+            box-shadow: var(--shadow);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--accent);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: #fff;
+            transition: background var(--transition);
+            box-shadow: 0 0 30px rgba(122, 92, 255, 0.25);
+        }
+
+        .brand-text {
+            font-family: var(--font-display);
+            font-weight: 900;
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, var(--accent), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            transition: background var(--transition);
+        }
+
+        .brand-text span {
+            -webkit-text-fill-color: var(--text);
+            opacity: 0.4;
+            font-weight: 500;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-btn {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text);
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all var(--transition);
+            position: relative;
+        }
+
+        .header-btn:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(122, 92, 255, 0.35);
+        }
+
+        .header-btn .badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            width: 16px;
+            height: 16px;
+            background: var(--accent);
+            border-radius: 50%;
+            font-size: 0.55rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+        }
+
+        /* ── Controls ── */
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 2rem;
+            padding: 0.2rem 0;
+        }
+
+        .controls .search-wrap {
+            flex: 1 1 280px;
+            position: relative;
+        }
+
+        .controls .search-wrap i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text2);
+            opacity: 0.5;
+            font-size: 0.9rem;
+            pointer-events: none;
+        }
+
+        .controls input,
+        .controls select {
+            padding: 12px 18px;
+            padding-left: 44px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--surface);
+            color: var(--text);
+            font-family: var(--font);
+            font-size: 0.95rem;
+            transition: all var(--transition);
+            width: 100%;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .controls input:focus,
+        .controls select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(122, 92, 255, 0.15);
+            background: var(--bg2);
+        }
+
+        .controls input::placeholder {
+            color: var(--text2);
+            opacity: 0.5;
+        }
+
+        .controls select {
+            padding-left: 18px;
+            appearance: none;
+            cursor: pointer;
+            flex: 0 1 180px;
+            background-image: linear-gradient(45deg, transparent 50%, var(--text2) 50%),
+                linear-gradient(135deg, var(--text2) 50%, transparent 50%);
+            background-position: calc(100% - 16px) center, calc(100% - 10px) center;
+            background-size: 6px 6px, 6px 6px;
+            background-repeat: no-repeat;
+            padding-right: 40px;
+        }
+
+        .controls select option {
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .controls .category-wrap {
+            flex: 0 1 180px;
+            display: none;
+        }
+        .controls .category-wrap.visible {
+            display: block;
+        }
+        .controls .category-wrap select {
+            padding-left: 18px;
+        }
+
+        /* ── Grid ── */
+        #container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+            gap: 1.4rem;
+        }
+
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.92) translateY(24px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .game-card {
+            background: var(--surface);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            cursor: pointer;
+            overflow: hidden;
+            opacity: 0;
+            animation: popIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .game-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 16px 40px rgba(122, 92, 255, 0.18);
+            border-color: var(--accent);
+            z-index: 2;
+        }
+
+        .game-card .img-wrap {
+            width: 100%;
+            aspect-ratio: 1;
+            overflow: hidden;
+            background: var(--bg2);
+            position: relative;
+        }
+
+        .game-card .img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .game-card:hover .img-wrap img {
+            transform: scale(1.1);
+        }
+
+        .game-card .img-wrap .play-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity var(--transition);
+        }
+
+        .game-card:hover .img-wrap .play-overlay {
+            opacity: 1;
+        }
+
+        .game-card .img-wrap .play-overlay i {
+            font-size: 2.8rem;
+            color: #fff;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            transform: scale(0.8);
+            transition: transform var(--transition);
+        }
+
+        .game-card:hover .img-wrap .play-overlay i {
+            transform: scale(1);
+        }
+
+        .game-card .game-name {
+            padding: 0.9rem 0.8rem;
+            font-family: var(--font);
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-align: center;
+            color: var(--text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            letter-spacing: 0.3px;
+            border-top: 1px solid var(--border);
+            transition: color var(--transition);
+            background: var(--surface);
+        }
+
+        .game-card:hover .game-name {
+            color: var(--accent);
+        }
+
+        .game-card .game-provider {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.55rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text2);
+            border: 1px solid var(--border);
+            pointer-events: none;
+        }
+
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text2);
+        }
+        .empty-state i {
+            font-size: 3rem;
+            opacity: 0.3;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        .empty-state p {
+            font-size: 1.1rem;
+            opacity: 0.7;
+        }
+
+        /* ── Modal ── */
+        #modalOverlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.88);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            padding: 1.5rem;
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        #gameModal {
+            width: 100%;
+            max-width: 1200px;
+            height: 88vh;
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
+            transform: scale(0.95);
+            animation: modalPop 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        @keyframes modalPop {
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.8rem;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        .modal-header .modal-title {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: var(--text);
+        }
+
+        .modal-header .modal-actions {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .modal-header .modal-actions button {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text);
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all var(--transition);
+        }
+
+        .modal-header .modal-actions button:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(122, 92, 255, 0.3);
+        }
+
+        #zoneFullscreenFrame {
+            flex: 1;
+            width: 100%;
+            border: none;
+            background: #000;
+        }
+
+        /* ── Settings Modal ── */
+        #settingsOverlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+            padding: 1.5rem;
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        #settingsModal {
+            width: 100%;
+            max-width: 640px;
+            max-height: 90vh;
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem 2.2rem;
+            overflow-y: auto;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
+            transform: scale(0.95);
+            animation: modalPop 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        #settingsModal h2 {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 1.4rem;
+            margin-bottom: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text);
+        }
+
+        #settingsModal h2 i {
+            color: var(--accent);
+        }
+
+        .settings-group {
+            margin-bottom: 2rem;
+        }
+
+        .settings-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--text2);
+            margin-bottom: 0.6rem;
+        }
+
+        .settings-group .setting-desc {
+            font-size: 0.8rem;
+            color: var(--text2);
+            opacity: 0.6;
+            margin-top: 0.3rem;
+        }
+
+        .settings-group select,
+        .settings-group input[type="text"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--surface);
+            color: var(--text);
+            font-family: var(--font);
+            font-size: 0.95rem;
+            transition: all var(--transition);
+            appearance: none;
+            cursor: pointer;
+        }
+
+        .settings-group select:focus,
+        .settings-group input[type="text"]:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(122, 92, 255, 0.15);
+            background: var(--bg);
+        }
+
+        .settings-group select option {
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .settings-group .select-wrap {
+            position: relative;
+        }
+        .settings-group .select-wrap::after {
+            content: '\f078';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text2);
+            opacity: 0.5;
+            pointer-events: none;
+            font-size: 0.7rem;
+        }
+
+        /* Theme grid */
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+            gap: 10px;
+            margin-top: 4px;
+        }
+
+        .theme-btn {
+            padding: 8px 6px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            background: var(--surface);
+            color: var(--text);
+            font-family: var(--font);
+            font-size: 0.7rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition);
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .theme-btn .swatch {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform var(--transition);
+        }
+
+        .theme-btn:hover {
+            border-color: var(--text2);
+            transform: translateY(-2px);
+        }
+        .theme-btn:hover .swatch {
+            transform: scale(1.1);
+        }
+
+        .theme-btn.active {
+            border-color: var(--accent);
+            background: var(--surface2);
+            box-shadow: 0 0 20px rgba(122, 92, 255, 0.15);
+        }
+
+        .theme-btn .theme-name {
+            font-size: 0.6rem;
+            opacity: 0.7;
+        }
+
+        .settings-close-row {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 0.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .settings-close-row button {
+            padding: 10px 28px;
+            border: none;
+            border-radius: 12px;
+            background: var(--accent);
+            color: #fff;
+            font-family: var(--font);
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+
+        .settings-close-row button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(122, 92, 255, 0.35);
+        }
+
+        /* ── Alerts ── */
+        .alert-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 4000;
+            animation: fadeIn 0.3s ease forwards;
+            padding: 1.5rem;
+        }
+
+        .alert-modal {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            max-width: 460px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+            transform: translateY(30px);
+            animation: slideUp 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        @keyframes slideUp {
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        .alert-modal h3 {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            color: var(--accent);
+            letter-spacing: 0.5px;
+        }
+
+        .alert-modal p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text2);
+            margin-bottom: 1.5rem;
+        }
+
+        .alert-modal .discord-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(88, 101, 242, 0.15);
+            border: 1px solid #5865F2;
+            color: #fff;
+            text-decoration: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+            transition: all var(--transition);
+        }
+
+        .alert-modal .discord-link:hover {
+            background: #5865F2;
+            box-shadow: 0 8px 24px rgba(88, 101, 242, 0.35);
+            transform: translateY(-2px);
+        }
+
+        .alert-modal .primary-btn {
+            background: var(--surface2);
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 0.9rem 2rem;
+            border-radius: 12px;
+            font-family: var(--font);
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all var(--transition);
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .alert-modal .primary-btn:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(122, 92, 255, 0.3);
+        }
+
+        .alert-modal .primary-btn.danger {
+            border-color: #ff4444;
+            color: #ff4444;
+        }
+        .alert-modal .primary-btn.danger:hover {
+            background: #ff4444;
+            color: #fff;
+            border-color: #ff4444;
+            box-shadow: 0 8px 24px rgba(255, 68, 68, 0.3);
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+            .header {
+                padding: 0.6rem 1.2rem;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            .brand-text {
+                font-size: 1.1rem;
+            }
+            .brand-icon {
+                width: 34px;
+                height: 34px;
+                font-size: 1.1rem;
+            }
+            .controls {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .controls .search-wrap {
+                flex: 1 1 auto;
+            }
+            .controls select {
+                flex: 1 1 auto;
+            }
+            #container {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 1rem;
+            }
+            #settingsModal {
+                padding: 1.5rem;
+            }
+            .theme-grid {
+                grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            }
+            .modal-header {
+                padding: 0.7rem 1.2rem;
+            }
+            .modal-header .modal-title {
+                font-size: 0.9rem;
+            }
+            #gameModal {
+                height: 92vh;
+            }
+            .alert-modal {
+                padding: 1.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .brand-text span {
+                display: none;
+            }
+            .header-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 0.9rem;
+            }
+            #container {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 0.8rem;
+            }
+            .game-card .game-name {
+                font-size: 0.75rem;
+                padding: 0.6rem 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ═══ HEADER ═══ -->
+    <header class="header">
+        <a class="brand" href="#">
+            <div class="brand-icon">Li</div>
+            <span class="brand-text">Lithium<span>.SH</span></span>
+        </a>
+        <div class="header-actions">
+            <button class="header-btn" id="settingsToggle" title="Settings" aria-label="Settings">
+                <i class="fas fa-sliders-h"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- ═══ CONTROLS ═══ -->
+    <div class="controls">
+        <div class="search-wrap">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchBar" placeholder="Search games..." oninput="applyFilters()" />
+        </div>
+        <div class="category-wrap" id="categoryWrap">
+            <select id="categorySelect" class="control-input" onchange="applyFilters()">
+                <option value="">All Categories</option>
+                <option value="action">Action</option>
+                <option value="racing">Racing</option>
+                <option value="strategy">Strategy</option>
+                <option value="sports">Sports</option>
+                <option value="skill">Skill</option>
+                <option value="shooting">Shooting</option>
+                <option value="2 player">2 Player</option>
+                <option value="io">Io</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- ═══ GAME GRID ═══ -->
+    <div id="container"></div>
+
+    <!-- ═══ GAME MODAL ═══ -->
+    <div id="modalOverlay">
+        <div id="gameModal">
+            <div class="modal-header">
+                <span class="modal-title" id="gameTitle">Game Title</span>
+                <div class="modal-actions">
+                    <button id="blankBtn" title="Open in about:blank"><i class="fa-solid fa-up-right-from-square"></i></button>
+                    <button id="downloadBtn" title="Download"><i class="fas fa-download"></i></button>
+                    <button id="fullscreenBtn" title="Fullscreen"><i class="fas fa-expand"></i></button>
+                    <button id="closeFullscreen" title="Close"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+            <iframe id="zoneFullscreenFrame"></iframe>
+        </div>
+    </div>
+
+    <!-- ═══ SETTINGS MODAL ═══ -->
+    <div id="settingsOverlay">
+        <div id="settingsModal">
+            <h2><i class="fas fa-sliders-h"></i> Settings</h2>
+
+            <!-- Theme -->
+            <div class="settings-group">
+                <label>Theme</label>
+                <div class="theme-grid" id="themeGrid"></div>
+                <div class="setting-desc">Choose your vibe.</div>
+            </div>
+
+            <!-- Provider -->
+            <div class="settings-group">
+                <label>Game Source</label>
+                <div class="select-wrap">
+                    <select id="providerSelect" onchange="handleProviderChange()">
+                        <option value="gn-math">GN-Math</option>
+                        <option value="truffled">Truffled.lol</option>
+                        <option value="petezah">PeteZah</option>
+                        <option value="elite">Elite Gamez</option>
+                        <option value="sea-bean">Sea Bean</option>
+                        <option value="ugs">UGS (may lag)</option>
+                        <option value="seraph">Seraph</option>
+                    </select>
+                </div>
+                <div class="setting-desc">Switch between game JSON sources.</div>
+            </div>
+
+            <!-- Truffled Proxy (hidden by default) -->
+            <div class="settings-group" id="truffledProxyGroup" style="display:none;">
+                <label>Truffled Proxy</label>
+                <div class="select-wrap">
+                    <select id="truffledProxySelect" onchange="loadGames()">
+                        <option value="https://truffled.lol">truffled.lol (Default)</option>
+                        <option value="https://classlink.com.de">classlink.com.de</option>
+                        <option value="https://pamson.pl.sophiemaslowski.com">pamson.pl.sophiemaslowski.com</option>
+                        <option value="https://lightspeed-sucks.9ibee.com">lightspeed-sucks.9ibee.com</option>
+                    </select>
+                </div>
+                <div class="setting-desc">If truffled is blocked, try another proxy.</div>
+            </div>
+
+            <div class="settings-close-row">
+                <button id="closeSettings">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ NOTICE ALERT ═══ -->
+    <div id="noticeModal" class="alert-backdrop">
+        <div class="alert-modal">
+            <h3><i class="fas fa-info-circle"></i> Notice</h3>
+            <p>I do not own these links; they belong to the truffled community. If you want a link removed, DM me on Discord (<strong>dominus.elitus</strong>). Support them!</p>
+            <a href="https://discord.gg/vVqY36mzvj" target="_blank" class="discord-link"><i class="fab fa-discord"></i> Truffled Discord</a>
+            <button id="noticeContinueBtn" class="primary-btn">Continue</button>
+        </div>
+    </div>
+
+    <!-- ═══ BLOCKED ALERT ═══ -->
+    <div id="blockedModal" class="alert-backdrop">
+        <div class="alert-modal">
+            <h3 style="color:#ff4444;"><i class="fas fa-ban"></i> Link Blocked</h3>
+            <p>This truffled proxy appears to be blocked. Please select another one from the settings dropdown.</p>
+            <button onclick="document.getElementById('blockedModal').style.display='none'" class="primary-btn danger">Got it</button>
+        </div>
+    </div>
+
+    <script>
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  THEMES
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        const THEMES = {
+            default: { "--bg": "#0b0a16", "--bg2": "#12101f", "--accent": "#7a5cff", "--accent2": "#5a3fd9",
+                "--blue": "#00bfff", "--text": "#e6e6ff", "--text2": "#a8a8d0", "--surface": "rgba(255,255,255,0.05)",
+                "--surface2": "rgba(255,255,255,0.08)", "--border": "rgba(255,255,255,0.08)" },
+            solar: { "--bg": "#1a0e00", "--bg2": "#241400", "--accent": "#ff6b00", "--accent2": "#cc5500",
+                "--blue": "#ffaa00", "--text": "#fff0e0", "--text2": "#d4a070", "--surface": "rgba(255,100,0,0.06)",
+                "--surface2": "rgba(255,100,0,0.10)", "--border": "rgba(255,100,0,0.12)" },
+            radiation: { "--bg": "#001a00", "--bg2": "#002400", "--accent": "#00ff41", "--accent2": "#00cc33",
+                "--blue": "#00ff88", "--text": "#b0ffb0", "--text2": "#70d070", "--surface": "rgba(0,255,60,0.05)",
+                "--surface2": "rgba(0,255,60,0.09)", "--border": "rgba(0,255,60,0.10)" },
+            purple: { "--bg": "#0a0015", "--bg2": "#120020", "--accent": "#9b59b6", "--accent2": "#7d3c98",
+                "--blue": "#8e44ad", "--text": "#f0e0ff", "--text2": "#c0a0d0", "--surface": "rgba(155,89,182,0.05)",
+                "--surface2": "rgba(155,89,182,0.09)", "--border": "rgba(155,89,182,0.10)" },
+            black: { "--bg": "#000000", "--bg2": "#0a0a0a", "--accent": "#ffffff", "--accent2": "#cccccc",
+                "--blue": "#888888", "--text": "#ffffff", "--text2": "#aaaaaa", "--surface": "rgba(255,255,255,0.04)",
+                "--surface2": "rgba(255,255,255,0.07)", "--border": "rgba(255,255,255,0.06)" },
+            singularity: { "--bg": "#000005", "--bg2": "#060012", "--accent": "#00d4ff", "--accent2": "#0099cc",
+                "--blue": "#7b2ffc", "--text": "#e0f0ff", "--text2": "#90b0d0", "--surface": "rgba(0,212,255,0.05)",
+                "--surface2": "rgba(0,212,255,0.09)", "--border": "rgba(0,212,255,0.10)" },
+            heatstroke: { "--bg": "#1a0000", "--bg2": "#2a0000", "--accent": "#ff2200", "--accent2": "#cc1a00",
+                "--blue": "#ff6600", "--text": "#ffd0d0", "--text2": "#cc8888", "--surface": "rgba(255,34,0,0.05)",
+                "--surface2": "rgba(255,34,0,0.09)", "--border": "rgba(255,34,0,0.10)" },
+            eclipse: { "--bg": "#0a0500", "--bg2": "#140a00", "--accent": "#ffd700", "--accent2": "#ccaa00",
+                "--blue": "#ff8c00", "--text": "#fff5e0", "--text2": "#d4b080", "--surface": "rgba(255,215,0,0.05)",
+                "--surface2": "rgba(255,215,0,0.09)", "--border": "rgba(255,215,0,0.10)" },
+            whiteout: { "--bg": "#f0f0f0", "--bg2": "#e0e0e0", "--accent": "#333333", "--accent2": "#555555",
+                "--blue": "#0066cc", "--text": "#1a1a1a", "--text2": "#555555", "--surface": "rgba(0,0,0,0.04)",
+                "--surface2": "rgba(0,0,0,0.07)", "--border": "rgba(0,0,0,0.08)" },
+            ai: { "--bg": "#000520", "--bg2": "#001030", "--accent": "#00ccff", "--accent2": "#0099dd",
+                "--blue": "#0066ff", "--text": "#d0ecff", "--text2": "#80b0d0", "--surface": "rgba(0,204,255,0.05)",
+                "--surface2": "rgba(0,204,255,0.09)", "--border": "rgba(0,204,255,0.10)" },
+            minecraft: { "--bg": "#1a1a0a", "--bg2": "#2a2a12", "--accent": "#7cb342", "--accent2": "#5d8c2e",
+                "--blue": "#4caf50", "--text": "#e8f0d0", "--text2": "#a0b080", "--surface": "rgba(124,179,66,0.05)",
+                "--surface2": "rgba(124,179,66,0.09)", "--border": "rgba(124,179,66,0.10)" },
+            cyber: { "--bg": "#050c1b", "--bg2": "#0a1428", "--accent": "#39ff14", "--accent2": "#28cc0f",
+                "--blue": "#00ffff", "--text": "#e0ffe0", "--text2": "#80d080", "--surface": "rgba(57,255,20,0.05)",
+                "--surface2": "rgba(57,255,20,0.09)", "--border": "rgba(57,255,20,0.10)" },
+            sunset: { "--bg": "#1a0b0b", "--bg2": "#281212", "--accent": "#ff6f61", "--accent2": "#d94a3d",
+                "--blue": "#ffa500", "--text": "#fff0e6", "--text2": "#d4a088", "--surface": "rgba(255,111,97,0.05)",
+                "--surface2": "rgba(255,111,97,0.09)", "--border": "rgba(255,111,97,0.10)" },
+            neon: { "--bg": "#0f0020", "--bg2": "#1a0035", "--accent": "#ff00ff", "--accent2": "#cc00cc",
+                "--blue": "#00ffff", "--text": "#ffffff", "--text2": "#cc88cc", "--surface": "rgba(255,0,255,0.05)",
+                "--surface2": "rgba(255,0,255,0.09)", "--border": "rgba(255,0,255,0.10)" },
+            darkred: { "--bg": "#1b0000", "--bg2": "#2a0000", "--accent": "#ff0000", "--accent2": "#cc0000",
+                "--blue": "#cc0000", "--text": "#ffe6e6", "--text2": "#cc8888", "--surface": "rgba(255,0,0,0.05)",
+                "--surface2": "rgba(255,0,0,0.09)", "--border": "rgba(255,0,0,0.10)" },
+            dnv2: { "--bg": "#050007", "--bg2": "#0a0012", "--accent": "#ff00de", "--accent2": "#cc00b0",
+                "--blue": "#00fff7", "--text": "#ffffff", "--text2": "#cc88cc", "--surface": "rgba(255,0,222,0.05)",
+                "--surface2": "rgba(255,0,222,0.09)", "--border": "rgba(255,0,222,0.12)" },
+            matrix: { "--bg": "#001100", "--bg2": "#001a00", "--accent": "#00ff00", "--accent2": "#00cc00",
+                "--blue": "#33ff33", "--text": "#99ff99", "--text2": "#66cc66", "--surface": "rgba(0,255,0,0.05)",
+                "--surface2": "rgba(0,255,0,0.09)", "--border": "rgba(0,255,0,0.10)" }
+        };
+
+        const THEME_NAMES = {
+            default: 'Default',
+            solar: 'Solar',
+            radiation: 'Radiation',
+            purple: 'Purple',
+            black: 'Black',
+            singularity: 'Singularity',
+            heatstroke: 'Heatstroke',
+            eclipse: 'Eclipse',
+            whiteout: 'Whiteout',
+            ai: 'AI',
+            minecraft: 'Minecraft',
+            cyber: 'Cyber',
+            sunset: 'Sunset',
+            neon: 'Neon',
+            darkred: 'Dark Red',
+            dnv2: 'DNv2',
+            matrix: 'Matrix'
+        };
+
+        const root = document.documentElement;
+
+        function applyTheme(theme) {
+            Object.entries(theme).forEach(([k, v]) => root.style.setProperty(k, v));
+        }
+
+        function loadTheme(name) {
+            const theme = THEMES[name];
+            if (theme) {
+                applyTheme(theme);
+                localStorage.setItem('lithium-theme', name);
+                renderThemeGrid(name);
+            }
+        }
+
+        function renderThemeGrid(active) {
+            const grid = document.getElementById('themeGrid');
+            grid.innerHTML = '';
+            Object.keys(THEMES).forEach(key => {
+                const btn = document.createElement('button');
+                btn.className = 'theme-btn' + (key === active ? ' active' : '');
+                const swatch = document.createElement('div');
+                swatch.className = 'swatch';
+                const t = THEMES[key];
+                swatch.style.background = `linear-gradient(135deg, ${t['--accent']}, ${t['--blue'] || t['--accent']})`;
+                const nameSpan = document.createElement('span');
+                nameSpan.className = 'theme-name';
+                nameSpan.textContent = THEME_NAMES[key] || key;
+                btn.appendChild(swatch);
+                btn.appendChild(nameSpan);
+                btn.onclick = () => { loadTheme(key);
+                    renderThemeGrid(key); };
+                grid.appendChild(btn);
+            });
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  DOM REFS
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        const container = document.getElementById('container');
+        const searchBar = document.getElementById('searchBar');
+        const categorySelect = document.getElementById('categorySelect');
+        const categoryWrap = document.getElementById('categoryWrap');
+        const providerSelect = document.getElementById('providerSelect');
+        const truffledProxySelect = document.getElementById('truffledProxySelect');
+        const truffledProxyGroup = document.getElementById('truffledProxyGroup');
+
+        const overlay = document.getElementById('modalOverlay');
+        const iframe = document.getElementById('zoneFullscreenFrame');
+        const closeBtn = document.getElementById('closeFullscreen');
+        const fullscreenBtn = document.getElementById('fullscreenBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const gameTitle = document.getElementById('gameTitle');
+        const blankBtn = document.getElementById('blankBtn');
+
+        const settingsOverlay = document.getElementById('settingsOverlay');
+        const settingsToggle = document.getElementById('settingsToggle');
+        const closeSettings = document.getElementById('closeSettings');
+
+        const noticeModal = document.getElementById('noticeModal');
+        const noticeContinue = document.getElementById('noticeContinueBtn');
+        const blockedModal = document.getElementById('blockedModal');
+
+        let allGames = [];
+        let currentGame = null;
+        let sortSelect = null;
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  UTILITY
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        function getFallbackImage(name) {
+            return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=0b0a16&color=7a5cff&size=256&font-size=0.33&bold=true`;
+        }
+
+        function resolveGameUrl(url, provider) {
+            if (!url) return '';
+            if (url.startsWith('http')) return url;
+            const cleanPath = url.replace(/^\//, '');
+            if (provider === 'seraph') {
+                return "https://cdn.jsdelivr.net/gh/a456pur/seraph@main/" + cleanPath;
+            }
+            return "https://cdn.jsdelivr.net/gh/tharun9772/tharun9772.github.io@main/" + cleanPath;
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  PROVIDER HANDLING
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        function handleProviderChange() {
+            const provider = providerSelect.value;
+
+            // Category visibility
+            if (provider === 'petezah') {
+                categoryWrap.classList.add('visible');
+            } else {
+                categoryWrap.classList.remove('visible');
+                categorySelect.value = '';
+            }
+
+            // Truffled proxy visibility + notice
+            if (provider === 'truffled') {
+                truffledProxyGroup.style.display = 'block';
+                if (!localStorage.getItem('truffledNoticeSeen')) {
+                    noticeModal.style.display = 'flex';
+                    return;
+                }
+            } else {
+                truffledProxyGroup.style.display = 'none';
+            }
+
+            loadGames();
+        }
+
+        noticeContinue.onclick = () => {
+            localStorage.setItem('truffledNoticeSeen', 'true');
+            noticeModal.style.display = 'none';
+            truffledProxyGroup.style.display = 'block';
+            loadGames();
+        };
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  LOAD GAMES
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        async function loadGames() {
+            container.innerHTML =
+                '<div class="empty-state"><i class="fas fa-circle-notch fa-spin"></i><p>Loading games...</p></div>';
+            allGames = [];
+            const provider = providerSelect.value;
+
+            try {
+                if (provider === 'gn-math') {
+                    const res = await fetch("https://cdn.jsdelivr.net/gh/freebuisness/assets/zones.json");
+                    const raw = await res.json();
+                    allGames = raw.filter(g => g.id !== -1 && !g.name.startsWith("[!]")).map((z, i) => {
+                        let coverUrl = (z.cover || "").replace('{COVER_URL}', '');
+                        if (coverUrl.startsWith('/')) coverUrl = coverUrl.substring(1);
+                        return {
+                            provider: 'gn-math',
+                            name: z.name,
+                            cover: 'https://cdn.jsdelivr.net/gh/freebuisness/covers@main/' + coverUrl,
+                            url: z.url,
+                            isAbsolute: z.url.startsWith('http'),
+                            addedOrder: i
+                        };
+                    });
+
+                } else if (provider === 'elite') {
+                    const res = await fetch(
+                    "https://cdn.jsdelivr.net/gh/elite-gamez/elite-gamez.github.io@main/games.json");
+                    const data = await res.json();
+                    allGames = data.map((g, i) => {
+                        let title = g.title || g.name || "Unknown Game";
+                        let url = g.url;
+                        if (!url.startsWith('http')) {
+                            url = "https://cdn.jsdelivr.net/gh/elite-gamez/elite-gamez.github.io@main/" + url;
+                        }
+                        return {
+                            provider: 'elite',
+                            name: title,
+                            cover: g.image ? ('https://cdn.jsdelivr.net/gh/elite-gamez/elite-gamez.github.io@main/' +
+                                g.image) : getFallbackImage(title),
+                            url: url,
+                            isAbsolute: true,
+                            addedOrder: i
+                        };
+                    });
+
+                } else if (provider === 'sea-bean') {
+                    const res = await fetch("https://cdn.jsdelivr.net/gh/sea-bean-unblocked/sde@main/zzz.json");
+                    const data = await res.json();
+                    allGames = data.map((g, i) => {
+                        let title = g.name || g.id || "Unknown Game";
+                        let htmlUrl = g.html || g.url || "";
+                        if (htmlUrl.includes("{HTML_URL}")) {
+                            htmlUrl = htmlUrl.replace("{HTML_URL}",
+                            "https://cdn.jsdelivr.net/gh/sea-bean-unblocked/Singlemile@main/games/");
+                        } else {
+                            htmlUrl = resolveGameUrl(htmlUrl);
+                        }
+                        let cover = (g.cover || g.img || "").replace("{COVER_URL}/", "");
+                        let finalCover = cover.startsWith("http") ?
+                            cover :
+                            (cover ? 'https://cdn.jsdelivr.net/gh/sea-bean-unblocked/Singlemile@main/Icon/' + cover :
+                                getFallbackImage(title));
+                        return {
+                            provider: 'sea-bean',
+                            name: title,
+                            cover: finalCover,
+                            url: htmlUrl,
+                            isAbsolute: true,
+                            addedOrder: i
+                        };
+                    });
+
+                } else if (provider === 'ugs') {
+                    const repos = ["tharun9772/ugs-1", "tharun9772/ugs-2", "tharun9772/ugs-3"];
+                    let games = [];
+                    let idx = 0;
+                    for (const repo of repos) {
+                        try {
+                            const r = await fetch(`https://api.github.com/repos/${repo}/contents/`);
+                            const d = await r.json();
+                            d.forEach(f => {
+                                if (f.type === "file" && f.name.startsWith("cl") && f.name.endsWith(".html")) {
+                                    let clean = f.name.replace(/^cl/, "").replace(".html", "");
+                                    clean = clean.charAt(0).toUpperCase() + clean.slice(1);
+                                    games.push({
+                                        provider: 'ugs',
+                                        name: clean,
+                                        cover: "https://cdn.jsdelivr.net/gh/tharun9772/game-assets@main/5968517.png",
+                                        url: `https://cdn.jsdelivr.net/gh/${repo}@main/${f.name}`,
+                                        isAbsolute: true,
+                                        addedOrder: idx++
+                                    });
+                                }
+                            });
+                        } catch (e) { console.warn("UGS fetch failed:", repo); }
+                    }
+                    allGames = games;
+
+                } else if (provider === 'truffled') {
+                    const proxyBase = truffledProxySelect.value.replace(/\/$/, "");
+                    try {
+                        await fetch(proxyBase + '/png/logo.png', { mode: 'no-cors', cache: 'no-store' });
+                    } catch (err) {
+                        blockedModal.style.display = 'flex';
+                        container.innerHTML =
+                            '<div class="empty-state"><i class="fas fa-ban" style="color:#ff4444;"></i><p style="color:#ff4444;">Proxy blocked. Please select another from Settings.</p></div>';
+                        return;
+                    }
+                    const res = await fetch("https://cdn.jsdelivr.net/gh/aukak/truffled@main/public/js/json/g.json");
+                    const data = await res.json();
+                    allGames = (data.games || []).map((g, i) => {
+                        let rawUrl = g.url;
+                        let gameUrl = g.url;
+                        let thumb = g.thumbnail;
+                        if (!gameUrl.startsWith('http')) {
+                            gameUrl = proxyBase + (gameUrl.startsWith('/') ? '' : '/') + gameUrl;
+                        }
+                        if (!thumb.startsWith('http')) {
+                            thumb = proxyBase + (thumb.startsWith('/') ? '' : '/') + thumb;
+                        }
+                        return {
+                            provider: 'truffled',
+                            name: g.name,
+                            cover: thumb,
+                            url: gameUrl,
+                            rawUrl: rawUrl,
+                            isAbsolute: g.url.startsWith('http'),
+                            frameType: g.frameType || 'iframe',
+                            addedOrder: i
+                        };
+                    });
+
+                } else if (provider === 'seraph') {
+                    const res = await fetch(
+                        'https://cdn.jsdelivr.net/gh/DominumNetwork/dominum@main/src/assets/libraries/seraph/games.json'
+                        );
+                    const data = await res.json();
+                    allGames = data.map((g, i) => {
+                        const path = g.url.endsWith('index.html') ? g.url : g.url.replace(/\/?$/, '/index.html');
+                        return {
+                            provider: 'seraph',
+                            name: g.name,
+                            cover: g.img || getFallbackImage(g.name),
+                            url: resolveGameUrl(path, 'seraph'),
+                            isAbsolute: true,
+                            addedOrder: i
+                        };
+                    });
+
+                } else if (provider === 'petezah') {
+                    const res = await fetch("https://cdn.jsdelivr.net/gh/PeteZah-G/singlefile-json@main/search.json");
+                    const data = await res.json();
+                    allGames = (data.games || []).map((g, i) => {
+                        let finalUrl = g.url;
+                        if (finalUrl && !finalUrl.endsWith('index.html') && !finalUrl.match(/\.\w+$/)) {
+                            finalUrl = finalUrl.replace(/\/$/, '') + '/index.html';
+                        }
+                        return {
+                            provider: 'petezah',
+                            name: g.label,
+                            cover: g.imageUrl || getFallbackImage(g.label),
+                            url: finalUrl,
+                            isAbsolute: finalUrl.startsWith('http'),
+                            addedOrder: i,
+                            categories: g.categories || []
+                        };
+                    });
+                }
+
+                applyFilters();
+
+            } catch (e) {
+                console.error(e);
+                container.innerHTML =
+                    '<div class="empty-state"><i class="fas fa-exclamation-triangle" style="color:#ff4444;"></i><p style="color:#ff4444;">Failed to load games. Check console.</p></div>';
+            }
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  FILTERS & SORT
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        function applyFilters() {
+            const query = searchBar.value.toLowerCase();
+            const categoryFilter = categorySelect.value.toLowerCase();
+
+            let filtered = allGames.filter(g => {
+                const matchesQuery = g.name.toLowerCase().includes(query);
+                const matchesCategory = !categoryFilter || (g.categories && g.categories.includes(categoryFilter));
+                return matchesQuery && matchesCategory;
+            });
+
+            // Sort: default A-Z (we keep it simple, no sort dropdown needed)
+            filtered.sort((a, b) => a.name.localeCompare(b.name));
+
+            displayGames(filtered);
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  DISPLAY
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        function displayGames(games) {
+            container.innerHTML = '';
+            if (games.length === 0) {
+                container.innerHTML = '<div class="empty-state"><i class="fas fa-gamepad"></i><p>No games found.</p></div>';
+                return;
+            }
+
+            games.forEach((game, index) => {
+                const card = document.createElement('div');
+                card.className = 'game-card';
+                const delay = Math.min(index * 0.025, 1.2);
+                card.style.animationDelay = `${delay}s`;
+
+                const wrap = document.createElement('div');
+                wrap.className = 'img-wrap';
+
+                const img = document.createElement('img');
+                img.dataset.src = game.cover;
+                img.alt = game.name;
+                img.loading = 'lazy';
+
+                const overlay = document.createElement('div');
+                overlay.className = 'play-overlay';
+                overlay.innerHTML = '<i class="fas fa-play-circle"></i>';
+
+                const nameEl = document.createElement('div');
+                nameEl.className = 'game-name';
+                nameEl.textContent = game.name;
+
+                const badge = document.createElement('span');
+                badge.className = 'game-provider';
+                badge.textContent = game.provider || '';
+
+                wrap.appendChild(img);
+                wrap.appendChild(overlay);
+                card.appendChild(wrap);
+                card.appendChild(nameEl);
+                card.appendChild(badge);
+
+                card.onclick = () => openGame(game);
+                container.appendChild(card);
+            });
+
+            // Lazy load images
+            const imgs = document.querySelectorAll('img[data-src]');
+            const observer = new IntersectionObserver((entries, obs) => {
+                entries.forEach(e => {
+                    if (e.isIntersecting) {
+                        const img = e.target;
+                        img.src = img.dataset.src;
+                        obs.unobserve(img);
+                    }
+                });
+            }, { rootMargin: '100px', threshold: 0.1 });
+            imgs.forEach(i => observer.observe(i));
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  OPEN GAME
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        async function openGame(game) {
+            currentGame = game;
+            overlay.style.display = 'flex';
+            gameTitle.textContent = game.name;
+
+            let fullUrl = game.url;
+            if (game.provider === 'gn-math' && !game.isAbsolute) {
+                fullUrl = 'https://cdn.jsdelivr.net/gh/freebuisness/html@main/' + game.url.replace('{HTML_URL}', '');
+            }
+
+            const needsBlob = ['elite', 'sea-bean', 'ugs', 'gn-math', 'seraph', 'petezah'];
+
+            if (needsBlob.includes(game.provider)) {
+                try {
+                    const response = await fetch(fullUrl);
+                    let html = await response.text();
+                    if (game.provider === 'petezah') {
+                        const base = fullUrl.replace(/\/[^\/]*$/, '/');
+                        if (!html.match(/<head[^>]*>/i)) {
+                            html = html.replace(/<html[^>]*>/i, '__HTML__<head><base href="' + base + '"></head>');
+                        } else {
+                            html = html.replace(/<head[^>]*>/i, '__HTML__<base href="' + base + '">');
+                        }
+                    }
+                    const blob = new Blob([html], { type: 'text/html' });
+                    const blobUrl = URL.createObjectURL(blob);
+                    iframe.src = blobUrl;
+                    iframe.onload = () => URL.revokeObjectURL(blobUrl);
+                } catch (e) {
+                    console.error("Fetch failed, falling back:", e);
+                    iframe.src = fullUrl;
+                }
+                return;
+            }
+
+            if (game.provider === 'truffled') {
+                if (game.frameType === 'unity') {
+                    const proxyBase = truffledProxySelect.value.replace(/\/$/, "");
+                    iframe.src = `${proxyBase}/unityframe.html?url=${encodeURIComponent(game.rawUrl)}`;
+                } else {
+                    iframe.src = game.url;
+                }
+                return;
+            }
+
+            iframe.src = fullUrl;
+        }
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  MODAL CONTROLS
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        closeBtn.onclick = () => {
+            overlay.style.display = 'none';
+            iframe.src = '';
+            currentGame = null;
+        };
+
+        overlay.onclick = (e) => { if (e.target === overlay) closeBtn.click(); };
+
+        fullscreenBtn.onclick = () => {
+            iframe.requestFullscreen().catch(() => alert('Fullscreen not supported or blocked.'));
+        };
+
+        downloadBtn.onclick = async () => {
+            if (!currentGame) return;
+            let fullUrl = currentGame.url;
+            if (currentGame.provider === 'gn-math' && !currentGame.isAbsolute) {
+                fullUrl = 'https://cdn.jsdelivr.net/gh/freebuisness/html@main/' + currentGame.url.replace('{HTML_URL}', '');
+            }
+            let content = '';
+            try {
+                const res = await fetch(fullUrl);
+                if (!res.ok) throw new Error("Network error");
+                content = await res.text();
+            } catch (e) {
+                content =
+                    `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${currentGame.name}</title><style>body,html{margin:0;padding:0;height:100%;overflow:hidden;background:#000;}iframe{width:100%;height:100%;border:none;}</style></head><body><iframe src="${fullUrl}" allowfullscreen></iframe></body></html>`;
+            }
+            const blob = new Blob([content], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${currentGame.name.replace(/[^a-z0-9]/gi,'_').toLowerCase()}.html`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        };
+
+        blankBtn.onclick = async () => {
+            if (!currentGame) return;
+            let url = currentGame.url;
+            if (currentGame.provider === 'gn-math' && !url.startsWith('http')) {
+                url = 'https://cdn.jsdelivr.net/gh/freebuisness/html@main/' + currentGame.url.replace('{HTML_URL}', '');
+            }
+            const win = window.open('about:blank', '_blank');
+            if (!win) return alert("Pop-up blocked!");
+            win.document.write(`
+            <!DOCTYPE html><html><head><title>${currentGame.name}</title>
+            <style>body,html{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#000;}iframe{width:100%;height:100%;border:none;}</style>
+            </head><body><iframe id="f" allowfullscreen></iframe></body></html>
+          `);
+            win.document.close();
+            const f = win.document.getElementById('f');
+            const needsBlob = ['gn-math', 'petezah', 'elite', 'seraph', 'sea-bean', 'ugs'];
+            if (needsBlob.includes(currentGame.provider)) {
+                try {
+                    const res = await fetch(url);
+                    let html = await res.text();
+                    if (currentGame.provider === 'petezah') {
+                        const base = url.substring(0, url.lastIndexOf('/') + 1);
+                        html = html.replace('<head>', `<head><base href="${base}">`);
+                    }
+                    f.contentWindow.document.open();
+                    f.contentWindow.document.write(html);
+                    f.contentWindow.document.close();
+                } catch (e) {
+                    console.error("Injection failed, fallback src:", e);
+                    f.src = url;
+                }
+            } else {
+                f.src = url;
+            }
+        };
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  SETTINGS
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        settingsToggle.onclick = () => {
+            settingsOverlay.style.display = 'flex';
+            renderThemeGrid(localStorage.getItem('lithium-theme') || 'default');
+        };
+
+        closeSettings.onclick = () => {
+            settingsOverlay.style.display = 'none';
+        };
+
+        settingsOverlay.onclick = (e) => {
+            if (e.target === settingsOverlay) settingsOverlay.style.display = 'none';
+        };
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  INIT
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        (function init() {
+            // Restore theme
+            const savedTheme = localStorage.getItem('lithium-theme') || 'default';
+            if (THEMES[savedTheme]) {
+                applyTheme(THEMES[savedTheme]);
+            } else {
+                applyTheme(THEMES.default);
+            }
+
+            // Restore provider
+            const savedProvider = localStorage.getItem('lithium-provider') || 'gn-math';
+            providerSelect.value = savedProvider;
+
+            // Restore truffled proxy
+            const savedProxy = localStorage.getItem('lithium-truffled-proxy') || 'https://truffled.lol';
+            truffledProxySelect.value = savedProxy;
+
+            handleProviderChange();
+
+            // Save provider on change
+            providerSelect.addEventListener('change', () => {
+                localStorage.setItem('lithium-provider', providerSelect.value);
+            });
+            truffledProxySelect.addEventListener('change', () => {
+                localStorage.setItem('lithium-truffled-proxy', truffledProxySelect.value);
+            });
+        })();
+    </script>
+</body>
+</html>
