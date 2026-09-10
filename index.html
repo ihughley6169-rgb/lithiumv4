@@ -1,111 +1,109 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Lithium V5</title>
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
-	<script src="./scramjet.all.js"></script>
-	<script src="./controller/controller.api.js"></script>
-	<style>
-		:root { --bg:#081018; --panel:rgba(13,24,32,.9); --line:rgba(190,224,217,.16); --text:#edf8f4; --muted:#8fa9aa; --accent:#c5e86c; --blue:#53b7d8; --danger:#ff6e6e; }
-		* { box-sizing:border-box; }
-		html,body { margin:0; min-height:100%; background:var(--bg); color:var(--text); font-family:Rajdhani,sans-serif; }
-		body { overflow:hidden; background:radial-gradient(circle at 18% 10%,#17303a 0,transparent 35%),linear-gradient(135deg,#081018,#111b24 55%,#071014); }
-		button,input { font:inherit; }
-		button { cursor:pointer; }
-		.boot { position:fixed; inset:0; z-index:5; display:grid; place-items:center; background:#05090d; transition:.5s; }
-		.boot.off { opacity:0; pointer-events:none; }
-		.boot-card { text-align:center; }
-		.mark { color:var(--accent); font-family:Orbitron,sans-serif; font-weight:900; letter-spacing:.18em; }
-		.boot .mark { font-size:clamp(2.2rem,8vw,5rem); color:var(--text); text-shadow:0 0 35px rgba(197,232,108,.35); }
-		.boot .mark span { color:var(--accent); }
-		.boot p { color:var(--muted); letter-spacing:.2em; text-transform:uppercase; }
-		.primary,.tool { border:1px solid var(--accent); background:rgba(197,232,108,.1); color:var(--accent); border-radius:9px; padding:.7rem 1.1rem; font-weight:700; }
-		.primary:hover,.tool:hover { background:var(--accent); color:#071014; }
-		#desktop { min-height:100vh; display:flex; flex-direction:column; }
-		.top { height:58px; display:flex; align-items:center; justify-content:space-between; padding:0 22px; border-bottom:1px solid var(--line); background:rgba(5,12,17,.7); backdrop-filter:blur(18px); }
-		.brand { font-family:Orbitron,sans-serif; letter-spacing:.12em; font-weight:700; }
-		.brand span { color:var(--accent); }
-		.status { color:var(--muted); font-size:.85rem; }
-		.workspace { flex:1; display:grid; grid-template-columns:92px 1fr; min-height:0; }
-		.dock { padding:22px 10px; display:flex; flex-direction:column; gap:12px; border-right:1px solid var(--line); background:rgba(4,12,17,.4); }
-		.dock button { min-height:62px; border:1px solid transparent; border-radius:10px; background:transparent; color:var(--muted); }
-		.dock button:hover,.dock button.active { color:var(--accent); border-color:var(--line); background:rgba(197,232,108,.08); }
-		.dock b { display:block; font-size:1.35rem; margin-bottom:4px; }
-		main { padding:clamp(20px,4vw,54px); overflow:auto; }
-		.hero { max-width:920px; margin:0 auto 28px; display:flex; justify-content:space-between; gap:24px; align-items:end; }
-		h1,h2,h3 { font-family:Orbitron,sans-serif; margin:.2rem 0 .7rem; }
-		h1 { font-size:clamp(1.8rem,4vw,3.8rem); max-width:680px; }
-		h1 span { color:var(--accent); }
-		.eyebrow { color:var(--blue); text-transform:uppercase; letter-spacing:.2em; font-weight:700; }
-		.hero p { max-width:620px; color:var(--muted); font-size:1.1rem; }
-		.grid { max-width:920px; margin:auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:14px; }
-		.card { border:1px solid var(--line); background:var(--panel); border-radius:12px; padding:20px; min-height:150px; box-shadow:0 12px 32px rgba(0,0,0,.16); }
-		.card:hover { border-color:rgba(197,232,108,.55); transform:translateY(-2px); }
-		.card button { margin-top:18px; }
-		.icon { color:var(--accent); font-size:1.7rem; }
-		.card p,.note p { color:var(--muted); line-height:1.4; }
-		.view { display:none; max-width:920px; margin:auto; }
-		.view.active { display:block; animation:rise .25s ease both; }
-		@keyframes rise { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
-		.panel { border:1px solid var(--line); background:var(--panel); border-radius:12px; padding:22px; }
-		.row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
-		.row input,.search { flex:1; min-width:180px; padding:.75rem 1rem; border:1px solid var(--line); border-radius:8px; color:var(--text); background:#071116; outline:none; }
-		.row input:focus,.search:focus { border-color:var(--accent); }
-		.results { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:12px; margin-top:18px; }
-		.track { border:1px solid var(--line); border-radius:8px; padding:12px; background:#111c22; cursor:pointer; }
-		.track img { width:100%; aspect-ratio:1; object-fit:cover; border-radius:5px; }
-		.track small { color:var(--muted); }
-		.browser-frame { width:100%; height:52vh; border:1px solid var(--line); border-radius:8px; background:white; margin-top:16px; }
-		.notes { display:grid; gap:12px; }
-		.note { border-left:3px solid var(--accent); padding:14px 18px; background:rgba(255,255,255,.04); }
-		.note h3 { font-size:1rem; }
-		footer { color:var(--muted); text-align:center; padding:12px; font-size:.8rem; border-top:1px solid var(--line); }
-		@media (max-width:650px) { .workspace { grid-template-columns:1fr; grid-template-rows:1fr 76px; } .dock { order:2; padding:7px; flex-direction:row; justify-content:space-around; border-right:0; border-top:1px solid var(--line); } .dock button { min-height:58px; } .dock span { font-size:.72rem; } main { padding:22px 14px; } .hero { display:block; } }
-	</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lithium V5</title>
+  <style>
+    :root { --acid:#61ff00; --acid-soft:#b8ff79; --ink:#030803; --panel:rgba(3,12,4,.82); --line:rgba(97,255,0,.3); --muted:#9ab695; --hot:#d9ffbd; }
+    * { box-sizing:border-box; }
+    html,body { margin:0; min-height:100%; background:var(--ink); color:#f4fff0; font-family:Arial,Helvetica,sans-serif; }
+    body { overflow-x:hidden; background:radial-gradient(ellipse at 45% 52%,rgba(35,130,19,.45),transparent 42%),radial-gradient(circle at 20% 20%,rgba(97,255,0,.12),transparent 22%),#020702; }
+    body::before { content:""; position:fixed; inset:0; pointer-events:none; opacity:.22; background-image:radial-gradient(#fff 1px,transparent 1px); background-size:83px 71px; mask-image:linear-gradient(to bottom,transparent 5%,#000 30%,#000 85%,transparent); }
+    button,input { font:inherit; }
+    button { cursor:pointer; }
+    .boot { position:fixed; inset:0; z-index:20; display:grid; place-items:center; background:radial-gradient(circle,#11370c 0,#020602 58%); transition:opacity .8s,visibility .8s; }
+    .boot.done { opacity:0; visibility:hidden; pointer-events:none; }
+    .boot-inner { text-align:center; animation:boot-in 1.2s ease both; }
+    .boot-symbol { width:112px; height:112px; display:grid; place-items:center; margin:0 auto 20px; border-radius:50%; background:radial-gradient(circle at 35% 28%,#d6ffb8 0 9%,#3df000 11% 57%,#102010 59%); color:#071000; font-size:48px; box-shadow:18px 18px 0 #15151a,0 0 60px rgba(97,255,0,.5); transform:rotate(-22deg); }
+    .boot h1 { margin:0; font-size:clamp(3rem,10vw,7rem); letter-spacing:-.09em; line-height:.9; text-transform:lowercase; }
+    .boot p { color:var(--acid-soft); letter-spacing:.28em; text-transform:uppercase; font-size:11px; }
+    .boot button { margin-top:28px; }
+    @keyframes boot-in { from { opacity:0; transform:scale(.8) translateY(30px); filter:blur(12px); } to { opacity:1; transform:none; filter:none; } }
+    .topbar { position:relative; z-index:2; min-height:74px; display:flex; align-items:center; gap:18px; padding:12px 3vw; border-bottom:1px solid rgba(97,255,0,.2); background:rgba(1,5,2,.88); }
+    .wordmark { display:flex; align-items:center; gap:10px; min-width:160px; color:var(--acid); font-weight:800; font-size:20px; }
+    .mini-mark { width:29px; height:29px; display:grid; place-items:center; border-radius:50%; background:#53ff0c; color:#071000; font-size:14px; transform:rotate(-18deg); }
+    .stats { display:flex; gap:9px; align-items:center; margin-left:auto; }
+    .chip { display:flex; align-items:center; gap:7px; padding:9px 12px; border:1px solid var(--line); border-radius:10px; color:var(--hot); background:rgba(10,27,8,.7); font-size:12px; white-space:nowrap; }
+    .chip b { color:var(--acid); }
+    .search { flex:1; max-width:420px; display:flex; align-items:center; gap:9px; padding:10px 14px; border:1px solid var(--line); border-radius:11px; background:#061006; color:var(--acid); }
+    .search input { width:100%; border:0; outline:0; color:#eaffdf; background:transparent; }
+    .search input::placeholder { color:#6e8d68; }
+    .picker { position:relative; width:38px; height:38px; overflow:hidden; border:1px solid var(--line); border-radius:11px; background:conic-gradient(#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00); }
+    .picker input { position:absolute; inset:-8px; width:54px; height:54px; opacity:0; cursor:pointer; }
+    .hero { position:relative; min-height:450px; display:grid; place-items:center; overflow:hidden; border-bottom:7px solid #0a2509; background:radial-gradient(ellipse at 50% 70%,rgba(42,191,20,.5),transparent 55%); }
+    .hero::before,.hero::after { content:""; position:absolute; left:-5%; width:110%; height:100px; border-top:1px solid rgba(97,255,0,.35); border-radius:50%; transform:rotate(-2deg); }
+    .hero::before { top:30%; box-shadow:0 44px 0 rgba(97,255,0,.2),0 90px 0 rgba(97,255,0,.15); }
+    .hero::after { bottom:0; height:60px; background:linear-gradient(170deg,transparent 45%,rgba(97,255,0,.18) 46%,transparent 50%); }
+    .hero-content { position:relative; z-index:1; text-align:center; }
+    .kiwi { width:112px; height:112px; display:grid; place-items:center; margin:0 auto 35px; border-radius:50%; background:radial-gradient(circle at 36% 27%,#e0ffbf 0 10%,#3bfa00 11% 58%,#101817 60%); color:#132c0e; font-size:50px; box-shadow:22px 24px 0 #131419,0 0 70px rgba(71,255,0,.32); transform:rotate(-20deg); }
+    .hero h1 { margin:0; font-size:clamp(3rem,7vw,5.8rem); letter-spacing:-.1em; text-transform:lowercase; }
+    .bookmark { display:inline-flex; gap:9px; align-items:center; margin-top:26px; padding:12px 18px; border-radius:10px; background:#031903; color:#d9ffd1; font-size:14px; }
+    kbd { border:1px solid rgba(97,255,0,.4); border-radius:4px; padding:3px 7px; color:var(--acid); background:#091e07; }
+    .follow { display:inline-flex; align-items:center; gap:12px; margin-top:26px; padding:14px 22px; border:1px solid var(--line); border-radius:12px; background:rgba(22,81,11,.75); color:#edffe8; font-weight:700; }
+    .follow strong { font-size:22px; color:#fff; }
+    .content { position:relative; z-index:1; max-width:1280px; margin:0 auto; padding:56px 5vw 90px; }
+    .section-head { display:flex; align-items:end; justify-content:space-between; margin-bottom:18px; }
+    .section-head h2 { margin:0; font-size:24px; text-transform:lowercase; letter-spacing:-.04em; }
+    .section-head span { color:var(--muted); font-size:12px; }
+    .tiles { display:grid; grid-template-columns:repeat(auto-fill,minmax(170px,1fr)); gap:18px; }
+    .tile { position:relative; min-height:178px; padding:0; overflow:hidden; border:1px solid rgba(97,255,0,.2); border-radius:11px; background:#061006; color:#fff; text-align:left; transition:transform .2s,border-color .2s,box-shadow .2s; }
+    .tile:hover { transform:translateY(-5px); border-color:var(--acid); box-shadow:0 12px 35px rgba(41,255,0,.22); }
+    .tile-art { height:125px; display:grid; place-items:center; color:#fff; font-size:48px; background:linear-gradient(135deg,#e5e5e5,#444); }
+    .tile:nth-child(2n) .tile-art { background:linear-gradient(135deg,#000,#222); }
+    .tile:nth-child(3n) .tile-art { background:linear-gradient(135deg,#a934ff,#20104d); }
+    .tile:nth-child(4n) .tile-art { background:linear-gradient(135deg,#28a9ff,#e8f3ff); }
+    .tile-name { display:block; padding:12px 13px; font-weight:700; }
+    .star { position:absolute; top:8px; right:8px; width:22px; height:22px; border:1px solid var(--acid); border-radius:50%; background:#061006; color:var(--acid); }
+    .apps { margin-top:52px; }
+    .app-tile { min-height:126px; }
+    .app-tile .tile-art { height:82px; font-size:34px; background:linear-gradient(135deg,#0e380b,#62ff25); }
+    .window { position:fixed; inset:9% 7%; z-index:10; display:none; flex-direction:column; border:1px solid var(--acid); border-radius:14px; background:#061006; box-shadow:0 30px 100px #000; overflow:hidden; }
+    .window.open { display:flex; animation:window-in .2s ease both; }
+    @keyframes window-in { from { opacity:0; transform:scale(.96); } to { opacity:1; transform:none; } }
+    .window-bar { display:flex; align-items:center; justify-content:space-between; padding:12px 16px; border-bottom:1px solid var(--line); background:#0b1b09; }
+    .window-bar strong { color:var(--acid); }
+    .close { border:0; background:transparent; color:var(--acid); font-size:20px; }
+    .window-body { flex:1; padding:18px; overflow:auto; }
+    .window-body input,.window-body button { padding:10px 13px; border:1px solid var(--line); border-radius:8px; color:#efffe9; background:#071507; }
+    .window-body button { color:#081004; background:var(--acid); font-weight:700; }
+    .browser-frame { width:100%; height:calc(100% - 60px); min-height:350px; margin-top:14px; border:1px solid var(--line); background:#fff; }
+    .music-results { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:12px; margin-top:18px; }
+    .music-card { padding:10px; border:1px solid var(--line); border-radius:8px; cursor:pointer; }
+    .music-card img { width:100%; aspect-ratio:1; object-fit:cover; }
+    .music-card small { color:var(--muted); }
+    footer { padding:24px; color:#587553; text-align:center; font-size:11px; }
+    @media (max-width:760px) { .topbar { flex-wrap:wrap; } .wordmark { min-width:auto; } .stats { order:3; width:100%; overflow:auto; margin:0; } .chip { padding:7px 9px; } .hero { min-height:400px; } .content { padding-top:36px; } .tiles { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; } .tile { min-height:145px; } .tile-art { height:98px; } .window { inset:4% 3%; } }
+  </style>
 </head>
 <body>
-	<section class="boot" id="boot"><div class="boot-card"><div class="mark">LITHIUM <span>V5</span></div><p>Lithium V5 · Core workspace</p><button class="primary" id="enter">Enter system</button></div></section>
-	<div id="desktop">
-		<header class="top"><div class="brand">LITHIUM <span>V5</span></div><div class="status" id="clock">--:--</div></header>
-		<div class="workspace">
-			<nav class="dock" aria-label="Applications">
-				<button class="active" data-view="home"><b>⌂</b><span>Home</span></button>
-				<button data-view="browser"><b>◉</b><span>Browser</span></button>
-				<button data-view="music"><b>♫</b><span>Music</span></button>
-				<button data-view="stream"><b>▣</b><span>Stream</span></button>
-				<button data-view="notes"><b>✦</b><span>Notes</span></button>
-			</nav>
-			<main>
-				<section class="view active" id="home">
-					<div class="hero"><div><div class="eyebrow">Lithium V5</div><h1>A calmer control deck for the <span>open web.</span></h1><p>Scramjet browsing, music discovery, streaming, and system notes in one Lithium workspace.</p></div><button class="primary" data-view="notes">Read patch notes</button></div>
-					<div class="grid"><article class="card"><div class="icon">◉</div><h3>Scram Browser</h3><p>Route a destination through the local Scramjet service worker.</p><button class="tool" data-view="browser">Open browser</button></article><article class="card"><div class="icon">♫</div><h3>Lithium Music</h3><p>Search iTunes previews and keep playback in this session.</p><button class="tool" data-view="music">Open music</button></article><article class="card"><div class="icon">▣</div><h3>Lithium Stream</h3><p>Load a stream or web app in a dedicated viewing surface.</p><button class="tool" data-view="stream">Open stream</button></article><article class="card"><div class="icon">✦</div><h3>V5 notes</h3><p>See what changed and what is planned for the next Lithium release.</p><button class="tool" data-view="notes">View updates</button></article></div>
-				</section>
-				<section class="view" id="browser"><div class="panel"><div class="eyebrow">Scramjet Browser</div><h2>Navigate through Lithium</h2><p class="status">The service worker is registered from <strong>/scram/sw.js</strong>. A Wisp backend is required for proxied destinations.</p><div class="row"><input id="url" placeholder="https://example.com or a search query" value="https://example.com"><button class="primary" id="go">Go</button></div><iframe class="browser-frame" id="frame" title="Scramjet browser"></iframe></div></section>
-				<section class="view" id="music"><div class="panel"><div class="eyebrow">Lithium Music</div><h2>Find a track</h2><div class="row"><input id="music-search" placeholder="Search songs or artists"><button class="primary" id="music-go">Search</button></div><div class="results" id="music-results"><p class="status">Search the iTunes catalog for 30-second preview clips.</p></div><audio id="audio" controls style="width:100%;margin-top:18px"></audio></div></section>
-				<section class="view" id="stream"><div class="panel"><div class="eyebrow">Lithium Stream</div><h2>Open a viewing surface</h2><div class="row"><input id="stream-url" placeholder="https://example.com"><button class="primary" id="stream-go">Load</button></div><iframe class="browser-frame" id="stream-frame" title="Lithium stream"></iframe></div></section>
-				<section class="view" id="notes"><div class="hero"><div><div class="eyebrow">Release channel</div><h1>Patch notes <span>V5.0</span></h1><p>Lithium V5 evolves as a compact workspace for the Scramjet stack.</p></div></div><div class="notes"><article class="note"><h3>V5.0.0 · Lithium Core</h3><p>Introduced the unified desktop shell, app dock, Scramjet browser surface, music discovery, stream viewer, and persistent release notes.</p></article><article class="note"><h3>Proxy foundation</h3><p>The existing service worker remains at <strong>/scram/sw.js</strong>, ready to route requests when the controller and Wisp transport are available.</p></article><article class="note"><h3>Next on the chart</h3><p>Package the Scramjet runtime artifacts locally, add BareMux transport selection, and expand the games workspace without making the desktop harder to scan.</p></article></div></section>
-			</main>
-		</div>
-		<footer>Lithium V5 · local workspace build · <span id="sw-status">checking service worker</span></footer>
-	</div>
-	<script>
-		const $ = (id) => document.getElementById(id);
-		const views = [...document.querySelectorAll('.view')];
-		function showView(name) { views.forEach((view) => view.classList.toggle('active', view.id === name)); document.querySelectorAll('[data-view]').forEach((button) => button.classList.toggle('active', button.dataset.view === name)); }
-		document.querySelectorAll('[data-view]').forEach((button) => button.addEventListener('click', () => showView(button.dataset.view)));
-		$('enter').addEventListener('click', () => $('boot').classList.add('off'));
-		function normalize(value) { const input = value.trim(); if (!input) return ''; return /^https?:\/\//i.test(input) ? input : 'https://www.google.com/search?q=' + encodeURIComponent(input); }
-		$('go').addEventListener('click', () => { const url = normalize($('url').value); if (url) $('frame').src = url; });
-		$('url').addEventListener('keydown', (event) => { if (event.key === 'Enter') $('go').click(); });
-		$('stream-go').addEventListener('click', () => { const url = normalize($('stream-url').value); if (url) $('stream-frame').src = url; });
-		$('music-go').addEventListener('click', searchMusic);
-		$('music-search').addEventListener('keydown', (event) => { if (event.key === 'Enter') searchMusic(); });
-		async function searchMusic() { const term = $('music-search').value.trim(); if (!term) return; $('music-results').innerHTML = '<p class="status">Searching...</p>'; try { const response = await fetch('https://itunes.apple.com/search?entity=song&limit=12&term=' + encodeURIComponent(term)); const data = await response.json(); $('music-results').innerHTML = data.results.map((song) => `<article class="track" data-url="${song.previewUrl || ''}"><img src="${song.artworkUrl100 || ''}" alt=""><strong>${song.trackName}</strong><br><small>${song.artistName}</small></article>`).join('') || '<p class="status">No tracks found.</p>'; document.querySelectorAll('.track').forEach((track) => track.addEventListener('click', () => { if (track.dataset.url) { $('audio').src = track.dataset.url; $('audio').play().catch(() => {}); } })); } catch (error) { $('music-results').innerHTML = '<p class="status">Music search is unavailable right now.</p>'; } }
-		function tick() { $('clock').textContent = new Date().toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' }); } tick(); setInterval(tick, 1000);
-		if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').then(() => $('sw-status').textContent = 'service worker ready').catch(() => $('sw-status').textContent = 'service worker unavailable'); else $('sw-status').textContent = 'service workers unsupported';
-	</script>
-	</body>
+  <section class="boot" id="boot"><div class="boot-inner"><div class="boot-symbol">◒</div><h1>lithium</h1><p>V5 / gamerouge interface</p><button class="follow" id="enter">enter the system</button></div></section>
+  <header class="topbar"><div class="wordmark"><span class="mini-mark">◒</span> lithium</div><div class="stats"><span class="chip">◷ <b id="clock">11:27 AM</b></span><span class="chip">● <b>84°F</b></span><span class="chip">⌁ <b>3181 ms</b></span><span class="chip">▣ <b>77%</b></span></div><label class="search">⌕ <input id="game-search" placeholder="search games" autocomplete="off"></label><label class="picker" title="Choose accent color"><input id="color-picker" type="color" value="#61ff00"></label></header>
+  <section class="hero"><div class="hero-content"><div class="kiwi">◒</div><h1>lithium</h1><div class="bookmark"><kbd>ctrl</kbd> + <kbd>D</kbd> to bookmark</div><div class="follow"><strong>♪</strong> follow the tiktok for more links</div></div></section>
+  <main class="content"><section><div class="section-head"><h2>games</h2><span id="game-count">12 titles</span></div><div class="tiles" id="game-grid"></div></section><section class="apps"><div class="section-head"><h2>apps</h2><span>tools for the session</span></div><div class="tiles"><button class="tile app-tile" data-app="browser"><div class="tile-art">◉</div><span class="tile-name">Browser</span><span class="star">☆</span></button><button class="tile app-tile" data-app="music"><div class="tile-art">♫</div><span class="tile-name">Music</span><span class="star">☆</span></button><button class="tile app-tile" data-app="stream"><div class="tile-art">▣</div><span class="tile-name">Stream</span><span class="star">☆</span></button><button class="tile app-tile" data-app="notes"><div class="tile-art">✦</div><span class="tile-name">Patch notes</span><span class="star">☆</span></button></div></section></main>
+  <footer>LITHIUM V5 · local gamerouge build · <span id="sw-status">loading runtime</span></footer>
+  <section class="window" id="browser-window"><div class="window-bar"><strong>◉ Browser</strong><button class="close" data-close="browser-window">×</button></div><div class="window-body"><div style="display:flex;gap:8px"><input id="browser-url" style="flex:1" value="https://example.com" placeholder="search or enter a URL"><button id="browser-go">go</button></div><iframe class="browser-frame" id="browser-frame" title="Lithium browser"></iframe></div></section>
+  <section class="window" id="music-window"><div class="window-bar"><strong>♫ Music</strong><button class="close" data-close="music-window">×</button></div><div class="window-body"><div style="display:flex;gap:8px"><input id="music-search" style="flex:1" placeholder="search songs or artists"><button id="music-go">search</button></div><div class="music-results" id="music-results"></div><audio id="audio" controls style="width:100%;margin-top:18px"></audio></div></section>
+  <section class="window" id="stream-window"><div class="window-bar"><strong>▣ Stream</strong><button class="close" data-close="stream-window">×</button></div><div class="window-body"><div style="display:flex;gap:8px"><input id="stream-url" style="flex:1" placeholder="https://example.com"><button id="stream-go">load</button></div><iframe class="browser-frame" id="stream-frame" title="Lithium stream"></iframe></div></section>
+  <section class="window" id="notes-window"><div class="window-bar"><strong>✦ Lithium V5 patch notes</strong><button class="close" data-close="notes-window">×</button></div><div class="window-body"><h2>V5 / gamerouge</h2><p>The interface is now built around the game shelf: a cinematic boot, a bright status bar, a search-first home, and apps that sit below the games.</p><h3>Runtime</h3><p>Scramjet assets remain local under <code>/scram</code>. Browser transport setup is ready for a Wisp backend.</p><h3>Next drop</h3><p>Favorites, game categories, downloadable themes, and a proper transport selector.</p></div></section>
+  <script>
+    const games = ['Duck Life','TikTok','Twitch','Omegle','Monster Truck','Hill Climb','Slope','Geometry Dash','Minecraft','FNAF','Run 3','Retro Bowl'];
+    const grid = document.getElementById('game-grid');
+    function renderGames(query = '') { const filtered = games.filter((game) => game.toLowerCase().includes(query.toLowerCase())); document.getElementById('game-count').textContent = `${filtered.length} titles`; grid.innerHTML = filtered.map((game, index) => `<button class="tile game-tile" data-game="${game}"><div class="tile-art">${['◉','♪','▣','◌','▰','◆'][index % 6]}</div><span class="tile-name">${game}</span><span class="star">☆</span></button>`).join(''); grid.querySelectorAll('[data-game]').forEach((tile) => tile.addEventListener('click', () => openApp('stream', tile.dataset.game))); }
+    function openApp(name) { const panel = document.getElementById(`${name}-window`); if (panel) panel.classList.add('open'); }
+    document.getElementById('enter').addEventListener('click', () => document.getElementById('boot').classList.add('done'));
+    document.querySelectorAll('[data-app]').forEach((button) => button.addEventListener('click', () => openApp(button.dataset.app)));
+    document.querySelectorAll('[data-close]').forEach((button) => button.addEventListener('click', () => document.getElementById(button.dataset.close).classList.remove('open')));
+    document.getElementById('game-search').addEventListener('input', (event) => renderGames(event.target.value));
+    document.getElementById('color-picker').addEventListener('input', (event) => document.documentElement.style.setProperty('--acid', event.target.value));
+    function normalize(value) { const input = value.trim(); return /^https?:\/\//i.test(input) ? input : `https://www.google.com/search?q=${encodeURIComponent(input)}`; }
+    document.getElementById('browser-go').addEventListener('click', () => { const value = document.getElementById('browser-url').value; if (value.trim()) document.getElementById('browser-frame').src = normalize(value); });
+    document.getElementById('browser-url').addEventListener('keydown', (event) => { if (event.key === 'Enter') document.getElementById('browser-go').click(); });
+    document.getElementById('stream-go').addEventListener('click', () => { const value = document.getElementById('stream-url').value; if (value.trim()) document.getElementById('stream-frame').src = normalize(value); });
+    async function searchMusic() { const term = document.getElementById('music-search').value.trim(); if (!term) return; const results = document.getElementById('music-results'); results.innerHTML = '<p>searching...</p>'; try { const response = await fetch(`https://itunes.apple.com/search?entity=song&limit=12&term=${encodeURIComponent(term)}`); const data = await response.json(); results.innerHTML = data.results.map((song) => `<article class="music-card" data-preview="${song.previewUrl || ''}"><img src="${song.artworkUrl100 || ''}" alt=""><strong>${song.trackName}</strong><br><small>${song.artistName}</small></article>`).join('') || '<p>no tracks found</p>'; results.querySelectorAll('[data-preview]').forEach((card) => card.addEventListener('click', () => { if (card.dataset.preview) { document.getElementById('audio').src = card.dataset.preview; document.getElementById('audio').play().catch(() => {}); } })); } catch { results.innerHTML = '<p>music search unavailable</p>'; } }
+    document.getElementById('music-go').addEventListener('click', searchMusic); document.getElementById('music-search').addEventListener('keydown', (event) => { if (event.key === 'Enter') searchMusic(); });
+    function updateClock() { document.getElementById('clock').textContent = new Date().toLocaleTimeString([], { hour:'numeric', minute:'2-digit' }); } updateClock(); setInterval(updateClock, 1000); renderGames();
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('/scram/sw.js').then(() => document.getElementById('sw-status').textContent = 'runtime ready').catch(() => document.getElementById('sw-status').textContent = 'runtime offline');
+  </script>
+</body>
 </html>
