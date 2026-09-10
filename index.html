@@ -1,1611 +1,1554 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="https://cdn.jsdelivr.net/gh/DominumNetwork/Dominum@main/src/assets/images/transparent-dominum.png">
-    <title>Lithium.SH</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <style>
-        /* ── Reset & Base ── */
-        *,
-        *::before,
-        *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        :root {
-            --bg: #0b0a16;
-            --bg2: #12101f;
-            --accent: #7a5cff;
-            --accent2: #5a3fd9;
-            --blue: #00bfff;
-            --text: #e6e6ff;
-            --text2: #a8a8d0;
-            --surface: rgba(255, 255, 255, 0.05);
-            --surface2: rgba(255, 255, 255, 0.08);
-            --border: rgba(255, 255, 255, 0.08);
-            --radius: 16px;
-            --shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            --transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            --font: 'Inter', sans-serif;
-            --font-display: 'Orbitron', sans-serif;
-        }
-
-        body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: var(--font);
-            min-height: 100vh;
-            padding: 1.5rem;
-            transition: background var(--transition), color var(--transition);
-            overflow-x: hidden;
-        }
-
-        /* ── Scrollbar ── */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--bg2);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--accent);
-            border-radius: 10px;
-        }
-
-        /* ── Header ── */
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0.8rem 1.8rem;
-            background: var(--surface);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            margin-bottom: 1.8rem;
-            transition: background var(--transition), border var(--transition);
-            box-shadow: var(--shadow);
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-        }
-
-        .brand-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--accent);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4rem;
-            font-weight: 900;
-            color: #fff;
-            transition: background var(--transition);
-            box-shadow: 0 0 30px rgba(122, 92, 255, 0.25);
-        }
-
-        .brand-text {
-            font-family: var(--font-display);
-            font-weight: 900;
-            font-size: 1.5rem;
-            letter-spacing: 1px;
-            background: linear-gradient(135deg, var(--accent), var(--blue));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            transition: background var(--transition);
-        }
-
-        .brand-text span {
-            -webkit-text-fill-color: var(--text);
-            opacity: 0.4;
-            font-weight: 500;
-        }
-
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .header-btn {
-            background: var(--surface2);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            color: var(--text);
-            width: 42px;
-            height: 42px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 1.1rem;
-            transition: all var(--transition);
-            position: relative;
-        }
-
-        .header-btn:hover {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: #fff;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(122, 92, 255, 0.35);
-        }
-
-        .header-btn .badge {
-            position: absolute;
-            top: -4px;
-            right: -4px;
-            width: 16px;
-            height: 16px;
-            background: var(--accent);
-            border-radius: 50%;
-            font-size: 0.55rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-        }
-
-        /* ── Controls ── */
-        .controls {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 2rem;
-            padding: 0.2rem 0;
-        }
-
-        .controls .search-wrap {
-            flex: 1 1 280px;
-            position: relative;
-        }
-
-        .controls .search-wrap i {
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text2);
-            opacity: 0.5;
-            font-size: 0.9rem;
-            pointer-events: none;
-        }
-
-        .controls input,
-        .controls select {
-            padding: 12px 18px;
-            padding-left: 44px;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            background: var(--surface);
-            color: var(--text);
-            font-family: var(--font);
-            font-size: 0.95rem;
-            transition: all var(--transition);
-            width: 100%;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-        }
-
-        .controls input:focus,
-        .controls select:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(122, 92, 255, 0.15);
-            background: var(--bg2);
-        }
-
-        .controls input::placeholder {
-            color: var(--text2);
-            opacity: 0.5;
-        }
-
-        .controls select {
-            padding-left: 18px;
-            appearance: none;
-            cursor: pointer;
-            flex: 0 1 180px;
-            background-image: linear-gradient(45deg, transparent 50%, var(--text2) 50%),
-                linear-gradient(135deg, var(--text2) 50%, transparent 50%);
-            background-position: calc(100% - 16px) center, calc(100% - 10px) center;
-            background-size: 6px 6px, 6px 6px;
-            background-repeat: no-repeat;
-            padding-right: 40px;
-        }
-
-        .controls select option {
-            background: var(--bg);
-            color: var(--text);
-        }
-
-        .controls .category-wrap {
-            flex: 0 1 180px;
-            display: none;
-        }
-        .controls .category-wrap.visible {
-            display: block;
-        }
-        .controls .category-wrap select {
-            padding-left: 18px;
-        }
-
-        /* ── Grid ── */
-        #container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-            gap: 1.4rem;
-        }
-
-        @keyframes popIn {
-            0% {
-                opacity: 0;
-                transform: scale(0.92) translateY(24px);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
-        }
-
-        .game-card {
-            background: var(--surface);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            cursor: pointer;
-            overflow: hidden;
-            opacity: 0;
-            animation: popIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-            transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
-            position: relative;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .game-card:hover {
-            transform: translateY(-6px) scale(1.02);
-            box-shadow: 0 16px 40px rgba(122, 92, 255, 0.18);
-            border-color: var(--accent);
-            z-index: 2;
-        }
-
-        .game-card .img-wrap {
-            width: 100%;
-            aspect-ratio: 1;
-            overflow: hidden;
-            background: var(--bg2);
-            position: relative;
-        }
-
-        .game-card .img-wrap img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-
-        .game-card:hover .img-wrap img {
-            transform: scale(1.1);
-        }
-
-        .game-card .img-wrap .play-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity var(--transition);
-        }
-
-        .game-card:hover .img-wrap .play-overlay {
-            opacity: 1;
-        }
-
-        .game-card .img-wrap .play-overlay i {
-            font-size: 2.8rem;
-            color: #fff;
-            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-            transform: scale(0.8);
-            transition: transform var(--transition);
-        }
-
-        .game-card:hover .img-wrap .play-overlay i {
-            transform: scale(1);
-        }
-
-        .game-card .game-name {
-            padding: 0.9rem 0.8rem;
-            font-family: var(--font);
-            font-weight: 600;
-            font-size: 0.85rem;
-            text-align: center;
-            color: var(--text);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            letter-spacing: 0.3px;
-            border-top: 1px solid var(--border);
-            transition: color var(--transition);
-            background: var(--surface);
-        }
-
-        .game-card:hover .game-name {
-            color: var(--accent);
-        }
-
-        .game-card .game-provider {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(8px);
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-size: 0.55rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--text2);
-            border: 1px solid var(--border);
-            pointer-events: none;
-        }
-
-        .empty-state {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 4rem 2rem;
-            color: var(--text2);
-        }
-        .empty-state i {
-            font-size: 3rem;
-            opacity: 0.3;
-            margin-bottom: 1rem;
-            display: block;
-        }
-        .empty-state p {
-            font-size: 1.1rem;
-            opacity: 0.7;
-        }
-
-        /* ── Modal ── */
-        #modalOverlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.88);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            padding: 1.5rem;
-            animation: fadeIn 0.3s ease forwards;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        #gameModal {
-            width: 100%;
-            max-width: 1200px;
-            height: 88vh;
-            background: var(--bg2);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
-            transform: scale(0.95);
-            animation: modalPop 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-        }
-
-        @keyframes modalPop {
-            to {
-                transform: scale(1);
-            }
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 1.8rem;
-            background: var(--surface);
-            border-bottom: 1px solid var(--border);
-            flex-shrink: 0;
-        }
-
-        .modal-header .modal-title {
-            font-family: var(--font-display);
-            font-weight: 700;
-            font-size: 1.1rem;
-            letter-spacing: 0.5px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            color: var(--text);
-        }
-
-        .modal-header .modal-actions {
-            display: flex;
-            gap: 8px;
-            flex-shrink: 0;
-        }
-
-        .modal-header .modal-actions button {
-            background: var(--surface2);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            color: var(--text);
-            width: 38px;
-            height: 38px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all var(--transition);
-        }
-
-        .modal-header .modal-actions button:hover {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: #fff;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(122, 92, 255, 0.3);
-        }
-
-        #zoneFullscreenFrame {
-            flex: 1;
-            width: 100%;
-            border: none;
-            background: #000;
-        }
-
-        /* ── Settings Modal ── */
-        #settingsOverlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 3000;
-            padding: 1.5rem;
-            animation: fadeIn 0.3s ease forwards;
-        }
-
-        #settingsModal {
-            width: 100%;
-            max-width: 640px;
-            max-height: 90vh;
-            background: var(--bg2);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 2rem 2.2rem;
-            overflow-y: auto;
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
-            transform: scale(0.95);
-            animation: modalPop 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-        }
-
-        #settingsModal h2 {
-            font-family: var(--font-display);
-            font-weight: 700;
-            font-size: 1.4rem;
-            margin-bottom: 1.8rem;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: var(--text);
-        }
-
-        #settingsModal h2 i {
-            color: var(--accent);
-        }
-
-        .settings-group {
-            margin-bottom: 2rem;
-        }
-
-        .settings-group label {
-            display: block;
-            font-weight: 600;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            color: var(--text2);
-            margin-bottom: 0.6rem;
-        }
-
-        .settings-group .setting-desc {
-            font-size: 0.8rem;
-            color: var(--text2);
-            opacity: 0.6;
-            margin-top: 0.3rem;
-        }
-
-        .settings-group select,
-        .settings-group input[type="text"] {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            background: var(--surface);
-            color: var(--text);
-            font-family: var(--font);
-            font-size: 0.95rem;
-            transition: all var(--transition);
-            appearance: none;
-            cursor: pointer;
-        }
-
-        .settings-group select:focus,
-        .settings-group input[type="text"]:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(122, 92, 255, 0.15);
-            background: var(--bg);
-        }
-
-        .settings-group select option {
-            background: var(--bg);
-            color: var(--text);
-        }
-
-        .settings-group .select-wrap {
-            position: relative;
-        }
-        .settings-group .select-wrap::after {
-            content: '\f078';
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
-            position: absolute;
-            right: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text2);
-            opacity: 0.5;
-            pointer-events: none;
-            font-size: 0.7rem;
-        }
-
-        /* Theme grid */
-        .theme-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-            gap: 10px;
-            margin-top: 4px;
-        }
-
-        .theme-btn {
-            padding: 8px 6px;
-            border: 2px solid var(--border);
-            border-radius: 10px;
-            background: var(--surface);
-            color: var(--text);
-            font-family: var(--font);
-            font-size: 0.7rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all var(--transition);
-            text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .theme-btn .swatch {
-            width: 28px;
-            height: 28px;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: transform var(--transition);
-        }
-
-        .theme-btn:hover {
-            border-color: var(--text2);
-            transform: translateY(-2px);
-        }
-        .theme-btn:hover .swatch {
-            transform: scale(1.1);
-        }
-
-        .theme-btn.active {
-            border-color: var(--accent);
-            background: var(--surface2);
-            box-shadow: 0 0 20px rgba(122, 92, 255, 0.15);
-        }
-
-        .theme-btn .theme-name {
-            font-size: 0.6rem;
-            opacity: 0.7;
-        }
-
-        .settings-close-row {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 0.5rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--border);
-        }
-
-        .settings-close-row button {
-            padding: 10px 28px;
-            border: none;
-            border-radius: 12px;
-            background: var(--accent);
-            color: #fff;
-            font-family: var(--font);
-            font-weight: 700;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all var(--transition);
-        }
-
-        .settings-close-row button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 28px rgba(122, 92, 255, 0.35);
-        }
-
-        /* ── Alerts ── */
-        .alert-backdrop {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 4000;
-            animation: fadeIn 0.3s ease forwards;
-            padding: 1.5rem;
-        }
-
-        .alert-modal {
-            background: var(--bg2);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 2.5rem;
-            max-width: 460px;
-            width: 100%;
-            text-align: center;
-            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
-            transform: translateY(30px);
-            animation: slideUp 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-        }
-
-        @keyframes slideUp {
-            to {
-                transform: translateY(0);
-            }
-        }
-
-        .alert-modal h3 {
-            font-family: var(--font-display);
-            font-size: 1.3rem;
-            margin-bottom: 0.8rem;
-            color: var(--accent);
-            letter-spacing: 0.5px;
-        }
-
-        .alert-modal p {
-            font-size: 0.95rem;
-            line-height: 1.6;
-            color: var(--text2);
-            margin-bottom: 1.5rem;
-        }
-
-        .alert-modal .discord-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(88, 101, 242, 0.15);
-            border: 1px solid #5865F2;
-            color: #fff;
-            text-decoration: none;
-            padding: 0.7rem 1.5rem;
-            border-radius: 12px;
-            font-weight: 600;
-            margin-bottom: 1.2rem;
-            transition: all var(--transition);
-        }
-
-        .alert-modal .discord-link:hover {
-            background: #5865F2;
-            box-shadow: 0 8px 24px rgba(88, 101, 242, 0.35);
-            transform: translateY(-2px);
-        }
-
-        .alert-modal .primary-btn {
-            background: var(--surface2);
-            color: var(--text);
-            border: 1px solid var(--border);
-            padding: 0.9rem 2rem;
-            border-radius: 12px;
-            font-family: var(--font);
-            font-weight: 700;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: all var(--transition);
-            width: 100%;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .alert-modal .primary-btn:hover {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: #fff;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(122, 92, 255, 0.3);
-        }
-
-        .alert-modal .primary-btn.danger {
-            border-color: #ff4444;
-            color: #ff4444;
-        }
-        .alert-modal .primary-btn.danger:hover {
-            background: #ff4444;
-            color: #fff;
-            border-color: #ff4444;
-            box-shadow: 0 8px 24px rgba(255, 68, 68, 0.3);
-        }
-
-        /* ── Responsive ── */
-        @media (max-width: 768px) {
-            body {
-                padding: 1rem;
-            }
-            .header {
-                padding: 0.6rem 1.2rem;
-                flex-wrap: wrap;
-                gap: 8px;
-            }
-            .brand-text {
-                font-size: 1.1rem;
-            }
-            .brand-icon {
-                width: 34px;
-                height: 34px;
-                font-size: 1.1rem;
-            }
-            .controls {
-                flex-direction: column;
-                gap: 10px;
-            }
-            .controls .search-wrap {
-                flex: 1 1 auto;
-            }
-            .controls select {
-                flex: 1 1 auto;
-            }
-            #container {
-                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-                gap: 1rem;
-            }
-            #settingsModal {
-                padding: 1.5rem;
-            }
-            .theme-grid {
-                grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-            }
-            .modal-header {
-                padding: 0.7rem 1.2rem;
-            }
-            .modal-header .modal-title {
-                font-size: 0.9rem;
-            }
-            #gameModal {
-                height: 92vh;
-            }
-            .alert-modal {
-                padding: 1.8rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .brand-text span {
-                display: none;
-            }
-            .header-btn {
-                width: 36px;
-                height: 36px;
-                font-size: 0.9rem;
-            }
-            #container {
-                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-                gap: 0.8rem;
-            }
-            .game-card .game-name {
-                font-size: 0.75rem;
-                padding: 0.6rem 0.5rem;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Anchor Proxy</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%232b65f6'/%3E%3Cpath d='M50 15 L65 40 L50 65 L35 40 Z' fill='white'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+:root {
+  --ps-bg: #0b0c10;
+  --ps-card: rgba(20,20,25,0.85);
+  --ps-blue: #2b65f6;
+  --ps-glow: rgba(43,101,246,0.5);
+  --text-main: #f0f0f0;
+  --text-muted: #888891;
+  --glass-border: rgba(255,255,255,0.08);
+  --bg-black: #000;
+  --bg-base: #121212;
+  --brand-green: #1db954;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; font-family:system-ui,-apple-system,sans-serif; user-select:none; }
+
+body {
+  background:var(--ps-bg); color:var(--text-main);
+  height:100vh; overflow:hidden; display:flex; flex-direction:column;
+}
+
+#boot-screen {
+  position:fixed; inset:0; background:radial-gradient(circle at center,#111 0%,#000 100%);
+  z-index:9999; display:flex; flex-direction:column; justify-content:center; align-items:center;
+  transition:opacity 1.2s ease, visibility 1.2s;
+}
+.boot-logo-container { position:relative; display:flex; flex-direction:column; align-items:center; }
+.boot-logo {
+  font-size:4.5rem; font-weight:300; letter-spacing:6px;
+  color:#fff; display:flex; align-items:center; gap:20px;
+  opacity:0; transform:scale(0.8);
+  animation:anchorPop 2.5s cubic-bezier(0.2,0.8,0.2,1) forwards;
+}
+.boot-logo i { color:var(--ps-blue); text-shadow:0 0 20px var(--ps-glow); }
+.boot-line {
+  margin-top:30px; width:200px; height:2px; background:var(--ps-blue);
+  box-shadow:0 0 15px var(--ps-blue); border-radius:2px;
+  transform-origin:center; transform:scaleX(0);
+  animation:lineExpand 2s cubic-bezier(0.8,0,0.2,1) 0.5s forwards;
+}
+@keyframes anchorPop {
+  0%{opacity:0;transform:scale(0.8) translateY(30px);filter:blur(15px);}
+  40%{opacity:1;transform:scale(1.05) translateY(0);filter:blur(0);text-shadow:0 0 40px rgba(255,255,255,0.6);}
+  100%{opacity:1;transform:scale(1) translateY(0);text-shadow:0 0 15px rgba(255,255,255,0.2);}
+}
+@keyframes lineExpand {
+  0%{transform:scaleX(0);opacity:1;}
+  50%{transform:scaleX(1);opacity:0.8;}
+  100%{transform:scaleX(0);opacity:0;}
+}
+
+#nav-modal {
+  display:none; position:fixed; inset:0;
+  background:rgba(0,0,0,0.85); z-index:10000;
+  backdrop-filter:blur(20px);
+  justify-content:center; align-items:center; flex-direction:column;
+}
+.nav-modal-content { text-align:center; max-width:600px; }
+.nav-modal-content h2 { font-weight:300; font-size:28px; margin-bottom:40px; color:#fff; }
+.nav-options { display:flex; gap:30px; justify-content:center; flex-wrap:wrap; }
+.nav-btn {
+  background:rgba(255,255,255,0.05); border:1px solid var(--glass-border);
+  padding:30px 40px; border-radius:16px; color:white; cursor:pointer;
+  transition:all 0.3s ease; display:flex; flex-direction:column; align-items:center; gap:15px; width:200px;
+}
+.nav-btn i { font-size:40px; color:var(--text-muted); transition:0.3s; }
+.nav-btn:hover, .nav-btn.focused {
+  background:rgba(255,255,255,0.15); border-color:white; transform:translateY(-5px);
+  box-shadow:0 10px 30px rgba(0,0,0,0.5);
+}
+.nav-btn:hover i, .nav-btn.focused i { color:white; }
+
+#app {
+  width:100%; height:100%;
+  background-size:cover; background-position:center;
+  transition:background-image 0.8s ease;
+  display:flex; flex-direction:column; position:relative;
+}
+#app::before {
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(circle at top, rgba(0,0,0,0.2) 0%, #000 95%);
+  z-index:1; pointer-events:none;
+}
+
+.top-bar {
+  height:90px; display:flex; justify-content:space-between; align-items:center;
+  padding:0 40px; z-index:20; position:relative; flex-shrink:0;
+}
+.tabs { display:flex; gap:35px; align-items:center; }
+.tab {
+  font-size:15px; color:var(--text-muted); cursor:pointer;
+  transition:0.3s; padding:8px 0; position:relative; font-weight:500;
+}
+.tab::after {
+  content:''; position:absolute; bottom:-5px; left:0; width:0%; height:2px;
+  background:white; transition:0.3s;
+}
+.tab.active { color:white; }
+.tab.active::after { width:100%; }
+.tab.focused { color:white; text-shadow:0 0 10px rgba(255,255,255,0.5); }
+
+.sys-icons { display:flex; gap:20px; color:white; font-size:16px; align-items:center; opacity:0.8; }
+.sys-icons span { font-size:13px; font-weight:bold; }
+#input-toggle { transition:0.3s; cursor:pointer; }
+#input-toggle:hover, #input-toggle.focused { color:var(--ps-blue); transform:scale(1.2); text-shadow:0 0 10px var(--ps-glow); }
+
+#content-area { flex:1; position:relative; z-index:10; display:flex; flex-direction:column; min-height:0; overflow:hidden; }
+
+.home-scroll-view {
+  display:flex; flex-direction:column; width:100%; height:100%;
+  overflow-y:auto; overflow-x:hidden; scroll-behavior:smooth; padding-bottom:40px;
+}
+
+.game-info { padding:0 60px; margin-bottom:25px; margin-top:auto; transition:opacity 0.3s; min-height:100px; flex-shrink:0; }
+.game-logo-text { font-size:40px; font-weight:800; letter-spacing:-1px; margin-bottom:8px; text-shadow:0 4px 20px rgba(0,0,0,0.8); }
+.game-desc { color:var(--text-muted); font-size:14px; max-width:450px; line-height:1.5; margin-bottom:20px; }
+
+.play-btn {
+  background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2);
+  backdrop-filter:blur(15px);
+  padding:12px 35px; border-radius:30px;
+  color:white; font-size:15px; font-weight:600; cursor:pointer;
+  display:inline-flex; align-items:center; gap:10px; transition:all 0.2s;
+}
+.play-btn:hover, .play-btn.focused {
+  background:white; color:black; transform:scale(1.05); box-shadow:0 5px 20px rgba(255,255,255,0.4);
+}
+
+.home-row { margin-bottom:25px; flex-shrink:0; }
+.carousel-container { padding-left:60px; overflow:visible; height:170px; }
+.carousel-track { display:flex; gap:16px; transition:transform 0.4s cubic-bezier(0.2,0.8,0.2,1); }
+
+.card {
+  width:130px; height:130px; border-radius:18px;
+  background:var(--ps-card); border:1px solid var(--glass-border);
+  display:flex; justify-content:center; align-items:center;
+  transition:all 0.3s ease; flex-shrink:0; position:relative; overflow:hidden; cursor:pointer;
+}
+.card-bg { position:absolute; inset:0; background-size:cover; background-position:center; opacity:0.6; transition:0.3s; }
+.card i { font-size:28px; color:white; z-index:2; opacity:0.5; }
+.card.active {
+  width:165px; height:165px; border:2px solid white;
+  box-shadow:0 10px 40px rgba(0,0,0,0.6); transform:translateY(-20px);
+}
+.card.active .card-bg { opacity:1; }
+.card.active i { opacity:1; text-shadow:0 0 15px rgba(255,255,255,0.5); }
+.card:hover:not(.active) { border-color:rgba(255,255,255,0.6); }
+
+.section-title {
+  font-size:20px; font-weight:700; margin:0 0 12px 60px;
+  color:white; display:flex; align-items:center; gap:10px; letter-spacing:-0.5px;
+}
+
+.marquee-container { overflow:hidden; white-space:nowrap; width:100%; position:relative; padding:10px 0 15px 0; }
+.marquee-track { display:inline-flex; gap:16px; animation:scrollMarquee 40s linear infinite; padding-left:60px; }
+.marquee-track:hover { animation-play-state:paused; }
+.marquee-card {
+  width:130px; height:130px; border-radius:14px; background-size:cover; background-position:center;
+  border:1px solid var(--glass-border); flex-shrink:0; transition:transform 0.3s; cursor:pointer;
+}
+.marquee-card:hover { transform:scale(1.08) translateY(-5px); border-color:white; box-shadow:0 10px 30px rgba(0,0,0,0.5); }
+@keyframes scrollMarquee { 0%{transform:translateX(0);} 100%{transform:translateX(-50%);} }
+
+.grid-view { display:none; width:100%; height:100%; flex-direction:column; overflow-y:auto; overflow-x:hidden; scroll-behavior:smooth; }
+
+.store-top-layout {
+  display:flex; gap:20px; margin:15px 50px 30px 50px; flex-shrink:0; height:300px;
+}
+.store-hero {
+  flex:2; border-radius:20px; position:relative; overflow:hidden;
+  display:flex; align-items:flex-end; padding:30px;
+  background:#000; box-shadow:0 20px 50px rgba(0,0,0,0.5);
+  border:1px solid var(--glass-border); cursor:pointer; transition:all 0.3s;
+}
+.store-random-box {
+  flex:1; border-radius:20px; position:relative; overflow:hidden;
+  background:var(--ps-card); border:1px solid var(--ps-blue); cursor:pointer;
+  display:flex; flex-direction:column; justify-content:flex-end; padding:25px;
+  transition:all 0.3s; box-shadow:0 10px 30px rgba(0,0,0,0.3);
+}
+.store-random-bg {
+  position:absolute; inset:0; background-size:cover; background-position:center;
+  transition:background-image 0.5s ease-in-out; opacity:0.4;
+  mask-image:linear-gradient(to bottom, transparent 20%, black 100%);
+}
+.store-hero-bg {
+  position:absolute; inset:0; background-size:cover; background-position:center 20%;
+  opacity:0.6; transition:opacity 1s, background-image 0.8s;
+  mask-image:linear-gradient(to bottom, black 30%, transparent 100%);
+}
+.store-hero-content, .store-random-content { position:relative; z-index:2; width:100%; }
+.store-hero-tag { color:var(--ps-blue); font-size:12px; font-weight:800; margin-bottom:8px; display:inline-block; letter-spacing:1.5px; text-transform:uppercase; }
+.store-hero-title { font-size:32px; font-weight:800; margin-bottom:10px; line-height:1.1; text-shadow:0 4px 20px rgba(0,0,0,0.8); }
+.store-hero-price { font-size:14px; color:#ccc; margin-bottom:18px; font-weight:500; }
+.store-random-content h3 { color:white; font-size:22px; font-weight:800; margin-bottom:6px; display:flex; align-items:center; gap:10px; text-shadow:0 2px 10px rgba(0,0,0,0.8); }
+.store-random-content p { color:var(--text-main); font-size:14px; text-shadow:0 2px 5px rgba(0,0,0,0.8); }
+
+.store-focusable.focused, .store-focusable:hover { border-color:white; transform:scale(1.02); z-index:5; }
+.store-random-box.focused, .store-random-box:hover { box-shadow:0 10px 40px rgba(43,101,246,0.5); background:rgba(43,101,246,0.1); }
+.store-hero.focused, .store-hero:hover { box-shadow:0 20px 60px rgba(255,255,255,0.15); }
+
+.store-section-title {
+  font-size:22px; font-weight:700; margin:10px 0 15px 50px;
+  color:white; display:flex; align-items:center; gap:10px; flex-shrink:0; letter-spacing:-0.5px;
+}
+
+.main-grid {
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(190px,1fr));
+  gap:25px; padding:0 50px 60px 50px; flex-shrink:0;
+}
+.grid-item {
+  background:var(--ps-card); border-radius:16px; overflow:hidden;
+  transition:all 0.3s cubic-bezier(0.2,0.8,0.2,1); cursor:pointer;
+  border:1px solid var(--glass-border); display:flex; flex-direction:column;
+  box-shadow:0 10px 20px rgba(0,0,0,0.2); height:100%;
+}
+.grid-item.wide { grid-column:span 2; }
+.grid-item.large { grid-column:span 2; grid-row:span 2; }
+.span-full { grid-column:1/-1; margin-top:20px; pointer-events:none; }
+
+.grid-item-img-container { width:100%; aspect-ratio:4/3; overflow:hidden; position:relative; }
+.grid-item.wide .grid-item-img-container { aspect-ratio:21/9; }
+.grid-item.large .grid-item-img-container { flex:1; aspect-ratio:unset; min-height:200px; }
+.grid-item-img { width:100%; height:100%; object-fit:cover; transition:transform 0.5s ease; opacity:0.9; }
+.grid-item-details {
+  padding:14px; display:flex; flex-direction:column; gap:8px;
+  background:rgba(20,20,25,0.95); flex-grow:1; justify-content:flex-end;
+}
+.grid-item-title { font-weight:700; font-size:15px; color:white; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.grid-item-footer { display:flex; justify-content:space-between; align-items:center; margin-top:auto; }
+.grid-item-cat { color:var(--text-muted); font-size:11px; }
+.grid-item-btn {
+  background:rgba(255,255,255,0.1); color:var(--ps-blue);
+  padding:5px 14px; border-radius:18px; font-size:12px; font-weight:700;
+  transition:0.2s; text-transform:uppercase; letter-spacing:0.5px;
+}
+.grid-item:hover, .grid-item.focused {
+  transform:scale(1.04) translateY(-5px);
+  border-color:rgba(255,255,255,0.3);
+  box-shadow:0 20px 40px rgba(0,0,0,0.5), 0 0 15px rgba(43,101,246,0.3); z-index:5;
+}
+.grid-item:hover .grid-item-img, .grid-item.focused .grid-item-img { transform:scale(1.08); opacity:1; }
+.grid-item:hover .grid-item-btn, .grid-item.focused .grid-item-btn { background:var(--ps-blue); color:white; }
+
+#search-box-container { padding:30px 50px 15px 50px; flex-shrink:0; }
+#search-input {
+  width:100%; background:var(--ps-card); border:1px solid var(--glass-border);
+  color:white; font-size:20px; font-weight:500; padding:16px 25px; outline:none; transition:0.3s;
+  border-radius:14px; box-shadow:0 10px 30px rgba(0,0,0,0.3); user-select:auto;
+}
+#search-input::placeholder { color:var(--text-muted); }
+#search-input:focus, #search-input.focused { border-color:var(--ps-blue); box-shadow:0 10px 40px var(--ps-glow); background:rgba(20,20,25,0.9); }
+
+#toast-container { position:fixed; top:30px; right:30px; z-index:20000; display:flex; flex-direction:column; gap:12px; pointer-events:none; }
+.toast {
+  background:rgba(20,20,25,0.95); backdrop-filter:blur(20px);
+  padding:14px 24px; border-radius:30px; border:1px solid rgba(255,255,255,0.1);
+  color:white; font-size:14px; font-weight:600; display:flex; align-items:center; gap:10px;
+  animation:slideIn 0.4s cubic-bezier(0.2,0.8,0.2,1); box-shadow:0 15px 35px rgba(0,0,0,0.6), 0 0 20px rgba(43,101,246,0.3);
+  transition:all 0.4s cubic-bezier(0.2,0.8,0.2,1);
+}
+@keyframes slideIn { from { transform:translateX(120%) scale(0.9); opacity:0; } to { transform:translateX(0) scale(1); opacity:1; } }
+
+#session-overlay {
+  display:none; position:fixed; bottom:20px; right:20px;
+  background:rgba(20,20,25,0.95); backdrop-filter:blur(20px); z-index:15000;
+  flex-direction:column; justify-content:center; align-items:center;
+  padding:14px 22px; border-radius:14px; border:1px solid var(--glass-border);
+  box-shadow:0 10px 30px rgba(0,0,0,0.5);
+}
+.session-timer { font-size:1.8rem; font-weight:100; margin:8px 0; letter-spacing:-1px; }
+.end-btn { background:white; color:black; border:none; padding:8px 24px; font-size:13px; font-weight:bold; border-radius:18px; cursor:pointer; transition:0.2s; }
+.end-btn:hover { background:#ff3b30; color:white; transform:scale(1.05); }
+
+::-webkit-scrollbar { width:6px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.12); border-radius:8px; }
+::-webkit-scrollbar-thumb:hover { background:rgba(255,255,255,0.25); }
+
+@media (max-width:768px) {
+  .top-bar { padding:0 15px; height:70px; }
+  .tabs { gap:15px; }
+  .tab { font-size:12px; }
+  .sys-icons { gap:12px; font-size:13px; }
+  .game-info { padding:0 20px; }
+  .game-logo-text { font-size:28px; }
+  .carousel-container { padding-left:20px; height:140px; }
+  .card { width:100px; height:100px; }
+  .card.active { width:130px; height:130px; transform:translateY(-15px); }
+  .section-title { font-size:16px; margin:0 0 10px 20px; }
+  .store-top-layout { flex-direction:column; height:auto; margin:10px 15px 20px 15px; }
+  .store-hero { min-height:180px; padding:20px; }
+  .store-hero-title { font-size:22px; }
+  .store-random-box { min-height:120px; padding:18px; }
+  .main-grid { grid-template-columns:repeat(auto-fill, minmax(140px,1fr)); gap:15px; padding:0 15px 40px 15px; }
+  .store-section-title { font-size:18px; margin:10px 0 12px 15px; }
+  #search-box-container { padding:20px 15px 10px 15px; }
+  #search-input { font-size:16px; padding:12px 18px; }
+  .nav-btn { width:150px; padding:20px; }
+}
+
+#file-input { display:none; }
+</style>
 </head>
 <body>
 
-    <!-- ═══ HEADER ═══ -->
-    <header class="header">
-        <a class="brand" href="#">
-            <div class="brand-icon">Li</div>
-            <span class="brand-text">Lithium<span>.SH</span></span>
-        </a>
-        <div class="header-actions">
-            <button class="header-btn" id="settingsToggle" title="Settings" aria-label="Settings">
-                <i class="fas fa-sliders-h"></i>
-            </button>
-        </div>
-    </header>
+<div id="boot-screen">
+  <div class="boot-logo-container">
+    <div class="boot-logo"><i class="fas fa-anchor"></i> ANCHOR PROXY</div>
+    <div class="boot-line"></div>
+  </div>
+</div>
 
-    <!-- ═══ CONTROLS ═══ -->
-    <div class="controls">
-        <div class="search-wrap">
-            <i class="fas fa-search"></i>
-            <input type="text" id="searchBar" placeholder="Search games..." oninput="applyFilters()" />
+<div id="nav-modal">
+  <div class="nav-modal-content">
+    <h2>Select Input Method</h2>
+    <div class="nav-options">
+      <div class="nav-btn" id="btn-keyboard" onclick="setNavMode('keyboard')">
+        <i class="fas fa-gamepad"></i>
+        <span>Controller / Keys</span>
+      </div>
+      <div class="nav-btn" id="btn-mouse" onclick="setNavMode('mouse')">
+        <i class="fas fa-mouse-pointer"></i>
+        <span>Mouse</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="app">
+  <div class="top-bar">
+    <div class="tabs">
+      <div class="tab active" data-id="games" onclick="if(useMouse) switchTab('games')">Home</div>
+      <div class="tab" data-id="purchased" onclick="if(useMouse) switchTab('purchased')">Library</div>
+      <div class="tab" data-id="store" onclick="if(useMouse) switchTab('store')">Store</div>
+      <div class="tab" data-id="search" onclick="if(useMouse) switchTab('search')"><i class="fas fa-search" style="margin-right:5px;"></i>Search</div>
+    </div>
+    <div class="sys-icons">
+      <i class="fas fa-cog"></i>
+      <i class="fas fa-mouse-pointer" id="input-toggle" onclick="toggleNavMode()" title="Toggle Input Mode"></i>
+      <i class="fas fa-user-circle" style="font-size:22px;"></i>
+      <span id="clock">12:00</span>
+    </div>
+  </div>
+
+  <div id="content-area">
+    <div class="home-scroll-view" id="carousel-view">
+      <div style="height:45vh; display:flex; flex-direction:column; justify-content:flex-end; padding-bottom:15px;">
+        <div class="game-info">
+          <div class="game-logo-text" id="hero-title">Select Title</div>
+          <div class="game-desc" id="hero-sub">Loading system assets...</div>
+          <button class="play-btn" id="hero-btn" onclick="handleAction()">
+            <i class="fas fa-play" id="btn-icon"></i> <span id="btn-text">Play</span>
+          </button>
         </div>
-        <div class="category-wrap" id="categoryWrap">
-            <select id="categorySelect" class="control-input" onchange="applyFilters()">
-                <option value="">All Categories</option>
-                <option value="action">Action</option>
-                <option value="racing">Racing</option>
-                <option value="strategy">Strategy</option>
-                <option value="sports">Sports</option>
-                <option value="skill">Skill</option>
-                <option value="shooting">Shooting</option>
-                <option value="2 player">2 Player</option>
-                <option value="io">Io</option>
-            </select>
+      </div>
+
+      <div class="home-row">
+        <div class="section-title" id="main-carousel-title">Your Games</div>
+        <div class="carousel-container">
+          <div class="carousel-track" id="track"></div>
         </div>
+      </div>
+
+      <div class="home-row">
+        <div class="section-title">Try Something New!</div>
+        <div class="marquee-container">
+          <div class="marquee-track" id="marquee-track"></div>
+        </div>
+      </div>
+
+      <div class="home-row">
+        <div class="section-title">What We Recommend</div>
+        <div class="carousel-container">
+          <div class="carousel-track" id="track-rec"></div>
+        </div>
+      </div>
     </div>
 
-    <!-- ═══ GAME GRID ═══ -->
-    <div id="container"></div>
-
-    <!-- ═══ GAME MODAL ═══ -->
-    <div id="modalOverlay">
-        <div id="gameModal">
-            <div class="modal-header">
-                <span class="modal-title" id="gameTitle">Game Title</span>
-                <div class="modal-actions">
-                    <button id="blankBtn" title="Open in about:blank"><i class="fa-solid fa-up-right-from-square"></i></button>
-                    <button id="downloadBtn" title="Download"><i class="fas fa-download"></i></button>
-                    <button id="fullscreenBtn" title="Fullscreen"><i class="fas fa-expand"></i></button>
-                    <button id="closeFullscreen" title="Close"><i class="fas fa-times"></i></button>
-                </div>
-            </div>
-            <iframe id="zoneFullscreenFrame"></iframe>
+    <div class="grid-view" id="store-view">
+      <div class="store-top-layout">
+        <div class="store-hero store-focusable" id="store-hero" onclick="purchaseFeatured()">
+          <div class="store-hero-bg" id="hero-bg-layer"></div>
+          <div class="store-hero-content">
+            <div class="store-hero-tag">Featured Title</div>
+            <div class="store-hero-title" id="featured-title">Loading...</div>
+            <div class="store-hero-price">Available Now • Enhanced</div>
+            <button class="play-btn" style="background:white;color:black;padding:8px 25px;border:none;pointer-events:none;font-size:13px;">GET</button>
+          </div>
         </div>
+        <div class="store-random-box store-focusable" id="store-random-box" onclick="buyStoreRandomGame()">
+          <div class="store-random-bg" id="store-random-bg"></div>
+          <div class="store-random-content">
+            <h3><i class="fas fa-dice"></i> Random Game</h3>
+            <p>Can't decide? Click to instantly grab the game shown!</p>
+          </div>
+        </div>
+      </div>
+      <div class="main-grid" id="store-grid"></div>
     </div>
 
-    <!-- ═══ SETTINGS MODAL ═══ -->
-    <div id="settingsOverlay">
-        <div id="settingsModal">
-            <h2><i class="fas fa-sliders-h"></i> Settings</h2>
-
-            <!-- Theme -->
-            <div class="settings-group">
-                <label>Theme</label>
-                <div class="theme-grid" id="themeGrid"></div>
-                <div class="setting-desc">Choose your vibe.</div>
-            </div>
-
-            <!-- Provider -->
-            <div class="settings-group">
-                <label>Game Source</label>
-                <div class="select-wrap">
-                    <select id="providerSelect" onchange="handleProviderChange()">
-                        <option value="gn-math">GN-Math</option>
-                        <option value="truffled">Truffled.lol</option>
-                        <option value="petezah">PeteZah</option>
-                        <option value="elite">Elite Gamez</option>
-                        <option value="sea-bean">Sea Bean</option>
-                        <option value="ugs">UGS (may lag)</option>
-                        <option value="seraph">Seraph</option>
-                    </select>
-                </div>
-                <div class="setting-desc">Switch between game JSON sources.</div>
-            </div>
-
-            <!-- Truffled Proxy (hidden by default) -->
-            <div class="settings-group" id="truffledProxyGroup" style="display:none;">
-                <label>Truffled Proxy</label>
-                <div class="select-wrap">
-                    <select id="truffledProxySelect" onchange="loadGames()">
-                        <option value="https://truffled.lol">truffled.lol (Default)</option>
-                        <option value="https://classlink.com.de">classlink.com.de</option>
-                        <option value="https://pamson.pl.sophiemaslowski.com">pamson.pl.sophiemaslowski.com</option>
-                        <option value="https://lightspeed-sucks.9ibee.com">lightspeed-sucks.9ibee.com</option>
-                    </select>
-                </div>
-                <div class="setting-desc">If truffled is blocked, try another proxy.</div>
-            </div>
-
-            <div class="settings-close-row">
-                <button id="closeSettings">Close</button>
-            </div>
-        </div>
+    <div class="grid-view" id="search-view">
+      <div id="search-box-container">
+        <input type="text" id="search-input" placeholder="Games, Apps, Articles and More" autocomplete="off">
+      </div>
+      <div class="store-section-title" id="search-status" style="font-size:16px;color:var(--text-muted);margin-top:5px;">Enter a query to search</div>
+      <div class="main-grid" id="search-grid"></div>
     </div>
+  </div>
+</div>
 
-    <!-- ═══ NOTICE ALERT ═══ -->
-    <div id="noticeModal" class="alert-backdrop">
-        <div class="alert-modal">
-            <h3><i class="fas fa-info-circle"></i> Notice</h3>
-            <p>I do not own these links; they belong to the truffled community. If you want a link removed, DM me on Discord (<strong>dominus.elitus</strong>). Support them!</p>
-            <a href="https://discord.gg/vVqY36mzvj" target="_blank" class="discord-link"><i class="fab fa-discord"></i> Truffled Discord</a>
-            <button id="noticeContinueBtn" class="primary-btn">Continue</button>
+<input type="file" id="file-input" accept=".html">
+
+<div id="session-overlay">
+  <div style="color:var(--ps-blue);font-weight:bold;font-size:12px;letter-spacing:2px;">NOW PLAYING</div>
+  <div class="session-timer" id="session-timer">00:00:00</div>
+  <button class="end-btn" onclick="killGame()">Close Game</button>
+</div>
+
+<div id="toast-container"></div>
+
+<script>
+const CDN_COVER = "https://cdn.jsdelivr.net/gh/bestsabplayerox/covers@main/";
+const CDN_HTML = "https://cdn.jsdelivr.net/gh/bestsabplayerox/html@master/";
+const API_ZONES = "https://cdn.jsdelivr.net/gh/bestsabplayerox/assets@main/zones.json";
+
+const NOAH_GAMES = [
+{title:"Alien Hominid",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/393.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/382.png"},
+{title:"Customer Support",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/383.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/383.jpg"},
+{title:"The Deadseat",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/395.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/384.jpg"},
+{title:"Fireboy & Watergirl: Forest Temple",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/385.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/385.jpg"},
+{title:"Deltatraveler",url:"https://script.google.com/macros/s/AKfycbx137PRDh0Of0SDaXqu2fKaJ8Ht8Os5Nabi3xeIWYs_dCA0jP4SKRjQ9P9nC1xeruWK/exec?game=388",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/386.jpg"},
+{title:"Needy Streamer Overload",url:"https://script.google.com/macros/s/AKfycbx137PRDh0Of0SDaXqu2fKaJ8Ht8Os5Nabi3xeIWYs_dCA0jP4SKRjQ9P9nC1xeruWK/exec?game=389",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/387.jpg"},
+{title:"Pizza Tower",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/394.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/388.png"},
+{title:"TileTopia",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/391.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/389.png"},
+{title:"Earn to Die",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/378.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/378.jpg"},
+{title:"Earn to Die 2",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/379.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/379.jpg"},
+{title:"Bart Blast",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/380.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/380.jpg"},
+{title:"Bendy and the Ink Machine",url:"https://script.google.com/macros/s/AKfycby_6uwHt90FuvgGfTLTHhveJVw0nEJ_bMxq8GTaA1KjFfpmu0g08RlArFt61GAw7WOw/exec?game=374",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/374.jpg"},
+{title:"Gacha Life",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/375.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/375.jpg"},
+{title:"Gacha Verse",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/376.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/376.jpg"},
+{title:"Tung Sahur Horror",url:"https://script.google.com/macros/s/AKfycby_6uwHt90FuvgGfTLTHhveJVw0nEJ_bMxq8GTaA1KjFfpmu0g08RlArFt61GAw7WOw/exec?game=377",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/377.jpg"},
+{title:"Horror Tale",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/373.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/373.jpg"},
+{title:"Dumb Ways to Die",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/372.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/images/372.jpg"},
+{title:"Bloons Tower Defense 1",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/367.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/367.jpg"},
+{title:"Bloons Tower Defense 2",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/368.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/368.jpg"},
+{title:"Bloons Tower Defense 3",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/369.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/369.jpg"},
+{title:"Bloons Tower Defense 4",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/370.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/370.jpg"},
+{title:"Bloons Tower Defense 5",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/371.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/371.jpg"},
+{title:"Brotato",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/366.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/366.jpg"},
+{title:"Endoparasitic 2",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/365.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/365.jpg"},
+{title:"Endoparasitic",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/364.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/364.jpg"},
+{title:"Baby Sniper In Vietnam",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/363.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/363.jpg"},
+{title:"Shift at Midnight",url:"https://script.google.com/macros/s/AKfycbxbf7DaEtTxZVBBPow6r-L0q2mvgkI4D7xYUU-_sbldBlrXfiB4jK1f4ACNiR0LPuCt/exec?game=362.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/356.jpg"},
+{title:"Road of Fury",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/361.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/355.jpg"},
+{title:"Roulette Hero",url:"https://script.google.com/macros/s/AKfycbxbf7DaEtTxZVBBPow6r-L0q2mvgkI4D7xYUU-_sbldBlrXfiB4jK1f4ACNiR0LPuCt/exec?game=360.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/354.jpg"},
+{title:"Fear Assessment",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/359.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/353.png"},
+{title:"Dimension Incident",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/358.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/352.jpg"},
+{title:"Raldi's Crackhouse",url:"https://script.google.com/macros/s/AKfycbxbf7DaEtTxZVBBPow6r-L0q2mvgkI4D7xYUU-_sbldBlrXfiB4jK1f4ACNiR0LPuCt/exec?game=357.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/360.jpg"},
+{title:"Christmas Massacre",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/356.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/359.jpg"},
+{title:"Boxing Random",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/355.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/358.jpg"},
+{title:"Volley Random",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/354.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/357.jpg"},
+{title:"Basket Random",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/353.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/362.png"},
+{title:"Soccer Random",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/352.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/361.jpg"},
+{title:"Little Big Planet",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/351.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/351.jpg"},
+{title:"Binding of Isaac: Rebirth",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/350.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/350.jpg"},
+{title:"Littlest Pet Shop City Friends",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/348.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/349.jpg"},
+{title:"Cloverpit",url:"https://script.google.com/macros/s/AKfycbw2YH3dPJE1XWPOXBnR4UOidr3vX8fgY0ZIyWj1Bmx9Lcty0e1bfUOYwPJ02lviN2Hb/exec?game=342.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/343.jpg"},
+{title:"Peaks of Yore",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/343.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/344.jpg"},
+{title:"Silent Hill",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/344.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/345.jpg"},
+{title:"Dad 'n Me",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/345.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/346.jpg"},
+{title:"Five Nights at Candy's",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/346.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/347.jpg"},
+{title:"Five Nights at Candy's 2",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/347.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/348.jpg"},
+{title:"Untitled Goose Game",url:"https://script.google.com/macros/s/AKfycbzyj-ClxB2ouG-p6WKb1f3vRqmapP4DA9kn9ZHPRYQ1d9_Ynk4nMOjyLpceGUfaTKFB/exec?game=341.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/342.jpg"},
+{title:"Deltarune Ch. 3 & 4",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/340.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/341.jpg"},
+{title:"Earthbound",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/339.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/340.jpg"},
+{title:"Hamtaro: Ham-Ham Heartbreak",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/336.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/337.jpg"},
+{title:"Class of '09",url:"https://script.google.com/macros/s/AKfycbw2YH3dPJE1XWPOXBnR4UOidr3vX8fgY0ZIyWj1Bmx9Lcty0e1bfUOYwPJ02lviN2Hb/exec?game=337.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/338.jpg"},
+{title:"Antonblast",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/338.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/339.jpg"},
+{title:"Super Monkey Ball",url:"https://rawcdn.githack.com/slqntdevss/quasar/main/public/assets/storage/html/smb/index.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/336.jpg"},
+{title:"Iron Lung",url:"https://script.google.com/macros/s/AKfycbw2YH3dPJE1XWPOXBnR4UOidr3vX8fgY0ZIyWj1Bmx9Lcty0e1bfUOYwPJ02lviN2Hb/exec?game=306.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/328.jpg"},
+{title:"Superhot",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/299.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/321.jpg"},
+{title:"OMORI",url:"https://script.google.com/macros/s/AKfycbw2YH3dPJE1XWPOXBnR4UOidr3vX8fgY0ZIyWj1Bmx9Lcty0e1bfUOYwPJ02lviN2Hb/exec?game=290.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/312.jpg"},
+{title:"Fear & Hunger",url:"https://script.google.com/macros/s/AKfycbw2YH3dPJE1XWPOXBnR4UOidr3vX8fgY0ZIyWj1Bmx9Lcty0e1bfUOYwPJ02lviN2Hb/exec?game=305.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/327.jpg"},
+{title:"Doodle Jump",url:"https://script.google.com/macros/s/AKfycbw2YH3dPJE1XWPOXBnR4UOidr3vX8fgY0ZIyWj1Bmx9Lcty0e1bfUOYwPJ02lviN2Hb/exec?game=298.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/320.jpg"},
+{title:"Karlson",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/289.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/311.jpg"},
+{title:"Toss The Turtle",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/311.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/334.jpg"},
+{title:"Survivor.io",url:"https://script.google.com/macros/s/AKfycbw2YH3dPJE1XWPOXBnR4UOidr3vX8fgY0ZIyWj1Bmx9Lcty0e1bfUOYwPJ02lviN2Hb/exec?game=310.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/333.jpg"},
+{title:"People Playground",url:"https://script.google.com/macros/s/AKfycbw2YH3dPJE1XWPOXBnR4UOidr3vX8fgY0ZIyWj1Bmx9Lcty0e1bfUOYwPJ02lviN2Hb/exec?game=309.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/332.jpg"},
+{title:"Papers, Please",url:"https://script.google.com/macros/s/AKfycbw2YH3dPJE1XWPOXBnR4UOidr3vX8fgY0ZIyWj1Bmx9Lcty0e1bfUOYwPJ02lviN2Hb/exec?game=308.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/331.jpg"},
+{title:"Scrap Divers",url:"https://rawcdn.githack.com/gameinclassroom/scrap-divers/a856e0b0dfafba00718e3b8dd05976376bf2b71b/index.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/330.jpg"},
+{title:"Beeswarm Simulator",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/312.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/335.jpg"},
+{title:"Time Shooter 3: SWAT",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/303.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/325.jpg"},
+{title:"Time Shooter 2",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/302.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/324.jpg"},
+{title:"Time Shooter 1",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/301.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/323.jpg"},
+{title:"The Man From The Window",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/293.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/315.jpg"},
+{title:"Real Flight Simulator",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/294.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/316.jpg"},
+{title:"Johnny Trigger",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/288.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/310.jpg"},
+{title:"Kirby Soft & Wet",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/292.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/314.jpg"},
+{title:"VS Rewrite: ROUND 2",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/304.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/326.jpg"},
+{title:"Speed Stars",url:"https://rawcdn.githack.com/BeezBumba/SpeedStarsv2/67d3a926357cf35e2a2efc5ac5fc29c786c8cbda/index.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/317.jpg"},
+{title:"Stickman Destruction",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/296.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/318.jpg"},
+{title:"Stickman Fight Ragdoll",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/297.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/319.jpg"},
+{title:"Gobble",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/291.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/313.jpg"},
+{title:"Tag",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/300.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/322.png"},
+{title:"BitPlanes",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/307.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/329.jpg"},
+{title:"Half Life: Opposing Force",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/269.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/296.jpg"},
+{title:"A Difficult Game About Climbing",url:"https://script.google.com/macros/s/AKfycbw2YH3dPJE1XWPOXBnR4UOidr3vX8fgY0ZIyWj1Bmx9Lcty0e1bfUOYwPJ02lviN2Hb/exec?game=172.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/294.jpg"},
+{title:"Stick War Legacy",url:"https://script.google.com/macros/s/AKfycbw2YH3dPJE1XWPOXBnR4UOidr3vX8fgY0ZIyWj1Bmx9Lcty0e1bfUOYwPJ02lviN2Hb/exec?game=171.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/293.jpg"},
+{title:"Buster Jam",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/170.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/292.jpg"},
+{title:"Dungeons & Degenerate Gamblers",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/173.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/295.jpg"},
+{title:"Minecraft 1.12.1",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/164.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/291.jpg"},
+{title:"Gorilla Tag",url:"https://script.google.com/macros/s/AKfycbw2YH3dPJE1XWPOXBnR4UOidr3vX8fgY0ZIyWj1Bmx9Lcty0e1bfUOYwPJ02lviN2Hb/exec?game=161.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/289.jpg"},
+{title:"Goblin Goopmaxxing",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/160.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/288.jpg"},
+{title:"Midnight Shift",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/159.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/287.jpg"},
+{title:"Orange Roulette",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/158.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/286.jpg"},
+{title:"Five Nights at Winstons",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/157.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/285.jpg"},
+{title:"Final Fantasy VII",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/156.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/284.jpg"},
+{title:"Please Dont Touch Anything",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/155.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/283.jpg"},
+{title:"Minesweeper Classic",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/162.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/290.jpg"},
+{title:"Doom 3",url:"https://doom3kaidensarcade.netlify.app/",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/282.jpg"},
+{title:"Slendy Tubbies",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/273.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/281.jpg"},
+{title:"Pixel Gun 3D",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/272.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/280.jpg"},
+{title:"Flying Gorilla",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/271.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/279.jpg"},
+{title:"Eat The Rich",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/270.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/278.jpg"},
+{title:"Grand Theft Auto Vice City",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/149.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/272.jpg"},
+{title:"Heretic",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/150.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/273.jpg"},
+{title:"Bacon May Die",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/151.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/274.jpg"},
+{title:"Oneshot",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/152.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/275.jpg"},
+{title:"Jelly Drift",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/153.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/276.jpg"},
+{title:"FNF Rewrite",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/154.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/277.jpg"},
+{title:"Terraria",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/165.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/271.jpg"},
+{title:"Celeste",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/147.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/270.jpg"},
+{title:"Burrito Bison",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/267.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/130.jpg"},
+{title:"Tanuki Sunset",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/146.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/269.jpg"},
+{title:"SwordFight!!",url:"https://script.google.com/macros/s/AKfycbw2YH3dPJE1XWPOXBnR4UOidr3vX8fgY0ZIyWj1Bmx9Lcty0e1bfUOYwPJ02lviN2Hb/exec?game=145.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/268.jpg"},
+{title:"Station Saturn",url:"https://script.google.com/macros/s/AKfycbw2YH3dPJE1XWPOXBnR4UOidr3vX8fgY0ZIyWj1Bmx9Lcty0e1bfUOYwPJ02lviN2Hb/exec?game=144.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/267.jpg"},
+{title:"Spelunky Classic HD",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/143.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/266.jpg"},
+{title:"Sonic.EXE",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/142.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/265.jpg"},
+{title:"Minesweeper Plus",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/141.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/264.jpg"},
+{title:"Kitty Toy",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/140.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/263.jpg"},
+{title:"Happy Wheels",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/139.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/174.jpg"},
+{title:"Google Feud",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/138.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/262.jpg"},
+{title:"Basketball Stars",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/137.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/261.jpg"},
+{title:"Daggerfall",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/136.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/252.jpg"},
+{title:"Portal",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/135.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/253.jpg"},
+{title:"Ice Dodo",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/134.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/254.jpg"},
+{title:"Doom",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/133.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/255.jpg"},
+{title:"Doom 2",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/257.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/257.jpg"},
+{title:"Call of Duty: World at War",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/130.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/258.jpg"},
+{title:"Call of Duty 4: Modern Warfare",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/129.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/259.jpg"},
+{title:"Kart Bros",url:"https://kartbros.io/",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/260.jpg"},
+{title:"Peggle",url:"https://script.google.com/macros/s/AKfycbw2YH3dPJE1XWPOXBnR4UOidr3vX8fgY0ZIyWj1Bmx9Lcty0e1bfUOYwPJ02lviN2Hb/exec?game=127.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/251.jpg"},
+{title:"Ace Attorney",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/126.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/250.jpg"},
+{title:"FNF Agoti",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/125.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/249.jpg"},
+{title:"FNF Black Betrayal",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/124.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/248.jpg"},
+{title:"FNF B-Side",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/123.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/247.jpg"},
+{title:"FNF Camellia",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/122.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/246.jpg"},
+{title:"FNF Impostor V4",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/121.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/245.jpg"},
+{title:"FNF Indie Cross",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/120.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/244.jpg"},
+{title:"FNF Kapi",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/119.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/243.jpg"},
+{title:"FNF Mario Madness",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/118.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/242.jpg"},
+{title:"FNF Pibby Apocalypse",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/117.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/241.jpg"},
+{title:"FNF Shaggy X Matt",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/116.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/240.jpg"},
+{title:"FNF Sonic.exe",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/115.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/239.jpg"},
+{title:"FNF Garcello",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/114.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/238.jpg"},
+{title:"FNF Hit Single",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/113.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/237.jpg"},
+{title:"Papa's Donuteria",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/275.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/297.jpg"},
+{title:"Papa's Burgeria",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/276.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/298.jpg"},
+{title:"Papa's Cheeseria",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/277.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/299.png"},
+{title:"Papa's Cupcakeria",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/278.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/300.jpg"},
+{title:"Papa's Freezeria",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/279.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/301.jpg"},
+{title:"Papa's Hot Doggeria",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/280.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/302.jpg"},
+{title:"Papa's Pancakeria",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/281.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/303.jpg"},
+{title:"Papa's Pastaria",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/282.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/304.jpg"},
+{title:"Papa's Scooperia",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/283.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/305.jpg"},
+{title:"Papa's Sushiria",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/284.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/306.jpg"},
+{title:"Papa's Taco Mia",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/285.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/307.jpg"},
+{title:"Papa's Wingeria",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/286.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/308.png"},
+{title:"Papa's Pizzeria",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/287.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/309.jpg"},
+{title:"Achilles 2",url:"https://script.google.com/macros/s/AKfycbw2YH3dPJE1XWPOXBnR4UOidr3vX8fgY0ZIyWj1Bmx9Lcty0e1bfUOYwPJ02lviN2Hb/exec?game=112.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/236.jpg"},
+{title:"Russian Counter Strike",url:"https://script.google.com/macros/s/AKfycbw2YH3dPJE1XWPOXBnR4UOidr3vX8fgY0ZIyWj1Bmx9Lcty0e1bfUOYwPJ02lviN2Hb/exec?game=111.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/235.jpg"},
+{title:"Deltarune",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/110.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/234.jpg"},
+{title:"Learn to Fly 3",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/109.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/233.jpg"},
+{title:"Lego Batman 2",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/108.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/232.jpg"},
+{title:"Lego Star Wars Complete Saga",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/107.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/231.jpg"},
+{title:"Madness Interactive",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/106.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/230.jpg"},
+{title:"Tony Hawks Pro Skater",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/105.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/229.jpg"},
+{title:"Postal",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/104.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/228.jpg"},
+{title:"Resident Evil 3",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/103.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/227.jpg"},
+{title:"Scribblenauts",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/102.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/226.jpg"},
+{title:"Sprunki",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/101.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/225.jpg"},
+{title:"Strange Rope Police",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/100.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/224.jpg"},
+{title:"Street Fighter III",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/99.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/223.jpg"},
+{title:"Super Liquid Soccer",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/98.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/222.jpg"},
+{title:"Tempoverdose",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/97.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/221.jpg"},
+{title:"Abandoned",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/96.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/220.jpg"},
+{title:"Plants vs Zombies 2",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/92.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/197.jpg"},
+{title:"Hotline Miami",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/16.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/22.jpg"},
+{title:"Balatro",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/268.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/195.jpg"},
+{title:"Wolfenstein 3D",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/95.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/219.jpg"},
+{title:"Zombotron Reboot",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/94.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/218.jpg"},
+{title:"Mortal Kombat 4",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/93.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/fuckthis.jpg"},
+{title:"Undertale",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/91.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/217.jpg"},
+{title:"Zelda: Majora's Mask",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/90.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/216.jpg"},
+{title:"Cooking Mama 3",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/89.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/215.jpg"},
+{title:"Cooking Mama 2",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/88.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/214.jpg"},
+{title:"Cooking Mama",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/87.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/213.jpg"},
+{title:"BloodMoney",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/86.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/212.jpg"},
+{title:"Big Shot Boxing",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/85.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/211.jpg"},
+{title:"Assessment Examination",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/84.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/210.jpg"},
+{title:"Schoolboy Runaway",url:"https://script.google.com/macros/s/AKfycbw2YH3dPJE1XWPOXBnR4UOidr3vX8fgY0ZIyWj1Bmx9Lcty0e1bfUOYwPJ02lviN2Hb/exec?game=83.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/209.jpg"},
+{title:"Fears to Fathom: Home Alone",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/82.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/208.jpg"},
+{title:"Dan The Man",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/81.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/207.jpg"},
+{title:"Resident Evil 2",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/80.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/205.jpg"},
+{title:"Get Yoked",url:"https://rawcdn.githack.com/ahrdevelopers/get-yoked-extreme-bodybuilding/5584024f6f0dc9fed26b21529b7578057d306fd5/index.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/204.jpg"},
+{title:"Douche Bag Life",url:"https://script.google.com/macros/s/AKfycbw2YH3dPJE1XWPOXBnR4UOidr3vX8fgY0ZIyWj1Bmx9Lcty0e1bfUOYwPJ02lviN2Hb/exec?game=78.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/203.jpg"},
+{title:"Donkey Kong",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/77.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/202.jpg"},
+{title:"Apple Worm",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/75.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/201.jpg"},
+{title:"Chess",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/74.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/200.jpg"},
+{title:"Doki Doki Literature Club",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/73.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/199.jpg"},
+{title:"Getting Over It",url:"https://script.google.com/macros/s/AKfycbw2YH3dPJE1XWPOXBnR4UOidr3vX8fgY0ZIyWj1Bmx9Lcty0e1bfUOYwPJ02lviN2Hb/exec?game=72.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/198.jpg"},
+{title:"Toca Boca World",url:"https://ud-gles3games.shared-osj.k8s.n2i.io/?deeplinksURI=null%3A%2F%2F&deeplinksApp=com.tocaboca.tocalifeworld&quotaBytes=89000000&naturalOrientation=portrait&invertNaturalOrientation&forcedNaturalOrientation&jitterBufferMin=0&deeplinksService=true&backOnDisconnected=true&disconnectedMessage=null&api=%7B%22back%22%3Afalse%7D&title=Toca+Boca+World",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/206.jpg"},
+{title:"Tattletail",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/71.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/196.jpg"},
+{title:"Sonic the Hedgehog 3",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/69.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/189.jpg"},
+{title:"Sonic the Hedgehog 2",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/68.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/190.jpg"},
+{title:"Sonic Mania",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/67.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/191.jpg"},
+{title:"Sonic CD",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/66.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/192.jpg"},
+{title:"War The Knights",url:"https://script.google.com/macros/s/AKfycbw2YH3dPJE1XWPOXBnR4UOidr3vX8fgY0ZIyWj1Bmx9Lcty0e1bfUOYwPJ02lviN2Hb/exec?game=70.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/193.jpg"},
+{title:"Football Bros",url:"https://fb.crispyclean.org/",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/194.jpg"},
+{title:"Buckshot Roulette",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/63.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/187.jpg"},
+{title:"Cup Head",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/266.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/188.jpg"},
+{title:"Slime Rancher",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/64.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/186.jpg"},
+{title:"FNAF: Pizza Sim",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/1.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/1.jpg"},
+{title:"Baseball Bros",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/265.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/2.jpg"},
+{title:"A Dance of Fire and Ice",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/3.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/3.jpg"},
+{title:"Smashy Kart",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/264.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/4.jpg"},
+{title:"Deepest Sword",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/263.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/8.jpg"},
+{title:"Tomodachi Life",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/5.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/9.jpg"},
+{title:"FNAF: Sister Location",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/6.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/10.jpg"},
+{title:"Fallout",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/7.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/11.jpg"},
+{title:"Rocket League",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/262.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/12.jpg"},
+{title:"Street Fighter II",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/261.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/13.jpg"},
+{title:"Bad Piggies",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/10.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/16.jpg"},
+{title:"Among Us (real)",url:"https://ud-gles3games.shared-osj.k8s.n2i.io/?deeplinksURI=null%3A%2F%2F&deeplinksApp=com.innersloth.spacemafia&naturalOrientation=landscape&forcedNaturalOrientation&autofitOnConnect&jitterBufferMin=0&deeplinksService=true&backOnDisconnected=true&disconnectedMessage=null&api=%7B%22back%22%3Afalse%7D&title=Among+Us",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/17.jpg"},
+{title:"Yandere Simulator",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/12.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/18.jpg"},
+{title:"Quake III",url:"https://script.google.com/macros/s/AKfycbw2YH3dPJE1XWPOXBnR4UOidr3vX8fgY0ZIyWj1Bmx9Lcty0e1bfUOYwPJ02lviN2Hb/exec?game=14.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/20.jpg"},
+{title:"10 Minutes Till Dawn",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/15.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/21.jpg"},
+{title:"Nubby's Number Factory",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/17.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/23.jpg"},
+{title:"Death Run 3D",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/19.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/25.jpg"},
+{title:"Clash Royale",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/andurdingus.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/26.jpg"},
+{title:"PaRappa The Rapper",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/22.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/27.jpg"},
+{title:"Hollow Knight",url:"https://script.google.com/macros/s/AKfycbw2YH3dPJE1XWPOXBnR4UOidr3vX8fgY0ZIyWj1Bmx9Lcty0e1bfUOYwPJ02lviN2Hb/exec?game=23.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/28.jpg"},
+{title:"Binding of Isaac WOTL",url:"https://script.google.com/macros/s/AKfycbw2YH3dPJE1XWPOXBnR4UOidr3vX8fgY0ZIyWj1Bmx9Lcty0e1bfUOYwPJ02lviN2Hb/exec?game=24.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/29.jpg"},
+{title:"Angry Birds",url:"https://script.google.com/macros/s/AKfycbw2YH3dPJE1XWPOXBnR4UOidr3vX8fgY0ZIyWj1Bmx9Lcty0e1bfUOYwPJ02lviN2Hb/exec?game=29.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/34.jpg"},
+{title:"FNAF: World",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/30.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/36.jpg"},
+{title:"Solar Smash",url:"https://script.google.com/macros/s/AKfycbw2YH3dPJE1XWPOXBnR4UOidr3vX8fgY0ZIyWj1Bmx9Lcty0e1bfUOYwPJ02lviN2Hb/exec?game=31.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/37.jpg"},
+{title:"Idle Mining Empire",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/260.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/37.jpg"},
+{title:"Bounce Masters",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/33.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/39.jpg"},
+{title:"Raft",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/35.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/41.jpg"},
+{title:"Slender",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/37.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/43.jpg"},
+{title:"Kindergarten 3",url:"https://script.google.com/macros/s/AKfycbw2YH3dPJE1XWPOXBnR4UOidr3vX8fgY0ZIyWj1Bmx9Lcty0e1bfUOYwPJ02lviN2Hb/exec?game=39.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/45.jpg"},
+{title:"Kindergarten 2",url:"https://script.google.com/macros/s/AKfycbw2YH3dPJE1XWPOXBnR4UOidr3vX8fgY0ZIyWj1Bmx9Lcty0e1bfUOYwPJ02lviN2Hb/exec?game=40.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/46.jpg"},
+{title:"Kindergarten",url:"https://script.google.com/macros/s/AKfycbw2YH3dPJE1XWPOXBnR4UOidr3vX8fgY0ZIyWj1Bmx9Lcty0e1bfUOYwPJ02lviN2Hb/exec?game=41.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/47.jpg"},
+{title:"Granny 3",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/259.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/48.jpg"},
+{title:"Granny 2",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/258.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/49.jpg"},
+{title:"Granny",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/257.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/50.jpg"},
+{title:"Baldi's Basics",url:"https://script.google.com/macros/s/AKfycbw2YH3dPJE1XWPOXBnR4UOidr3vX8fgY0ZIyWj1Bmx9Lcty0e1bfUOYwPJ02lviN2Hb/exec?game=43.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/52.jpg"},
+{title:"Candy Crush",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/45.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/54.jpg"},
+{title:"Geometry Dash",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/46.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/55.jpg"},
+{title:"That's Not My Neighbor",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/47.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/56.jpg"},
+{title:"ULTRAKILL",url:"https://script.google.com/macros/s/AKfycbw2YH3dPJE1XWPOXBnR4UOidr3vX8fgY0ZIyWj1Bmx9Lcty0e1bfUOYwPJ02lviN2Hb/exec?game=48.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/57.jpg"},
+{title:"WebFishing",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/49.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/58.jpg"},
+{title:"Super Falling Fred",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/256.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/59.jpg"},
+{title:"Pokemon Emerald",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/255.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/62.jpg"},
+{title:"Impossible Quiz 2",url:"https://xoriushourz.github.io/ImpossibleQuiz2/",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/63.jpg"},
+{title:"Super Smash Flash 2",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/253.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/64.jpg"},
+{title:"Idle Breakout",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/252.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/65.jpg"},
+{title:"Gun Mayhem 2",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/251.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/66.jpg"},
+{title:"Gun Mayhem",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/250.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/67.jpg"},
+{title:"Big Tower Tiny Square",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/249.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/68.jpg"},
+{title:"Big Tower Tiny Square 2",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/248.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/69.jpg"},
+{title:"Pokemon Firered",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/247.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/72.jpg"},
+{title:"Stake Mines",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/246.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/73.jpg"},
+{title:"Blumgi Rocket",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/245.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/74.jpg"},
+{title:"Raft Wars 2",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/244.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/75.jpg"},
+{title:"8Ball Pool",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/243.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/79.jpg"},
+{title:"Escape Road",url:"https://raw.githack.com/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/master/games/242.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/81.jpg"},
+{title:"OvO",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/241.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/82.jpg"},
+{title:"Fruit Ninja",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/240.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/84.jpg"},
+{title:"They're Coming",url:"https://raw.githack.com/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/d689b42d2c441f234879d5e4da51fc61f07b078d/games/52.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/86.jpg"},
+{title:"Flappy Bird",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/239.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/87.jpg"},
+{title:"Recoil",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/238.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/88.jpg"},
+{title:"Twitch Tetris",url:"https://godlover89.github.io/Twitch-Tetris/",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/89.jpg"},
+{title:"Ultimate Car Driving",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/237.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/90.jpg"},
+{title:"Crazy Cattle 3D",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/236.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/91.jpg"},
+{title:"Run 3",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/235.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/92.jpg"},
+{title:"Vex 8",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/234.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/93.jpg"},
+{title:"Apple Shooter",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/233.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/94.jpg"},
+{title:"Running Fred",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/232.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/95.jpg"},
+{title:"Jelly Truck",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/230.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/97.jpg"},
+{title:"Rooftop Snipers 2",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/229.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/98.jpg"},
+{title:"Hole.io",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/228.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/100.jpg"},
+{title:"Wrassling",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/227.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/102.jpg"},
+{title:"Level Devil",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/225.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/105.jpg"},
+{title:"Temple Run 2",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/224.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/106.jpg"},
+{title:"Boxing Live 2",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/223.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/107.jpg"},
+{title:"Super Mario 64",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/222.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/109.jpg"},
+{title:"Wheelie Bike 2",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/221.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/111.jpg"},
+{title:"Bloxorz",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/219.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/113.jpg"},
+{title:"World's Hardest Game",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/218.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/115.jpg"},
+{title:"Impossible Quiz",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/217.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/117.jpg"},
+{title:"Stickman Hook",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/216.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/118.jpg"},
+{title:"Rio Rex",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/215.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/119.jpg"},
+{title:"Stacktris",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/214.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/123.jpg"},
+{title:"Plinko",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/213.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/125.jpg"},
+{title:"Blocky Snakes",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/212.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/127.jpg"},
+{title:"Crossy Road",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/211.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/128.jpg"},
+{title:"Happy Room",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/210.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/129.jpg"},
+{title:"Zombocalypse 2",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/209.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/131.jpg"},
+{title:"Backrooms",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/208.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/134.jpg"},
+{title:"Getaway Shootout",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/207.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/135.jpg"},
+{title:"Snow Rider 3D",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/206.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/136.jpg"},
+{title:"Gladihoppers",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/205.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/137.jpg"},
+{title:"Paper.io 2",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/204.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/138.jpg"},
+{title:"Poly Track",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/203.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/139.jpg"},
+{title:"Club Penguin",url:"https://play.cplegacy.com/",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/140.jpg"},
+{title:"Ragdoll Hit",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/202.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/142.jpg"},
+{title:"Gun Spin",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/201.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/143.jpg"},
+{title:"Subway Surfers",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/200.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/145.jpg"},
+{title:"Block Blast",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/199.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/146.jpg"},
+{title:"Plants vs Zombies",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/197.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/148.jpg"},
+{title:"Drift Boss",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/196.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/150.jpg"},
+{title:"Friday Night Funkin",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/195.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/151.jpg"},
+{title:"COD Nazi Zombies Portable",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/194.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/152.jpg"},
+{title:"Adventure Capitalist",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/193.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/153.jpg"},
+{title:"1v1.lol",url:"https://script.google.com/macros/s/AKfycbw2YH3dPJE1XWPOXBnR4UOidr3vX8fgY0ZIyWj1Bmx9Lcty0e1bfUOYwPJ02lviN2Hb/exec?game=313.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/154.jpg"},
+{title:"Ragdoll Archers",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/192.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/155.jpg"},
+{title:"Retro Bowl",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/191.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/158.jpg"},
+{title:"Half Life",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/190.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/159.jpg"},
+{title:"Jetpack Joyride",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/189.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/160.jpg"},
+{title:"Bloons TD 4",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/188.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/161.jpg"},
+{title:"Sand Game",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/187.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/162.jpg"},
+{title:"FNAF",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/166.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/164.jpg"},
+{title:"FNAF 2",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/167.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/165.jpg"},
+{title:"FNAF 3",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/168.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/166.jpg"},
+{title:"FNAF 4",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/169.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/167.jpg"},
+{title:"Tiny Fishing",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/185.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/169.jpg"},
+{title:"Chrome Dino",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/184.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/170.jpg"},
+{title:"Dodge Ball",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/dskadlwasdmw-a@main/Dodge%20Ball%20(4).html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/171.jpg"},
+{title:"Age of War 2",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/183.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/172.jpg"},
+{title:"Slope",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/182.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/175.jpg"},
+{title:"Sprinter",url:"https://noahsamazingtutoringhelp.github.io/sprinter/",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/176.jpg"},
+{title:"Cookie Clicker",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/181.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/177.jpg"},
+{title:"Bitlife",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/180.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/178.jpg"},
+{title:"Drift Hunters",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/179.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/179.jpg"},
+{title:"Cut The Rope",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/178.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/180.jpg"},
+{title:"Sort The Court",url:"https://noahsamazingtutoringhelp.github.io/skdpiwjamoksld/",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/181.jpg"},
+{title:"Tomb of the Mask",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/177.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/182.jpg"},
+{title:"Wordle",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/176.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/183.jpg"},
+{title:"Monkey Mart",url:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor@master/games/175.html",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/184.jpg"},
+{title:"Thorns and Balloons",url:"https://noahsamazingtutoringhelp.github.io/ScienceStudyBuddy/",image:"https://cdn.jsdelivr.net/gh/NoahsAmazingTutoringHelp/Noahs-Calculus-Tutor/images/144.jpg"}
+];
+
+let DB = [];
+let currentTab = 'games';
+let activeIndex = 0;
+let recIndex = 0;
+let storeIndex = 0;
+let searchIndex = 0;
+let navLayer = 'home_yours';
+let purchasedIds = JSON.parse(localStorage.getItem('anchor_proxy_purchased')) || [];
+let homeIds = JSON.parse(localStorage.getItem('anchor_proxy_home')) || [];
+let customData = JSON.parse(localStorage.getItem('anchor_proxy_custom')) || [];
+let rendered = 0;
+let useMouse = true;
+let featGames = [];
+let featIdx = 0;
+let searchResults = [];
+let recommendedGames = [];
+let currentStoreRandomGame = null;
+let storeCycler = null;
+let activeWin = null;
+let startT = null;
+let tInterval = null;
+
+const STORE_CATEGORIES = ["Trending Now","Action & Adventure","Puzzle & Strategy","RPG Epics","Casual Indie"];
+
+function getAll() { return [...DB, ...customData]; }
+
+function initBoot() {
+  setTimeout(() => {
+    document.getElementById('boot-screen').style.opacity = '0';
+    setTimeout(() => {
+      document.getElementById('boot-screen').style.visibility = 'hidden';
+      if(!localStorage.getItem('anchorNavSet')) {
+        document.getElementById('nav-modal').style.display = 'flex';
+        hoverNav('keyboard');
+      } else {
+        setNavMode(localStorage.getItem('anchorNavSet'));
+        startupDash();
+      }
+    }, 1200);
+  }, 2500);
+}
+
+function hoverNav(mode) {
+  document.getElementById('btn-keyboard').classList.remove('focused');
+  document.getElementById('btn-mouse').classList.remove('focused');
+  document.getElementById(`btn-${mode}`).classList.add('focused');
+}
+
+function toggleNavMode() {
+  const newMode = useMouse ? 'keyboard' : 'mouse';
+  setNavMode(newMode);
+  popMsg(newMode === 'mouse' ? "Mouse Navigation Enabled" : "Controller Navigation Enabled");
+}
+
+function setNavMode(mode) {
+  useMouse = (mode === 'mouse');
+  localStorage.setItem('anchorNavSet', mode);
+  const icon = document.getElementById('input-toggle');
+  if(useMouse) {
+    document.body.classList.add('mouse-mode');
+    document.querySelectorAll('.focused').forEach(el => el.classList.remove('focused'));
+    icon.className = "fas fa-mouse-pointer";
+  } else {
+    document.body.classList.remove('mouse-mode');
+    icon.className = "fas fa-gamepad";
+    updateUIState();
+  }
+  document.getElementById('nav-modal').style.display = 'none';
+  if(DB.length > 0 && rendered === 0) startupDash();
+}
+
+function startupDash() {
+  setupFeatured();
+  generateRecommended();
+  renderMarquee();
+  startStoreRandomCycler();
+  renderCards();
+  updateUIState();
+}
+
+function generateRecommended() {
+  const unowned = getStoreData().filter(g => !homeIds.includes(g.id) && !purchasedIds.includes(g.id));
+  recommendedGames = unowned.sort(() => 0.5 - Math.random()).slice(0, 15);
+  renderRecommended();
+}
+
+function renderMarquee() {
+  const marqueeTrack = document.getElementById('marquee-track');
+  if(!marqueeTrack) return;
+  marqueeTrack.innerHTML = '';
+  const allGames = getStoreData();
+  const shuffled = [...allGames].sort(() => 0.5 - Math.random()).slice(0, 20);
+  let html = '';
+  shuffled.forEach(g => {
+    html += `<div class="marquee-card" style="background-image:url('${g.img || ''}')" onclick="buyStuffById('${g.id}')"></div>`;
+  });
+  marqueeTrack.innerHTML = html + html;
+}
+
+function startStoreRandomCycler() {
+  clearInterval(storeCycler);
+  const unowned = getStoreData().filter(g => !purchasedIds.includes(g.id));
+  if(!unowned.length) return;
+  currentStoreRandomGame = unowned[Math.floor(Math.random() * unowned.length)];
+  const bgEl = document.getElementById('store-random-bg');
+  if(bgEl) bgEl.style.backgroundImage = `url('${currentStoreRandomGame.img}')`;
+  storeCycler = setInterval(() => {
+    const u = getStoreData().filter(g => !purchasedIds.includes(g.id));
+    if(!u.length) { clearInterval(storeCycler); return; }
+    currentStoreRandomGame = u[Math.floor(Math.random() * u.length)];
+    if(bgEl) bgEl.style.backgroundImage = `url('${currentStoreRandomGame.img}')`;
+  }, 3000);
+}
+
+function buyStoreRandomGame() {
+  if(!currentStoreRandomGame) return;
+  buyStuff(currentStoreRandomGame);
+  currentStoreRandomGame = null;
+  startStoreRandomCycler();
+  generateRecommended();
+}
+
+window.onload = function() {
+  document.body.classList.add('mouse-mode');
+  let wheelCooldown = false;
+  document.getElementById('content-area').addEventListener('wheel', (e) => {
+    if(!useMouse) { e.preventDefault(); return; }
+    const trackContainer = e.target.closest('.carousel-container');
+    if(trackContainer && !e.target.closest('.marquee-container')) {
+      e.preventDefault();
+      if(wheelCooldown || Math.abs(e.deltaY) < 15) return;
+      wheelCooldown = true;
+      setTimeout(() => wheelCooldown = false, 600);
+      const isRec = trackContainer.querySelector('#track-rec');
+      if(isRec) {
+        if(e.deltaY > 0 && recIndex < recommendedGames.length - 1) recIndex++;
+        else if(e.deltaY < 0 && recIndex > 0) recIndex--;
+        updateRecFocus();
+      } else {
+        const list = getActiveList();
+        if(e.deltaY > 0 && activeIndex < list.length - 1) activeIndex++;
+        else if(e.deltaY < 0 && activeIndex > 0) activeIndex--;
+        updateCarouselFocus();
+      }
+    }
+  }, { passive: false });
+
+  fetch(API_ZONES + "?cachebust=" + Date.now())
+    .then(r => r.json())
+    .then(data => {
+      const fetchedDB = data.map(g => ({
+        id: 'id_' + g.name.replace(/\s+/g, '_').toLowerCase(),
+        name: g.name,
+        desc: "Full Game • Enhanced Edition",
+        img: g.cover ? g.cover.replace("{COVER_URL}", CDN_COVER).replace("{HTML_URL}", CDN_HTML) : '',
+        url: g.url ? g.url.replace("{HTML_URL}", CDN_HTML) : '',
+        price: 'Free',
+        featured: Math.random() < 0.2
+      }));
+      const noahDB = NOAH_GAMES.map(g => ({
+        id: 'id_noah_' + g.title.replace(/\s+/g, '_').toLowerCase(),
+        name: g.title,
+        desc: "Classic Collection",
+        img: g.image,
+        url: g.url,
+        price: 'Free',
+        featured: Math.random() < 0.2
+      }));
+      DB = [...fetchedDB, ...noahDB];
+      const seen = new Set();
+      DB = DB.filter(g => {
+        const key = g.name.toLowerCase().trim();
+        if(seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+      initBoot();
+    })
+    .catch(e => {
+      console.error("API dead", e);
+      DB = NOAH_GAMES.map(g => ({
+        id: 'id_noah_' + g.title.replace(/\s+/g, '_').toLowerCase(),
+        name: g.title,
+        desc: "Classic Collection",
+        img: g.image,
+        url: g.url,
+        price: 'Free',
+        featured: Math.random() < 0.2
+      }));
+      initBoot();
+    });
+
+  document.getElementById('store-view').addEventListener('scroll', (e) => {
+    if(e.target.scrollTop + e.target.clientHeight >= e.target.scrollHeight - 300) renderMoreStore();
+  });
+
+  document.getElementById('search-input').addEventListener('input', (e) => {
+    const q = e.target.value.toLowerCase().trim();
+    if(!q) {
+      searchResults = [];
+      document.getElementById('search-status').innerText = "Enter a query to search";
+      renderSearchGrid();
+      return;
+    }
+    searchResults = getStoreData().filter(g => g.name.toLowerCase().includes(q) || g.desc.toLowerCase().includes(q));
+    document.getElementById('search-status').innerText = searchResults.length ? `Found ${searchResults.length} results` : "No results found";
+    searchIndex = 0;
+    renderSearchGrid();
+  });
+};
+
+document.addEventListener('keydown', (e) => {
+  if(document.getElementById('session-overlay').style.display === 'flex') {
+    if(e.key === 'Escape') killGame();
+    return;
+  }
+  if(document.getElementById('nav-modal').style.display === 'flex') {
+    if(e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+      const isKb = document.getElementById('btn-keyboard').classList.contains('focused');
+      hoverNav(isKb ? 'mouse' : 'keyboard');
+    }
+    if(e.key === 'Enter') setNavMode(document.getElementById('btn-keyboard').classList.contains('focused') ? 'keyboard' : 'mouse');
+    return;
+  }
+  if(useMouse) return;
+
+  if(navLayer === 'tabs') {
+    const arr = ['games','purchased','store','search'];
+    let curr = arr.indexOf(currentTab);
+    if(e.key === 'ArrowRight') switchTab(arr[(curr + 1) % arr.length]);
+    if(e.key === 'ArrowLeft') switchTab(arr[(curr - 1 + arr.length) % arr.length]);
+    if(e.key === 'ArrowDown') {
+      if(currentTab === 'store') navLayer = 'store';
+      else if(currentTab === 'search') navLayer = 'search_input';
+      else navLayer = 'home_yours';
+      updateUIState();
+    }
+  } else if(navLayer === 'home_hero') {
+    if(e.key === 'ArrowUp') { navLayer = 'tabs'; updateUIState(); }
+    if(e.key === 'ArrowDown') { navLayer = 'home_yours'; updateUIState(); }
+    if(e.key === 'Enter') handleAction();
+  } else if(navLayer === 'home_yours') {
+    const list = getActiveList();
+    if(e.key === 'ArrowUp') { navLayer = 'home_hero'; updateUIState(); }
+    if(e.key === 'ArrowDown') {
+      if(currentTab === 'games' && recommendedGames.length > 0) navLayer = 'home_rec';
+      updateUIState();
+    }
+    if(e.key === 'ArrowRight' && activeIndex < list.length - 1) { activeIndex++; updateCarouselFocus(); }
+    if(e.key === 'ArrowLeft' && activeIndex > 0) { activeIndex--; updateCarouselFocus(); }
+    if(e.key === 'Enter') executeItem(list[activeIndex]);
+  } else if(navLayer === 'home_rec') {
+    if(e.key === 'ArrowUp') { navLayer = 'home_yours'; updateUIState(); }
+    if(e.key === 'ArrowRight' && recIndex < recommendedGames.length - 1) { recIndex++; updateRecFocus(); }
+    if(e.key === 'ArrowLeft' && recIndex > 0) { recIndex--; updateRecFocus(); }
+    if(e.key === 'Enter') { buyStuff(recommendedGames[recIndex]); generateRecommended(); }
+  } else if(navLayer === 'store') {
+    if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)) moveFocusStore(e.key);
+    if(e.key === 'Enter') {
+      const focusedItem = document.querySelector('.store-focusable.focused');
+      if(focusedItem) focusedItem.click();
+    }
+  } else if(navLayer === 'search_input') {
+    if(e.key === 'ArrowUp') { navLayer = 'tabs'; document.getElementById('search-input').blur(); updateUIState(); }
+    if(e.key === 'ArrowDown' && searchResults.length > 0) { navLayer = 'search_grid'; document.getElementById('search-input').blur(); updateUIState(); }
+  } else if(navLayer === 'search_grid') {
+    if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)) moveFocusSearch(e.key);
+    if(e.key === 'Enter') handleSearchItemClick(searchResults[searchIndex]);
+  }
+});
+
+function moveFocusStore(dir) {
+  const items = Array.from(document.querySelectorAll('.store-focusable'));
+  if(!items.length) return;
+  let cur = items[storeIndex];
+  if(!cur) { storeIndex = 0; focusStore(0); return; }
+  const r1 = cur.getBoundingClientRect();
+  let best = -1, minD = Infinity;
+  items.forEach((item, i) => {
+    if(i === storeIndex) return;
+    const r2 = item.getBoundingClientRect();
+    let match = false;
+    let dx = (r2.left + r2.width/2) - (r1.left + r1.width/2);
+    let dy = (r2.top + r2.height/2) - (r1.top + r1.height/2);
+    if(dir === 'ArrowUp' && dy < -20 && Math.abs(dx) < r1.width) match = true;
+    if(dir === 'ArrowDown' && dy > 20 && Math.abs(dx) < r1.width) match = true;
+    if(dir === 'ArrowLeft' && dx < -20 && Math.abs(dy) < r1.height/2) match = true;
+    if(dir === 'ArrowRight' && dx > 20 && Math.abs(dy) < r1.height/2) match = true;
+    if(!match) {
+      if(dir === 'ArrowUp' && dy < -20) match = true;
+      if(dir === 'ArrowDown' && dy > 20) match = true;
+      if(dir === 'ArrowLeft' && dx < -20) match = true;
+      if(dir === 'ArrowRight' && dx > 20) match = true;
+    }
+    if(match) {
+      let dist = (dir === 'ArrowUp' || dir === 'ArrowDown') ? (dx*dx*4 + dy*dy) : (dx*dx + dy*dy*4);
+      if(dist < minD) { minD = dist; best = i; }
+    }
+  });
+  if(best !== -1) { storeIndex = best; focusStore(storeIndex); }
+  else if(dir === 'ArrowUp') { navLayer = 'tabs'; updateUIState(); }
+}
+
+function moveFocusSearch(dir) {
+  const items = document.querySelectorAll('#search-grid .grid-item');
+  if(!items.length) return;
+  const cur = items[searchIndex];
+  if(!cur) { searchIndex = 0; focusSearch(0); return; }
+  const r1 = cur.getBoundingClientRect();
+  let best = -1, minD = Infinity;
+  items.forEach((item, i) => {
+    if(i === searchIndex) return;
+    const r2 = item.getBoundingClientRect();
+    let match = false;
+    let dx = (r2.left + r2.width/2) - (r1.left + r1.width/2);
+    let dy = (r2.top + r2.height/2) - (r1.top + r1.height/2);
+    if(dir === 'ArrowUp' && dy < -20) match = true;
+    if(dir === 'ArrowDown' && dy > 20) match = true;
+    if(dir === 'ArrowLeft' && dx < -20) match = true;
+    if(dir === 'ArrowRight' && dx > 20) match = true;
+    if(match) {
+      let dist = (dir === 'ArrowUp' || dir === 'ArrowDown') ? (dx*dx*4 + dy*dy) : (dx*dx + dy*dy*4);
+      if(dist < minD) { minD = dist; best = i; }
+    }
+  });
+  if(best !== -1) { searchIndex = best; focusSearch(searchIndex); }
+  else if(dir === 'ArrowUp') { navLayer = 'search_input'; updateUIState(); }
+}
+
+function getActiveList() {
+  if(currentTab === 'purchased') return getAll().filter(g => purchasedIds.includes(g.id));
+  const addCard = { name:"Upload Title", desc:"Install package via USB/HTML", icon:"fas fa-folder-plus", id:"sys_import" };
+  return [addCard, ...getAll().filter(g => homeIds.includes(g.id))];
+}
+
+function getStoreData() { return getAll().filter(g => g.id !== 'sys_import'); }
+
+function switchTab(t) {
+  currentTab = t; activeIndex = 0; storeIndex = 0; searchIndex = 0; recIndex = 0;
+  document.querySelectorAll('.tab').forEach(el => el.classList.toggle('active', el.dataset.id === t));
+  document.getElementById('carousel-view').style.display = 'none';
+  document.getElementById('store-view').style.display = 'none';
+  document.getElementById('search-view').style.display = 'none';
+  document.getElementById('app').style.backgroundImage = 'none';
+  if(t === 'store') {
+    document.getElementById('store-view').style.display = 'flex';
+    if(rendered === 0) { document.getElementById('store-grid').innerHTML = ''; renderMoreStore(); }
+  } else if(t === 'search') {
+    document.getElementById('search-view').style.display = 'flex';
+    if(useMouse) { document.getElementById('search-input').focus(); }
+    else { navLayer = 'search_input'; }
+  } else {
+    document.getElementById('carousel-view').style.display = 'flex';
+    document.getElementById('main-carousel-title').innerText = t === 'games' ? "Your Games" : "Library";
+    document.getElementById('row-rec').style.display = t === 'games' ? 'block' : 'none';
+    document.getElementById('row-rand').style.display = t === 'games' ? 'block' : 'none';
+    renderCards();
+  }
+  if(!useMouse && t !== 'store' && t !== 'search') navLayer = 'home_yours';
+  updateUIState();
+}
+
+function renderCards() {
+  const track = document.getElementById('track');
+  const list = getActiveList();
+  track.innerHTML = '';
+  if(activeIndex >= list.length) activeIndex = Math.max(0, list.length - 1);
+  list.forEach((g, i) => {
+    const div = document.createElement('div');
+    div.className = `card ${i === activeIndex && navLayer === 'home_yours' ? 'active' : ''}`;
+    div.id = `carousel-card-${i}`;
+    let inner = '';
+    if(g.img) inner += `<div class="card-bg" style="background-image:url('${g.img}')"></div>`;
+    if(g.icon) inner += `<i class="${g.icon}"></i>`;
+    else if(!g.img) inner += `<i class="fas fa-gamepad"></i>`;
+    div.innerHTML = inner;
+    if(useMouse) {
+      div.onmouseenter = () => {
+        if(activeIndex !== i || navLayer !== 'home_yours') {
+          activeIndex = i; navLayer = 'home_yours';
+          updateCarouselFocus(); updateUIState();
+        }
+      };
+      div.onclick = () => executeItem(g);
+    }
+    track.appendChild(div);
+  });
+  updateCarouselFocus(true);
+}
+
+function renderRecommended() {
+  const track = document.getElementById('track-rec');
+  if(!track) return;
+  track.innerHTML = '';
+  if(recIndex >= recommendedGames.length) recIndex = Math.max(0, recommendedGames.length - 1);
+  recommendedGames.forEach((g, i) => {
+    const div = document.createElement('div');
+    div.className = `card ${i === recIndex && navLayer === 'home_rec' ? 'active' : ''}`;
+    div.id = `rec-card-${i}`;
+    let inner = '';
+    if(g.img) inner += `<div class="card-bg" style="background-image:url('${g.img}')"></div>`;
+    else inner += `<i class="fas fa-gamepad"></i>`;
+    div.innerHTML = inner;
+    if(useMouse) {
+      div.onmouseenter = () => {
+        if(recIndex !== i || navLayer !== 'home_rec') {
+          recIndex = i; navLayer = 'home_rec';
+          updateRecFocus(); updateUIState();
+        }
+      };
+      div.onclick = () => { buyStuff(g); generateRecommended(); };
+    }
+    track.appendChild(div);
+  });
+  updateRecFocus(true);
+}
+
+function updateCarouselFocus(skipClasses = false) {
+  const track = document.getElementById('track');
+  if(!skipClasses && navLayer === 'home_yours') {
+    document.querySelectorAll('#track .card').forEach((c, idx) => {
+      c.classList.toggle('active', idx === activeIndex);
+    });
+  }
+  if(navLayer === 'home_yours') updateTopUI(getActiveList()[activeIndex]);
+  const nodes = document.querySelectorAll('#track .card');
+  if(nodes[activeIndex]) {
+    const offset = activeIndex * 146;
+    track.style.transform = `translateX(-${offset}px)`;
+    if(!useMouse) nodes[activeIndex].scrollIntoView({behavior:'smooth', block:'center'});
+  }
+}
+
+function updateRecFocus(skipClasses = false) {
+  const track = document.getElementById('track-rec');
+  if(!skipClasses && navLayer === 'home_rec') {
+    document.querySelectorAll('#track-rec .card').forEach((c, idx) => {
+      c.classList.toggle('active', idx === recIndex);
+    });
+  }
+  if(navLayer === 'home_rec') updateTopUI(recommendedGames[recIndex]);
+  const nodes = document.querySelectorAll('#track-rec .card');
+  if(nodes[recIndex]) {
+    const offset = recIndex * 146;
+    track.style.transform = `translateX(-${offset}px)`;
+    if(!useMouse) nodes[recIndex].scrollIntoView({behavior:'smooth', block:'center'});
+  }
+}
+
+function updateTopUI(game) {
+  if(!game) return;
+  document.getElementById('hero-title').innerText = game.name;
+  document.getElementById('hero-sub').innerText = game.desc;
+  if(game.img) document.getElementById('app').style.backgroundImage = `url(${game.img})`;
+  else document.getElementById('app').style.backgroundImage = `none`;
+  const btnText = document.getElementById('btn-text');
+  const btnIcon = document.getElementById('btn-icon');
+  if(game.id === 'sys_import') {
+    btnText.innerText = "Install Media"; btnIcon.className = "fas fa-download";
+  } else {
+    const isH = homeIds.includes(game.id);
+    if(navLayer === 'home_rec') {
+      btnText.innerText = "GET"; btnIcon.className = "fas fa-shopping-cart";
+    } else if(currentTab === 'games') {
+      btnText.innerText = "Remove from Home"; btnIcon.className = "fas fa-trash";
+    } else {
+      btnText.innerText = isH ? "Remove from Home" : "Add to Home";
+      btnIcon.className = isH ? "fas fa-trash" : "fas fa-plus";
+    }
+  }
+}
+
+function updateUIState() {
+  if(useMouse) return;
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('focused', navLayer === 'tabs' && t.classList.contains('active')));
+  document.getElementById('hero-btn').classList.toggle('focused', navLayer === 'home_hero');
+  if(currentTab === 'games' || currentTab === 'purchased') {
+    document.querySelectorAll('#track .card').forEach((c, idx) => c.classList.toggle('active', idx === activeIndex && navLayer === 'home_yours'));
+    document.querySelectorAll('#track-rec .card').forEach((c, idx) => c.classList.toggle('active', idx === recIndex && navLayer === 'home_rec'));
+    if(navLayer === 'home_yours') updateCarouselFocus();
+    if(navLayer === 'home_rec') updateRecFocus();
+    if(navLayer === 'home_hero') document.getElementById('hero-title').scrollIntoView({behavior:'smooth', block:'center'});
+  }
+  if(currentTab === 'store') {
+    if(navLayer === 'store') focusStore(storeIndex);
+    else document.querySelectorAll('.store-focusable').forEach(c => c.classList.remove('focused'));
+  } else if(currentTab === 'search') {
+    const sInput = document.getElementById('search-input');
+    if(navLayer === 'search_input') { sInput.classList.add('focused'); sInput.focus(); }
+    else { sInput.classList.remove('focused'); sInput.blur(); }
+    if(navLayer === 'search_grid') focusSearch(searchIndex);
+    else document.querySelectorAll('#search-grid .grid-item').forEach(c => c.classList.remove('focused'));
+  }
+}
+
+function executeItem(g) {
+  if(g.id === 'sys_import') document.getElementById('file-input').click();
+  else runExe(g);
+}
+
+function handleAction() {
+  let g;
+  if(navLayer === 'home_yours' || navLayer === 'home_hero') g = getActiveList()[activeIndex];
+  else if(navLayer === 'home_rec') g = recommendedGames[recIndex];
+  if(!g) return;
+  if(g.id === 'sys_import') { document.getElementById('file-input').click(); }
+  else if(navLayer === 'home_rec') { buyStuff(g); generateRecommended(); }
+  else {
+    if(homeIds.includes(g.id)) {
+      homeIds = homeIds.filter(id => id !== g.id);
+      popMsg("Removed from Home Screen");
+    } else {
+      homeIds.push(g.id);
+      popMsg("Added to Home Screen");
+    }
+    localStorage.setItem('anchor_proxy_home', JSON.stringify(homeIds));
+    if(currentTab === 'games') activeIndex = Math.max(0, activeIndex - 1);
+    renderCards();
+  }
+}
+
+function setupFeatured() {
+  featGames = getStoreData().filter(g => g.featured);
+  if(!featGames.length) return;
+  updateHeroSlide();
+  setInterval(() => {
+    if(currentTab === 'store') {
+      featIdx = (featIdx + 1) % featGames.length;
+      updateHeroSlide();
+    }
+  }, 7000);
+}
+
+function updateHeroSlide() {
+  const g = featGames[featIdx];
+  if(!g) return;
+  const bg = document.getElementById('hero-bg-layer');
+  bg.style.opacity = '0';
+  setTimeout(() => {
+    bg.style.backgroundImage = `url(${g.img})`;
+    document.getElementById('featured-title').innerText = g.name;
+    bg.style.opacity = '0.6';
+  }, 600);
+}
+
+function purchaseFeatured() { buyStuff(featGames[featIdx]); }
+
+function renderMoreStore() {
+  const grid = document.getElementById('store-grid');
+  const db = getStoreData();
+  if(rendered >= db.length) return;
+  const slice = db.slice(rendered, rendered + 24);
+  const frag = document.createDocumentFragment();
+  slice.forEach((g, i) => {
+    const absIdx = rendered + i;
+    if(absIdx % 8 === 0) {
+      const catName = STORE_CATEGORIES[(absIdx / 8) % STORE_CATEGORIES.length];
+      const header = document.createElement('div');
+      header.className = 'store-section-title span-full';
+      header.innerHTML = catName;
+      frag.appendChild(header);
+    }
+    let sizeClass = '';
+    if(absIdx !== 0 && absIdx % 7 === 0) sizeClass = 'wide';
+    else if(absIdx !== 0 && absIdx % 11 === 0) sizeClass = 'large';
+    const owned = purchasedIds.includes(g.id);
+    const item = document.createElement('div');
+    item.className = `grid-item store-focusable ${sizeClass}`;
+    item.id = `store-card-${absIdx}`;
+    item.onclick = () => buyStuff(g);
+    item.onmouseenter = () => {
+      if(useMouse) {
+        const items = Array.from(document.querySelectorAll('.store-focusable'));
+        storeIndex = items.indexOf(item);
+      }
+    };
+    item.innerHTML = `
+      <div class="grid-item-img-container">
+        <img src="${g.img || ''}" class="grid-item-img" loading="lazy" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzIyMiIvPjwvc3ZnPg=='">
+      </div>
+      <div class="grid-item-details">
+        <div class="grid-item-title">${g.name}</div>
+        <div class="grid-item-footer">
+          <span class="grid-item-cat">Game</span>
+          <span class="grid-item-btn">${owned ? 'OPEN' : 'GET'}</span>
         </div>
-    </div>
+      </div>
+    `;
+    frag.appendChild(item);
+  });
+  grid.appendChild(frag);
+  rendered += slice.length;
+}
 
-    <!-- ═══ BLOCKED ALERT ═══ -->
-    <div id="blockedModal" class="alert-backdrop">
-        <div class="alert-modal">
-            <h3 style="color:#ff4444;"><i class="fas fa-ban"></i> Link Blocked</h3>
-            <p>This truffled proxy appears to be blocked. Please select another one from the settings dropdown.</p>
-            <button onclick="document.getElementById('blockedModal').style.display='none'" class="primary-btn danger">Got it</button>
+function focusStore(idx) {
+  if(useMouse) return;
+  const items = Array.from(document.querySelectorAll('.store-focusable'));
+  if(idx >= items.length - 5) renderMoreStore();
+  items.forEach(c => c.classList.remove('focused'));
+  const c = items[idx];
+  if(c) { c.classList.add('focused'); c.scrollIntoView({behavior:'smooth', block:'center'}); }
+}
+
+function renderSearchGrid() {
+  const grid = document.getElementById('search-grid');
+  grid.innerHTML = '';
+  searchResults.forEach((g, i) => {
+    const owned = purchasedIds.includes(g.id);
+    const item = document.createElement('div');
+    item.className = 'grid-item';
+    item.id = `search-card-${i}`;
+    item.onclick = () => handleSearchItemClick(g);
+    item.onmouseenter = () => { if(useMouse) searchIndex = i; };
+    item.innerHTML = `
+      <div class="grid-item-img-container">
+        <img src="${g.img || ''}" class="grid-item-img" loading="lazy" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzIyMiIvPjwvc3ZnPg=='">
+      </div>
+      <div class="grid-item-details">
+        <div class="grid-item-title">${g.name}</div>
+        <div class="grid-item-footer">
+          <span class="grid-item-cat">Game</span>
+          <span class="grid-item-btn">${owned ? 'OPEN' : 'GET'}</span>
         </div>
-    </div>
+      </div>
+    `;
+    grid.appendChild(item);
+  });
+  if(!useMouse && navLayer === 'search_grid') focusSearch(searchIndex);
+}
 
-    <script>
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        //  THEMES
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        const THEMES = {
-            default: { "--bg": "#0b0a16", "--bg2": "#12101f", "--accent": "#7a5cff", "--accent2": "#5a3fd9",
-                "--blue": "#00bfff", "--text": "#e6e6ff", "--text2": "#a8a8d0", "--surface": "rgba(255,255,255,0.05)",
-                "--surface2": "rgba(255,255,255,0.08)", "--border": "rgba(255,255,255,0.08)" },
-            solar: { "--bg": "#1a0e00", "--bg2": "#241400", "--accent": "#ff6b00", "--accent2": "#cc5500",
-                "--blue": "#ffaa00", "--text": "#fff0e0", "--text2": "#d4a070", "--surface": "rgba(255,100,0,0.06)",
-                "--surface2": "rgba(255,100,0,0.10)", "--border": "rgba(255,100,0,0.12)" },
-            radiation: { "--bg": "#001a00", "--bg2": "#002400", "--accent": "#00ff41", "--accent2": "#00cc33",
-                "--blue": "#00ff88", "--text": "#b0ffb0", "--text2": "#70d070", "--surface": "rgba(0,255,60,0.05)",
-                "--surface2": "rgba(0,255,60,0.09)", "--border": "rgba(0,255,60,0.10)" },
-            purple: { "--bg": "#0a0015", "--bg2": "#120020", "--accent": "#9b59b6", "--accent2": "#7d3c98",
-                "--blue": "#8e44ad", "--text": "#f0e0ff", "--text2": "#c0a0d0", "--surface": "rgba(155,89,182,0.05)",
-                "--surface2": "rgba(155,89,182,0.09)", "--border": "rgba(155,89,182,0.10)" },
-            black: { "--bg": "#000000", "--bg2": "#0a0a0a", "--accent": "#ffffff", "--accent2": "#cccccc",
-                "--blue": "#888888", "--text": "#ffffff", "--text2": "#aaaaaa", "--surface": "rgba(255,255,255,0.04)",
-                "--surface2": "rgba(255,255,255,0.07)", "--border": "rgba(255,255,255,0.06)" },
-            singularity: { "--bg": "#000005", "--bg2": "#060012", "--accent": "#00d4ff", "--accent2": "#0099cc",
-                "--blue": "#7b2ffc", "--text": "#e0f0ff", "--text2": "#90b0d0", "--surface": "rgba(0,212,255,0.05)",
-                "--surface2": "rgba(0,212,255,0.09)", "--border": "rgba(0,212,255,0.10)" },
-            heatstroke: { "--bg": "#1a0000", "--bg2": "#2a0000", "--accent": "#ff2200", "--accent2": "#cc1a00",
-                "--blue": "#ff6600", "--text": "#ffd0d0", "--text2": "#cc8888", "--surface": "rgba(255,34,0,0.05)",
-                "--surface2": "rgba(255,34,0,0.09)", "--border": "rgba(255,34,0,0.10)" },
-            eclipse: { "--bg": "#0a0500", "--bg2": "#140a00", "--accent": "#ffd700", "--accent2": "#ccaa00",
-                "--blue": "#ff8c00", "--text": "#fff5e0", "--text2": "#d4b080", "--surface": "rgba(255,215,0,0.05)",
-                "--surface2": "rgba(255,215,0,0.09)", "--border": "rgba(255,215,0,0.10)" },
-            whiteout: { "--bg": "#f0f0f0", "--bg2": "#e0e0e0", "--accent": "#333333", "--accent2": "#555555",
-                "--blue": "#0066cc", "--text": "#1a1a1a", "--text2": "#555555", "--surface": "rgba(0,0,0,0.04)",
-                "--surface2": "rgba(0,0,0,0.07)", "--border": "rgba(0,0,0,0.08)" },
-            ai: { "--bg": "#000520", "--bg2": "#001030", "--accent": "#00ccff", "--accent2": "#0099dd",
-                "--blue": "#0066ff", "--text": "#d0ecff", "--text2": "#80b0d0", "--surface": "rgba(0,204,255,0.05)",
-                "--surface2": "rgba(0,204,255,0.09)", "--border": "rgba(0,204,255,0.10)" },
-            minecraft: { "--bg": "#1a1a0a", "--bg2": "#2a2a12", "--accent": "#7cb342", "--accent2": "#5d8c2e",
-                "--blue": "#4caf50", "--text": "#e8f0d0", "--text2": "#a0b080", "--surface": "rgba(124,179,66,0.05)",
-                "--surface2": "rgba(124,179,66,0.09)", "--border": "rgba(124,179,66,0.10)" },
-            cyber: { "--bg": "#050c1b", "--bg2": "#0a1428", "--accent": "#39ff14", "--accent2": "#28cc0f",
-                "--blue": "#00ffff", "--text": "#e0ffe0", "--text2": "#80d080", "--surface": "rgba(57,255,20,0.05)",
-                "--surface2": "rgba(57,255,20,0.09)", "--border": "rgba(57,255,20,0.10)" },
-            sunset: { "--bg": "#1a0b0b", "--bg2": "#281212", "--accent": "#ff6f61", "--accent2": "#d94a3d",
-                "--blue": "#ffa500", "--text": "#fff0e6", "--text2": "#d4a088", "--surface": "rgba(255,111,97,0.05)",
-                "--surface2": "rgba(255,111,97,0.09)", "--border": "rgba(255,111,97,0.10)" },
-            neon: { "--bg": "#0f0020", "--bg2": "#1a0035", "--accent": "#ff00ff", "--accent2": "#cc00cc",
-                "--blue": "#00ffff", "--text": "#ffffff", "--text2": "#cc88cc", "--surface": "rgba(255,0,255,0.05)",
-                "--surface2": "rgba(255,0,255,0.09)", "--border": "rgba(255,0,255,0.10)" },
-            darkred: { "--bg": "#1b0000", "--bg2": "#2a0000", "--accent": "#ff0000", "--accent2": "#cc0000",
-                "--blue": "#cc0000", "--text": "#ffe6e6", "--text2": "#cc8888", "--surface": "rgba(255,0,0,0.05)",
-                "--surface2": "rgba(255,0,0,0.09)", "--border": "rgba(255,0,0,0.10)" },
-            dnv2: { "--bg": "#050007", "--bg2": "#0a0012", "--accent": "#ff00de", "--accent2": "#cc00b0",
-                "--blue": "#00fff7", "--text": "#ffffff", "--text2": "#cc88cc", "--surface": "rgba(255,0,222,0.05)",
-                "--surface2": "rgba(255,0,222,0.09)", "--border": "rgba(255,0,222,0.12)" },
-            matrix: { "--bg": "#001100", "--bg2": "#001a00", "--accent": "#00ff00", "--accent2": "#00cc00",
-                "--blue": "#33ff33", "--text": "#99ff99", "--text2": "#66cc66", "--surface": "rgba(0,255,0,0.05)",
-                "--surface2": "rgba(0,255,0,0.09)", "--border": "rgba(0,255,0,0.10)" }
-        };
+function handleSearchItemClick(g) {
+  if(purchasedIds.includes(g.id) || homeIds.includes(g.id) || g.id === 'sys_import' || g.id.startsWith('c_')) {
+    runExe(g);
+  } else {
+    buyStuff(g);
+    renderSearchGrid();
+  }
+}
 
-        const THEME_NAMES = {
-            default: 'Default',
-            solar: 'Solar',
-            radiation: 'Radiation',
-            purple: 'Purple',
-            black: 'Black',
-            singularity: 'Singularity',
-            heatstroke: 'Heatstroke',
-            eclipse: 'Eclipse',
-            whiteout: 'Whiteout',
-            ai: 'AI',
-            minecraft: 'Minecraft',
-            cyber: 'Cyber',
-            sunset: 'Sunset',
-            neon: 'Neon',
-            darkred: 'Dark Red',
-            dnv2: 'DNv2',
-            matrix: 'Matrix'
-        };
+function focusSearch(idx) {
+  if(useMouse) return;
+  document.querySelectorAll('#search-grid .grid-item').forEach(c => c.classList.remove('focused'));
+  const c = document.getElementById(`search-card-${idx}`);
+  if(c) { c.classList.add('focused'); c.scrollIntoView({behavior:'smooth', block:'center'}); }
+}
 
-        const root = document.documentElement;
+function buyStuffById(id) {
+  const g = getStoreData().find(x => x.id === id);
+  if(g) buyStuff(g);
+}
 
-        function applyTheme(theme) {
-            Object.entries(theme).forEach(([k, v]) => root.style.setProperty(k, v));
+function buyStuff(g) {
+  if(purchasedIds.includes(g.id)) { popMsg("Already in Library", "error"); return; }
+  purchasedIds.push(g.id);
+  localStorage.setItem('anchor_proxy_purchased', JSON.stringify(purchasedIds));
+  popMsg(`${g.name} added to Library!`);
+  const sIdx = getStoreData().findIndex(x => x.id === g.id);
+  const c = document.getElementById(`store-card-${sIdx}`);
+  if(c) {
+    const btn = c.querySelector('.grid-item-btn');
+    if(btn) btn.innerText = "OPEN";
+  }
+  if(currentTab === 'games' || currentTab === 'purchased') {
+    renderCards();
+    generateRecommended();
+  }
+}
+
+async function runExe(g) {
+  popMsg("Booting Title...");
+  try {
+    activeWin = document.createElement('iframe');
+    activeWin.style.position = 'fixed';
+    activeWin.style.top = '0';
+    activeWin.style.left = '0';
+    activeWin.style.width = '100vw';
+    activeWin.style.height = '100vh';
+    activeWin.style.border = 'none';
+    activeWin.style.zIndex = '14000';
+    activeWin.style.backgroundColor = '#000';
+    activeWin.id = 'game-frame';
+    activeWin.src = 'about:blank';
+    document.body.appendChild(activeWin);
+    await new Promise(resolve => {
+      if(activeWin.contentWindow.document.readyState === 'complete') resolve();
+      else activeWin.onload = resolve;
+      setTimeout(resolve, 50);
+    });
+    const doc = activeWin.contentWindow.document;
+    doc.open();
+    if(g.htmlContent) {
+      doc.write(g.htmlContent);
+    } else if(g.url) {
+      try {
+        const response = await fetch(g.url);
+        let html = await response.text();
+        const urlObj = new URL(g.url);
+        const basePath = urlObj.href.substring(0, urlObj.href.lastIndexOf('/') + 1);
+        const baseTag = `<base href="${basePath}">`;
+        if(/<head[^>]*>/i.test(html)) {
+          html = html.replace(/<head[^>]*>/i, match => match + baseTag);
+        } else if(/<html[^>]*>/i.test(html)) {
+          html = html.replace(/<html[^>]*>/i, match => match + '<head>' + baseTag + '</head>');
+        } else {
+          html = baseTag + html;
         }
+        doc.write(html);
+      } catch(err) {
+        console.error("Fetch blocked, fallback to src:", err);
+        activeWin.src = g.url;
+      }
+    }
+    doc.close();
+    document.getElementById('session-overlay').style.display = 'flex';
+    startT = Date.now();
+    tickTime();
+    tInterval = setInterval(tickTime, 1000);
+  } catch(err) {
+    console.error(err);
+    popMsg("Connection error.", "error");
+  }
+}
 
-        function loadTheme(name) {
-            const theme = THEMES[name];
-            if (theme) {
-                applyTheme(theme);
-                localStorage.setItem('lithium-theme', name);
-                renderThemeGrid(name);
-            }
-        }
+function tickTime() {
+  if(!startT) return;
+  const diff = Math.floor((Date.now() - startT) / 1000);
+  const h = String(Math.floor(diff / 3600)).padStart(2, '0');
+  const m = String(Math.floor((diff % 3600) / 60)).padStart(2, '0');
+  const s = String(diff % 60).padStart(2, '0');
+  document.getElementById('session-timer').innerText = `${h}:${m}:${s}`;
+}
 
-        function renderThemeGrid(active) {
-            const grid = document.getElementById('themeGrid');
-            grid.innerHTML = '';
-            Object.keys(THEMES).forEach(key => {
-                const btn = document.createElement('button');
-                btn.className = 'theme-btn' + (key === active ? ' active' : '');
-                const swatch = document.createElement('div');
-                swatch.className = 'swatch';
-                const t = THEMES[key];
-                swatch.style.background = `linear-gradient(135deg, ${t['--accent']}, ${t['--blue'] || t['--accent']})`;
-                const nameSpan = document.createElement('span');
-                nameSpan.className = 'theme-name';
-                nameSpan.textContent = THEME_NAMES[key] || key;
-                btn.appendChild(swatch);
-                btn.appendChild(nameSpan);
-                btn.onclick = () => { loadTheme(key);
-                    renderThemeGrid(key); };
-                grid.appendChild(btn);
-            });
-        }
+function killGame() {
+  if(activeWin) { activeWin.remove(); activeWin = null; }
+  clearInterval(tInterval);
+  startT = null;
+  document.getElementById('session-overlay').style.display = 'none';
+}
 
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        //  DOM REFS
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        const container = document.getElementById('container');
-        const searchBar = document.getElementById('searchBar');
-        const categorySelect = document.getElementById('categorySelect');
-        const categoryWrap = document.getElementById('categoryWrap');
-        const providerSelect = document.getElementById('providerSelect');
-        const truffledProxySelect = document.getElementById('truffledProxySelect');
-        const truffledProxyGroup = document.getElementById('truffledProxyGroup');
+document.getElementById('file-input').addEventListener('change', (e) => {
+  const f = e.target.files[0];
+  if(f) {
+    const n = prompt("Enter Game Title:", f.name.split('.')[0]);
+    if(!n) return;
+    const r = new FileReader();
+    r.onload = (evt) => {
+      customData.push({
+        id: 'c_' + Date.now(), name: n, desc: "Sideloaded Title",
+        img: "", htmlContent: evt.target.result, price: 'Free', featured: false
+      });
+      localStorage.setItem('anchor_proxy_custom', JSON.stringify(customData));
+      popMsg("Title Installed!");
+      renderCards();
+      document.getElementById('file-input').value = '';
+    };
+    r.readAsText(f);
+  }
+});
 
-        const overlay = document.getElementById('modalOverlay');
-        const iframe = document.getElementById('zoneFullscreenFrame');
-        const closeBtn = document.getElementById('closeFullscreen');
-        const fullscreenBtn = document.getElementById('fullscreenBtn');
-        const downloadBtn = document.getElementById('downloadBtn');
-        const gameTitle = document.getElementById('gameTitle');
-        const blankBtn = document.getElementById('blankBtn');
+function popMsg(txt, type = "info") {
+  const box = document.getElementById('toast-container');
+  const t = document.createElement('div');
+  t.className = 'toast';
+  const icon = type === 'error' ? 'fa-exclamation-circle' : 'fa-check-circle';
+  const color = type === 'error' ? '#ff3b30' : 'var(--ps-blue)';
+  t.innerHTML = `<i class="fas ${icon}" style="font-size:18px;color:${color};"></i> <span>${txt}</span>`;
+  box.appendChild(t);
+  setTimeout(() => {
+    t.style.opacity = '0'; t.style.transform = 'translateX(120%) scale(0.9)';
+    setTimeout(() => t.remove(), 400);
+  }, 3500);
+}
 
-        const settingsOverlay = document.getElementById('settingsOverlay');
-        const settingsToggle = document.getElementById('settingsToggle');
-        const closeSettings = document.getElementById('closeSettings');
-
-        const noticeModal = document.getElementById('noticeModal');
-        const noticeContinue = document.getElementById('noticeContinueBtn');
-        const blockedModal = document.getElementById('blockedModal');
-
-        let allGames = [];
-        let currentGame = null;
-        let sortSelect = null;
-
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        //  UTILITY
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        function getFallbackImage(name) {
-            return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=0b0a16&color=7a5cff&size=256&font-size=0.33&bold=true`;
-        }
-
-        function resolveGameUrl(url, provider) {
-            if (!url) return '';
-            if (url.startsWith('http')) return url;
-            const cleanPath = url.replace(/^\//, '');
-            if (provider === 'seraph') {
-                return "https://cdn.jsdelivr.net/gh/a456pur/seraph@main/" + cleanPath;
-            }
-            return "https://cdn.jsdelivr.net/gh/tharun9772/tharun9772.github.io@main/" + cleanPath;
-        }
-
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        //  PROVIDER HANDLING
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        function handleProviderChange() {
-            const provider = providerSelect.value;
-
-            // Category visibility
-            if (provider === 'petezah') {
-                categoryWrap.classList.add('visible');
-            } else {
-                categoryWrap.classList.remove('visible');
-                categorySelect.value = '';
-            }
-
-            // Truffled proxy visibility + notice
-            if (provider === 'truffled') {
-                truffledProxyGroup.style.display = 'block';
-                if (!localStorage.getItem('truffledNoticeSeen')) {
-                    noticeModal.style.display = 'flex';
-                    return;
-                }
-            } else {
-                truffledProxyGroup.style.display = 'none';
-            }
-
-            loadGames();
-        }
-
-        noticeContinue.onclick = () => {
-            localStorage.setItem('truffledNoticeSeen', 'true');
-            noticeModal.style.display = 'none';
-            truffledProxyGroup.style.display = 'block';
-            loadGames();
-        };
-
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        //  LOAD GAMES
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        async function loadGames() {
-            container.innerHTML =
-                '<div class="empty-state"><i class="fas fa-circle-notch fa-spin"></i><p>Loading games...</p></div>';
-            allGames = [];
-            const provider = providerSelect.value;
-
-            try {
-                if (provider === 'gn-math') {
-                    const res = await fetch("https://cdn.jsdelivr.net/gh/freebuisness/assets/zones.json");
-                    const raw = await res.json();
-                    allGames = raw.filter(g => g.id !== -1 && !g.name.startsWith("[!]")).map((z, i) => {
-                        let coverUrl = (z.cover || "").replace('{COVER_URL}', '');
-                        if (coverUrl.startsWith('/')) coverUrl = coverUrl.substring(1);
-                        return {
-                            provider: 'gn-math',
-                            name: z.name,
-                            cover: 'https://cdn.jsdelivr.net/gh/freebuisness/covers@main/' + coverUrl,
-                            url: z.url,
-                            isAbsolute: z.url.startsWith('http'),
-                            addedOrder: i
-                        };
-                    });
-
-                } else if (provider === 'elite') {
-                    const res = await fetch(
-                    "https://cdn.jsdelivr.net/gh/elite-gamez/elite-gamez.github.io@main/games.json");
-                    const data = await res.json();
-                    allGames = data.map((g, i) => {
-                        let title = g.title || g.name || "Unknown Game";
-                        let url = g.url;
-                        if (!url.startsWith('http')) {
-                            url = "https://cdn.jsdelivr.net/gh/elite-gamez/elite-gamez.github.io@main/" + url;
-                        }
-                        return {
-                            provider: 'elite',
-                            name: title,
-                            cover: g.image ? ('https://cdn.jsdelivr.net/gh/elite-gamez/elite-gamez.github.io@main/' +
-                                g.image) : getFallbackImage(title),
-                            url: url,
-                            isAbsolute: true,
-                            addedOrder: i
-                        };
-                    });
-
-                } else if (provider === 'sea-bean') {
-                    const res = await fetch("https://cdn.jsdelivr.net/gh/sea-bean-unblocked/sde@main/zzz.json");
-                    const data = await res.json();
-                    allGames = data.map((g, i) => {
-                        let title = g.name || g.id || "Unknown Game";
-                        let htmlUrl = g.html || g.url || "";
-                        if (htmlUrl.includes("{HTML_URL}")) {
-                            htmlUrl = htmlUrl.replace("{HTML_URL}",
-                            "https://cdn.jsdelivr.net/gh/sea-bean-unblocked/Singlemile@main/games/");
-                        } else {
-                            htmlUrl = resolveGameUrl(htmlUrl);
-                        }
-                        let cover = (g.cover || g.img || "").replace("{COVER_URL}/", "");
-                        let finalCover = cover.startsWith("http") ?
-                            cover :
-                            (cover ? 'https://cdn.jsdelivr.net/gh/sea-bean-unblocked/Singlemile@main/Icon/' + cover :
-                                getFallbackImage(title));
-                        return {
-                            provider: 'sea-bean',
-                            name: title,
-                            cover: finalCover,
-                            url: htmlUrl,
-                            isAbsolute: true,
-                            addedOrder: i
-                        };
-                    });
-
-                } else if (provider === 'ugs') {
-                    const repos = ["tharun9772/ugs-1", "tharun9772/ugs-2", "tharun9772/ugs-3"];
-                    let games = [];
-                    let idx = 0;
-                    for (const repo of repos) {
-                        try {
-                            const r = await fetch(`https://api.github.com/repos/${repo}/contents/`);
-                            const d = await r.json();
-                            d.forEach(f => {
-                                if (f.type === "file" && f.name.startsWith("cl") && f.name.endsWith(".html")) {
-                                    let clean = f.name.replace(/^cl/, "").replace(".html", "");
-                                    clean = clean.charAt(0).toUpperCase() + clean.slice(1);
-                                    games.push({
-                                        provider: 'ugs',
-                                        name: clean,
-                                        cover: "https://cdn.jsdelivr.net/gh/tharun9772/game-assets@main/5968517.png",
-                                        url: `https://cdn.jsdelivr.net/gh/${repo}@main/${f.name}`,
-                                        isAbsolute: true,
-                                        addedOrder: idx++
-                                    });
-                                }
-                            });
-                        } catch (e) { console.warn("UGS fetch failed:", repo); }
-                    }
-                    allGames = games;
-
-                } else if (provider === 'truffled') {
-                    const proxyBase = truffledProxySelect.value.replace(/\/$/, "");
-                    try {
-                        await fetch(proxyBase + '/png/logo.png', { mode: 'no-cors', cache: 'no-store' });
-                    } catch (err) {
-                        blockedModal.style.display = 'flex';
-                        container.innerHTML =
-                            '<div class="empty-state"><i class="fas fa-ban" style="color:#ff4444;"></i><p style="color:#ff4444;">Proxy blocked. Please select another from Settings.</p></div>';
-                        return;
-                    }
-                    const res = await fetch("https://cdn.jsdelivr.net/gh/aukak/truffled@main/public/js/json/g.json");
-                    const data = await res.json();
-                    allGames = (data.games || []).map((g, i) => {
-                        let rawUrl = g.url;
-                        let gameUrl = g.url;
-                        let thumb = g.thumbnail;
-                        if (!gameUrl.startsWith('http')) {
-                            gameUrl = proxyBase + (gameUrl.startsWith('/') ? '' : '/') + gameUrl;
-                        }
-                        if (!thumb.startsWith('http')) {
-                            thumb = proxyBase + (thumb.startsWith('/') ? '' : '/') + thumb;
-                        }
-                        return {
-                            provider: 'truffled',
-                            name: g.name,
-                            cover: thumb,
-                            url: gameUrl,
-                            rawUrl: rawUrl,
-                            isAbsolute: g.url.startsWith('http'),
-                            frameType: g.frameType || 'iframe',
-                            addedOrder: i
-                        };
-                    });
-
-                } else if (provider === 'seraph') {
-                    const res = await fetch(
-                        'https://cdn.jsdelivr.net/gh/DominumNetwork/dominum@main/src/assets/libraries/seraph/games.json'
-                        );
-                    const data = await res.json();
-                    allGames = data.map((g, i) => {
-                        const path = g.url.endsWith('index.html') ? g.url : g.url.replace(/\/?$/, '/index.html');
-                        return {
-                            provider: 'seraph',
-                            name: g.name,
-                            cover: g.img || getFallbackImage(g.name),
-                            url: resolveGameUrl(path, 'seraph'),
-                            isAbsolute: true,
-                            addedOrder: i
-                        };
-                    });
-
-                } else if (provider === 'petezah') {
-                    const res = await fetch("https://cdn.jsdelivr.net/gh/PeteZah-G/singlefile-json@main/search.json");
-                    const data = await res.json();
-                    allGames = (data.games || []).map((g, i) => {
-                        let finalUrl = g.url;
-                        if (finalUrl && !finalUrl.endsWith('index.html') && !finalUrl.match(/\.\w+$/)) {
-                            finalUrl = finalUrl.replace(/\/$/, '') + '/index.html';
-                        }
-                        return {
-                            provider: 'petezah',
-                            name: g.label,
-                            cover: g.imageUrl || getFallbackImage(g.label),
-                            url: finalUrl,
-                            isAbsolute: finalUrl.startsWith('http'),
-                            addedOrder: i,
-                            categories: g.categories || []
-                        };
-                    });
-                }
-
-                applyFilters();
-
-            } catch (e) {
-                console.error(e);
-                container.innerHTML =
-                    '<div class="empty-state"><i class="fas fa-exclamation-triangle" style="color:#ff4444;"></i><p style="color:#ff4444;">Failed to load games. Check console.</p></div>';
-            }
-        }
-
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        //  FILTERS & SORT
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        function applyFilters() {
-            const query = searchBar.value.toLowerCase();
-            const categoryFilter = categorySelect.value.toLowerCase();
-
-            let filtered = allGames.filter(g => {
-                const matchesQuery = g.name.toLowerCase().includes(query);
-                const matchesCategory = !categoryFilter || (g.categories && g.categories.includes(categoryFilter));
-                return matchesQuery && matchesCategory;
-            });
-
-            // Sort: default A-Z (we keep it simple, no sort dropdown needed)
-            filtered.sort((a, b) => a.name.localeCompare(b.name));
-
-            displayGames(filtered);
-        }
-
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        //  DISPLAY
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        function displayGames(games) {
-            container.innerHTML = '';
-            if (games.length === 0) {
-                container.innerHTML = '<div class="empty-state"><i class="fas fa-gamepad"></i><p>No games found.</p></div>';
-                return;
-            }
-
-            games.forEach((game, index) => {
-                const card = document.createElement('div');
-                card.className = 'game-card';
-                const delay = Math.min(index * 0.025, 1.2);
-                card.style.animationDelay = `${delay}s`;
-
-                const wrap = document.createElement('div');
-                wrap.className = 'img-wrap';
-
-                const img = document.createElement('img');
-                img.dataset.src = game.cover;
-                img.alt = game.name;
-                img.loading = 'lazy';
-
-                const overlay = document.createElement('div');
-                overlay.className = 'play-overlay';
-                overlay.innerHTML = '<i class="fas fa-play-circle"></i>';
-
-                const nameEl = document.createElement('div');
-                nameEl.className = 'game-name';
-                nameEl.textContent = game.name;
-
-                const badge = document.createElement('span');
-                badge.className = 'game-provider';
-                badge.textContent = game.provider || '';
-
-                wrap.appendChild(img);
-                wrap.appendChild(overlay);
-                card.appendChild(wrap);
-                card.appendChild(nameEl);
-                card.appendChild(badge);
-
-                card.onclick = () => openGame(game);
-                container.appendChild(card);
-            });
-
-            // Lazy load images
-            const imgs = document.querySelectorAll('img[data-src]');
-            const observer = new IntersectionObserver((entries, obs) => {
-                entries.forEach(e => {
-                    if (e.isIntersecting) {
-                        const img = e.target;
-                        img.src = img.dataset.src;
-                        obs.unobserve(img);
-                    }
-                });
-            }, { rootMargin: '100px', threshold: 0.1 });
-            imgs.forEach(i => observer.observe(i));
-        }
-
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        //  OPEN GAME
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        async function openGame(game) {
-            currentGame = game;
-            overlay.style.display = 'flex';
-            gameTitle.textContent = game.name;
-
-            let fullUrl = game.url;
-            if (game.provider === 'gn-math' && !game.isAbsolute) {
-                fullUrl = 'https://cdn.jsdelivr.net/gh/freebuisness/html@main/' + game.url.replace('{HTML_URL}', '');
-            }
-
-            const needsBlob = ['elite', 'sea-bean', 'ugs', 'gn-math', 'seraph', 'petezah'];
-
-            if (needsBlob.includes(game.provider)) {
-                try {
-                    const response = await fetch(fullUrl);
-                    let html = await response.text();
-                    if (game.provider === 'petezah') {
-                        const base = fullUrl.replace(/\/[^\/]*$/, '/');
-                        if (!html.match(/<head[^>]*>/i)) {
-                            html = html.replace(/<html[^>]*>/i, '__HTML__<head><base href="' + base + '"></head>');
-                        } else {
-                            html = html.replace(/<head[^>]*>/i, '__HTML__<base href="' + base + '">');
-                        }
-                    }
-                    const blob = new Blob([html], { type: 'text/html' });
-                    const blobUrl = URL.createObjectURL(blob);
-                    iframe.src = blobUrl;
-                    iframe.onload = () => URL.revokeObjectURL(blobUrl);
-                } catch (e) {
-                    console.error("Fetch failed, falling back:", e);
-                    iframe.src = fullUrl;
-                }
-                return;
-            }
-
-            if (game.provider === 'truffled') {
-                if (game.frameType === 'unity') {
-                    const proxyBase = truffledProxySelect.value.replace(/\/$/, "");
-                    iframe.src = `${proxyBase}/unityframe.html?url=${encodeURIComponent(game.rawUrl)}`;
-                } else {
-                    iframe.src = game.url;
-                }
-                return;
-            }
-
-            iframe.src = fullUrl;
-        }
-
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        //  MODAL CONTROLS
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        closeBtn.onclick = () => {
-            overlay.style.display = 'none';
-            iframe.src = '';
-            currentGame = null;
-        };
-
-        overlay.onclick = (e) => { if (e.target === overlay) closeBtn.click(); };
-
-        fullscreenBtn.onclick = () => {
-            iframe.requestFullscreen().catch(() => alert('Fullscreen not supported or blocked.'));
-        };
-
-        downloadBtn.onclick = async () => {
-            if (!currentGame) return;
-            let fullUrl = currentGame.url;
-            if (currentGame.provider === 'gn-math' && !currentGame.isAbsolute) {
-                fullUrl = 'https://cdn.jsdelivr.net/gh/freebuisness/html@main/' + currentGame.url.replace('{HTML_URL}', '');
-            }
-            let content = '';
-            try {
-                const res = await fetch(fullUrl);
-                if (!res.ok) throw new Error("Network error");
-                content = await res.text();
-            } catch (e) {
-                content =
-                    `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${currentGame.name}</title><style>body,html{margin:0;padding:0;height:100%;overflow:hidden;background:#000;}iframe{width:100%;height:100%;border:none;}</style></head><body><iframe src="${fullUrl}" allowfullscreen></iframe></body></html>`;
-            }
-            const blob = new Blob([content], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `${currentGame.name.replace(/[^a-z0-9]/gi,'_').toLowerCase()}.html`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        };
-
-        blankBtn.onclick = async () => {
-            if (!currentGame) return;
-            let url = currentGame.url;
-            if (currentGame.provider === 'gn-math' && !url.startsWith('http')) {
-                url = 'https://cdn.jsdelivr.net/gh/freebuisness/html@main/' + currentGame.url.replace('{HTML_URL}', '');
-            }
-            const win = window.open('about:blank', '_blank');
-            if (!win) return alert("Pop-up blocked!");
-            win.document.write(`
-            <!DOCTYPE html><html><head><title>${currentGame.name}</title>
-            <style>body,html{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#000;}iframe{width:100%;height:100%;border:none;}</style>
-            </head><body><iframe id="f" allowfullscreen></iframe></body></html>
-          `);
-            win.document.close();
-            const f = win.document.getElementById('f');
-            const needsBlob = ['gn-math', 'petezah', 'elite', 'seraph', 'sea-bean', 'ugs'];
-            if (needsBlob.includes(currentGame.provider)) {
-                try {
-                    const res = await fetch(url);
-                    let html = await res.text();
-                    if (currentGame.provider === 'petezah') {
-                        const base = url.substring(0, url.lastIndexOf('/') + 1);
-                        html = html.replace('<head>', `<head><base href="${base}">`);
-                    }
-                    f.contentWindow.document.open();
-                    f.contentWindow.document.write(html);
-                    f.contentWindow.document.close();
-                } catch (e) {
-                    console.error("Injection failed, fallback src:", e);
-                    f.src = url;
-                }
-            } else {
-                f.src = url;
-            }
-        };
-
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        //  SETTINGS
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        settingsToggle.onclick = () => {
-            settingsOverlay.style.display = 'flex';
-            renderThemeGrid(localStorage.getItem('lithium-theme') || 'default');
-        };
-
-        closeSettings.onclick = () => {
-            settingsOverlay.style.display = 'none';
-        };
-
-        settingsOverlay.onclick = (e) => {
-            if (e.target === settingsOverlay) settingsOverlay.style.display = 'none';
-        };
-
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        //  INIT
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        (function init() {
-            // Restore theme
-            const savedTheme = localStorage.getItem('lithium-theme') || 'default';
-            if (THEMES[savedTheme]) {
-                applyTheme(THEMES[savedTheme]);
-            } else {
-                applyTheme(THEMES.default);
-            }
-
-            // Restore provider
-            const savedProvider = localStorage.getItem('lithium-provider') || 'gn-math';
-            providerSelect.value = savedProvider;
-
-            // Restore truffled proxy
-            const savedProxy = localStorage.getItem('lithium-truffled-proxy') || 'https://truffled.lol';
-            truffledProxySelect.value = savedProxy;
-
-            handleProviderChange();
-
-            // Save provider on change
-            providerSelect.addEventListener('change', () => {
-                localStorage.setItem('lithium-provider', providerSelect.value);
-            });
-            truffledProxySelect.addEventListener('change', () => {
-                localStorage.setItem('lithium-truffled-proxy', truffledProxySelect.value);
-            });
-        })();
-    </script>
+setInterval(() => {
+  document.getElementById('clock').innerText = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+}, 1000);
+document.getElementById('clock').innerText = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+</script>
 </body>
 </html>
