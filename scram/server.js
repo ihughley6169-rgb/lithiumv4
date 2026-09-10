@@ -31,4 +31,4 @@ const server = http.createServer((request, response) => {
 	});
 });
 
-server.listen(port, () => console.log(`Anchor OS serving at http://localhost:${port}`));
+server.listen(port, () => console.log(`Lithium V5 serving at http://localhost:${port}`));

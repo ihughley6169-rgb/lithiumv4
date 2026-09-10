@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Anchor OS V8</title>
+	<title>Lithium V5</title>
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
 	<script src="./scramjet.all.js"></script>
@@ -67,9 +67,9 @@
 	</style>
 </head>
 <body>
-	<section class="boot" id="boot"><div class="boot-card"><div class="mark">ANCHOR <span>OS</span></div><p>V8 · AnchoredVerses</p><button class="primary" id="enter">Enter system</button></div></section>
+	<section class="boot" id="boot"><div class="boot-card"><div class="mark">LITHIUM <span>V5</span></div><p>Lithium V5 · Core workspace</p><button class="primary" id="enter">Enter system</button></div></section>
 	<div id="desktop">
-		<header class="top"><div class="brand">ANCHOR <span>OS</span> <small>V8</small></div><div class="status" id="clock">--:--</div></header>
+		<header class="top"><div class="brand">LITHIUM <span>V5</span></div><div class="status" id="clock">--:--</div></header>
 		<div class="workspace">
 			<nav class="dock" aria-label="Applications">
 				<button class="active" data-view="home"><b>⌂</b><span>Home</span></button>
@@ -80,16 +80,16 @@
 			</nav>
 			<main>
 				<section class="view active" id="home">
-					<div class="hero"><div><div class="eyebrow">Anchor OS V8</div><h1>A calmer control deck for the <span>open web.</span></h1><p>Scramjet browsing, music discovery, streaming, and system notes in one anchored workspace.</p></div><button class="primary" data-view="notes">Read patch notes</button></div>
-					<div class="grid"><article class="card"><div class="icon">◉</div><h3>Scram Browser</h3><p>Route a destination through the local Scramjet service worker.</p><button class="tool" data-view="browser">Open browser</button></article><article class="card"><div class="icon">♫</div><h3>Anchor Music</h3><p>Search iTunes previews and keep playback in this session.</p><button class="tool" data-view="music">Open music</button></article><article class="card"><div class="icon">▣</div><h3>Anchor Stream</h3><p>Load a stream or web app in a dedicated viewing surface.</p><button class="tool" data-view="stream">Open stream</button></article><article class="card"><div class="icon">✦</div><h3>V8 notes</h3><p>See what changed and what is planned for the next Anchor release.</p><button class="tool" data-view="notes">View updates</button></article></div>
+					<div class="hero"><div><div class="eyebrow">Lithium V5</div><h1>A calmer control deck for the <span>open web.</span></h1><p>Scramjet browsing, music discovery, streaming, and system notes in one Lithium workspace.</p></div><button class="primary" data-view="notes">Read patch notes</button></div>
+					<div class="grid"><article class="card"><div class="icon">◉</div><h3>Scram Browser</h3><p>Route a destination through the local Scramjet service worker.</p><button class="tool" data-view="browser">Open browser</button></article><article class="card"><div class="icon">♫</div><h3>Lithium Music</h3><p>Search iTunes previews and keep playback in this session.</p><button class="tool" data-view="music">Open music</button></article><article class="card"><div class="icon">▣</div><h3>Lithium Stream</h3><p>Load a stream or web app in a dedicated viewing surface.</p><button class="tool" data-view="stream">Open stream</button></article><article class="card"><div class="icon">✦</div><h3>V5 notes</h3><p>See what changed and what is planned for the next Lithium release.</p><button class="tool" data-view="notes">View updates</button></article></div>
 				</section>
-				<section class="view" id="browser"><div class="panel"><div class="eyebrow">Scramjet Browser</div><h2>Navigate through Anchor</h2><p class="status">The service worker is registered from <strong>/scram/sw.js</strong>. A Wisp backend is required for proxied destinations.</p><div class="row"><input id="url" placeholder="https://example.com or a search query" value="https://example.com"><button class="primary" id="go">Go</button></div><iframe class="browser-frame" id="frame" title="Scramjet browser"></iframe></div></section>
-				<section class="view" id="music"><div class="panel"><div class="eyebrow">Anchor Music</div><h2>Find a track</h2><div class="row"><input id="music-search" placeholder="Search songs or artists"><button class="primary" id="music-go">Search</button></div><div class="results" id="music-results"><p class="status">Search the iTunes catalog for 30-second preview clips.</p></div><audio id="audio" controls style="width:100%;margin-top:18px"></audio></div></section>
-				<section class="view" id="stream"><div class="panel"><div class="eyebrow">Anchor Stream</div><h2>Open a viewing surface</h2><div class="row"><input id="stream-url" placeholder="https://example.com"><button class="primary" id="stream-go">Load</button></div><iframe class="browser-frame" id="stream-frame" title="Anchor stream"></iframe></div></section>
-				<section class="view" id="notes"><div class="hero"><div><div class="eyebrow">Release channel</div><h1>Patch notes <span>V8.0</span></h1><p>Anchor OS evolves as a compact workspace for the Scramjet stack.</p></div></div><div class="notes"><article class="note"><h3>V8.0.0 · AnchoredVerses</h3><p>Introduced the unified desktop shell, app dock, Scramjet browser surface, music discovery, stream viewer, and persistent release notes.</p></article><article class="note"><h3>Proxy foundation</h3><p>The existing service worker remains at <strong>/scram/sw.js</strong>, ready to route requests when the controller and Wisp transport are available.</p></article><article class="note"><h3>Next on the chart</h3><p>Package the Scramjet runtime artifacts locally, add BareMux transport selection, and expand the games workspace without making the desktop harder to scan.</p></article></div></section>
+				<section class="view" id="browser"><div class="panel"><div class="eyebrow">Scramjet Browser</div><h2>Navigate through Lithium</h2><p class="status">The service worker is registered from <strong>/scram/sw.js</strong>. A Wisp backend is required for proxied destinations.</p><div class="row"><input id="url" placeholder="https://example.com or a search query" value="https://example.com"><button class="primary" id="go">Go</button></div><iframe class="browser-frame" id="frame" title="Scramjet browser"></iframe></div></section>
+				<section class="view" id="music"><div class="panel"><div class="eyebrow">Lithium Music</div><h2>Find a track</h2><div class="row"><input id="music-search" placeholder="Search songs or artists"><button class="primary" id="music-go">Search</button></div><div class="results" id="music-results"><p class="status">Search the iTunes catalog for 30-second preview clips.</p></div><audio id="audio" controls style="width:100%;margin-top:18px"></audio></div></section>
+				<section class="view" id="stream"><div class="panel"><div class="eyebrow">Lithium Stream</div><h2>Open a viewing surface</h2><div class="row"><input id="stream-url" placeholder="https://example.com"><button class="primary" id="stream-go">Load</button></div><iframe class="browser-frame" id="stream-frame" title="Lithium stream"></iframe></div></section>
+				<section class="view" id="notes"><div class="hero"><div><div class="eyebrow">Release channel</div><h1>Patch notes <span>V5.0</span></h1><p>Lithium V5 evolves as a compact workspace for the Scramjet stack.</p></div></div><div class="notes"><article class="note"><h3>V5.0.0 · Lithium Core</h3><p>Introduced the unified desktop shell, app dock, Scramjet browser surface, music discovery, stream viewer, and persistent release notes.</p></article><article class="note"><h3>Proxy foundation</h3><p>The existing service worker remains at <strong>/scram/sw.js</strong>, ready to route requests when the controller and Wisp transport are available.</p></article><article class="note"><h3>Next on the chart</h3><p>Package the Scramjet runtime artifacts locally, add BareMux transport selection, and expand the games workspace without making the desktop harder to scan.</p></article></div></section>
 			</main>
 		</div>
-		<footer>Anchor OS V8 · local workspace build · <span id="sw-status">checking service worker</span></footer>
+		<footer>Lithium V5 · local workspace build · <span id="sw-status">checking service worker</span></footer>
 	</div>
 	<script>
 		const $ = (id) => document.getElementById(id);
