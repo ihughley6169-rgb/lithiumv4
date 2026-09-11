@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Anti-Block by Lithium</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 50px;
+    background-color: #f0f0f0;
+  }
+  h1 {
+    text-align: center;
+  }
+  label {
+    display: block;
+    margin-top: 10px;
+  }
+  input[type="text"], input[type="url"] {
+    width: 70%;
+    padding: 10px;
+    font-size: 1em;
+  }
+  button {
+    padding: 10px 20px;
+    font-size: 1em;
+    margin-top: 10px;
+  }
+  #result {
+    margin-top: 20px;
+    display: none;
+  }
+  textarea {
+    width: 100%;
+    height: 400px;
+    white-space: pre;
+    font-family: monospace;
+  }
+</style>
+</head>
+<body>
+
+<h1>Anti-Block</h1>
+
+<div style="max-width:600px; margin:auto;">
+  <label for="titleInput">Proxy Name:</label>
+  <input type="text" id="titleInput" placeholder="Enter page title" />
+
+  <label for="linkInput">Proxy Link:</label>
+  <input type="url" id="linkInput" placeholder="Enter URL here" />
+
+  <button onclick="generateFullIframeHTML()">Generate HTML File</button>
+</div>
+
+<div id="result">
+  <h2>Copy Your Full HTML Page</h2>
+  <p>Save this code as a .html file and open in your browser.</p>
+  <textarea id="htmlCode" readonly></textarea>
+</div>
+
+<script>
+function generateFullIframeHTML() {
+  const title = document.getElementById('titleInput').value.trim() || 'Embedded Page';
+  const url = document.getElementById('linkInput').value.trim();
+  if (!url) {
+    alert('Please enter a URL.');
+    return;
+  }
+
+  const fullHTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>${title}</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+  }
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+</style>
+</head>
+<body>
+<iframe src="${url}" title="${title}"></iframe>
+</body>
+</html>`;
+
+  document.getElementById('htmlCode').value = fullHTML;
+  document.getElementById('result').style.display = 'block';
+}
+</script>
+
+</body>
+</html>
