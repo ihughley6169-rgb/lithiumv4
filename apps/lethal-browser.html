@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lethal Browser</title>
-    <link rel="icon" href="/sources/petezahgames/public/logo.png" />
+    <link rel="icon" type="image/svg+xml" href="/assets/lithium-mark.svg" />
     <style>
       body,
       html {
@@ -46,16 +46,46 @@
         font-size: 13px;
         letter-spacing: 0.02em;
       }
-      #lethal-nav { position: fixed; top: 10px; left: 10px; right: 10px; z-index: 4; display: flex; gap: 8px; padding: 8px; border: 1px solid rgba(255,255,255,.14); border-radius: 10px; background: rgba(4,8,14,.86); backdrop-filter: blur(14px); }
-      #lethal-url { flex: 1; min-width: 0; padding: 9px 12px; border: 1px solid #27354a; border-radius: 7px; outline: 0; color: #e7efff; background: #0d1420; }
-      #lethal-go { padding: 0 14px; border: 0; border-radius: 7px; color: #07100b; background: #b4ff9f; cursor: pointer; }
+      #lethal-nav { position: fixed; top: 10px; left: 10px; right: 10px; z-index: 4; display: flex; align-items: center; gap: 6px; padding: 7px; border: 1px solid rgba(255,255,255,.14); border-radius: 12px; background: rgba(4,8,14,.9); backdrop-filter: blur(14px); box-shadow: 0 12px 35px rgba(0,0,0,.28); }
+      .lethal-tool, #lethal-go { width: 32px; height: 32px; padding: 0; border: 0; border-radius: 8px; color: #a8b8cc; background: transparent; cursor: pointer; font: 600 15px system-ui, sans-serif; }
+      .lethal-tool:hover, #lethal-go:hover { color: #07100b; background: #b4ff9f; }
+      .lethal-tool:disabled { opacity: .3; cursor: default; }
+      #lethal-url { flex: 1; min-width: 0; padding: 9px 12px; border: 1px solid #27354a; border-radius: 8px; outline: 0; color: #e7efff; background: #0d1420; font: 13px system-ui, sans-serif; }
+      #lethal-go { width: auto; padding: 0 13px; color: #07100b; background: #b4ff9f; }
+      #lethal-panels { position: fixed; top: 62px; right: 10px; z-index: 5; width: min(360px, calc(100vw - 20px)); color: #d9e4f3; }
+      .lethal-panel { display: none; padding: 14px; border: 1px solid rgba(255,255,255,.14); border-radius: 12px; background: rgba(7,13,23,.96); box-shadow: 0 18px 45px rgba(0,0,0,.42); }
+      .lethal-panel.open { display: block; }
+      .lethal-panel h2 { margin: 0 0 10px; font-size: 14px; color: #f1f6ff; }
+      .lethal-list { display: grid; gap: 6px; max-height: 300px; overflow: auto; }
+      .lethal-item { display: flex; align-items: center; gap: 9px; padding: 9px; border-radius: 8px; background: rgba(255,255,255,.05); font-size: 12px; }
+      .lethal-item button { margin-left: auto; border: 0; border-radius: 6px; padding: 5px 8px; color: #b4ff9f; background: rgba(180,255,159,.1); cursor: pointer; }
+      .lethal-empty { color: #718198; font-size: 12px; }
+      #lethal-tabs { position: fixed; top: 0; left: 0; right: 0; z-index: 3; display: flex; justify-content: center; gap: 4px; padding: 72px 10px 0; pointer-events: none; }
+      .lethal-tab { pointer-events: auto; border: 1px solid rgba(255,255,255,.12); border-radius: 7px; padding: 6px 10px; color: #93a5bc; background: rgba(4,8,14,.8); cursor: pointer; font-size: 11px; }
+      .lethal-tab.active { color: #f1f6ff; border-color: rgba(180,255,159,.55); }
     </style>
     <script src="/sources/petezahgames/public/m4thx/index.js?v=dl13"></script>
     <script src="/sources/petezahgames/public/q9vx/sj.all.js?v=dl13"></script>
     <script>var _CONFIG = { streamurl: "wss://wisp.mercurywork.shop/", bareurl: "https://bare-server.netlify.app/" };</script>
   </head>
   <body>
-    <form id="lethal-nav"><input id="lethal-url" value="https://example.com" aria-label="Lethal Browser address"><button id="lethal-go" type="submit">Go</button></form>
+    <form id="lethal-nav">
+      <button class="lethal-tool" id="lethal-back" type="button" title="Back" aria-label="Back">&#8592;</button>
+      <button class="lethal-tool" id="lethal-forward" type="button" title="Forward" aria-label="Forward">&#8594;</button>
+      <button class="lethal-tool" id="lethal-reload" type="button" title="Reload" aria-label="Reload">&#8635;</button>
+      <input id="lethal-url" value="https://example.com" aria-label="Lethal Browser address" autocomplete="off">
+      <button class="lethal-tool" id="lethal-bookmark" type="button" title="Bookmark" aria-label="Bookmark">&#9734;</button>
+      <button class="lethal-tool" id="lethal-bookmarks" type="button" title="Bookmarks" aria-label="Bookmarks">&#128278;</button>
+      <button class="lethal-tool" id="lethal-history" type="button" title="History" aria-label="History">&#9716;</button>
+      <button class="lethal-tool" id="lethal-extensions" type="button" title="Extensions" aria-label="Extensions">&#9881;</button>
+      <button id="lethal-go" type="submit">Go</button>
+    </form>
+    <div id="lethal-tabs" aria-label="Open pages"></div>
+    <div id="lethal-panels">
+      <section class="lethal-panel" id="bookmarks-panel"><h2>Bookmarks</h2><div class="lethal-list" id="bookmarks-list"></div></section>
+      <section class="lethal-panel" id="history-panel"><h2>Recent history</h2><div class="lethal-list" id="history-list"></div></section>
+      <section class="lethal-panel" id="extensions-panel"><h2>Extensions</h2><div class="lethal-list" id="extensions-list"></div></section>
+    </div>
     <div id="status"><p>Loading…</p></div>
     <div id="iframe-container"></div>
     <script>
@@ -318,6 +348,156 @@
         } else {
           window.addEventListener("DOMContentLoaded", loadFromHash);
         }
+      })();
+    </script>
+    <script>
+      (function () {
+        var bookmarkKey = "lithium-browser-bookmarks";
+        var historyKey = "lithium-browser-history";
+        var extensionKey = "lithium-browser-extensions";
+        var builtinExtensions = [
+          { id: "reader", name: "Reader mode", description: "Improve typography on any page.", enabled: true },
+          { id: "dim", name: "Dim the web", description: "Reduce harsh white backgrounds.", enabled: false }
+        ];
+        var panels = ["bookmarks-panel", "history-panel", "extensions-panel"];
+        var urlInput = document.getElementById("lethal-url");
+        var tabs = document.getElementById("lethal-tabs");
+
+        function read(key, fallback) {
+          try { return JSON.parse(localStorage.getItem(key) || "null") || fallback; } catch (e) { return fallback; }
+        }
+        function write(key, value) {
+          try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) {}
+        }
+        function currentUrl() {
+          var raw = window.location.hash.slice(1);
+          try { raw = decodeURIComponent(raw); } catch (e) {}
+          return raw || "https://example.com";
+        }
+        function navigate(url) {
+          var value = String(url || "").trim();
+          if (!value) return;
+          if (!/^https?:\/\//i.test(value)) value = "https://" + value;
+          window.location.hash = value;
+        }
+        function closePanels() {
+          panels.forEach(function (id) { document.getElementById(id).classList.remove("open"); });
+        }
+        function togglePanel(id) {
+          var panel = document.getElementById(id);
+          var open = panel.classList.contains("open");
+          closePanels();
+          if (!open) panel.classList.add("open");
+        }
+        function domain(url) {
+          try { return new URL(url).hostname; } catch (e) { return url; }
+        }
+        function renderBookmarks() {
+          var list = document.getElementById("bookmarks-list");
+          var items = read(bookmarkKey, []);
+          list.innerHTML = items.length ? items.map(function (item, index) {
+            return '<div class="lethal-item"><span>★</span><span title="' + item.url.replace(/"/g, "&quot;") + '">' + (item.title || domain(item.url)) + '</span><button data-bookmark="' + index + '">Open</button></div>';
+          }).join("") : '<span class="lethal-empty">No bookmarks yet. Star the current page to save it.</span>';
+          list.querySelectorAll("[data-bookmark]").forEach(function (button) {
+            button.onclick = function () { navigate(items[Number(button.dataset.bookmark)].url); closePanels(); };
+          });
+        }
+        function renderHistory() {
+          var list = document.getElementById("history-list");
+          var items = read(historyKey, []);
+          list.innerHTML = items.length ? items.slice(0, 20).map(function (item, index) {
+            return '<div class="lethal-item"><span>' + (index + 1) + '</span><span title="' + item.url.replace(/"/g, "&quot;") + '">' + (item.title || domain(item.url)) + '</span><button data-history="' + index + '">Open</button></div>';
+          }).join("") : '<span class="lethal-empty">Your browsing history will appear here.</span>';
+          list.querySelectorAll("[data-history]").forEach(function (button) {
+            button.onclick = function () { navigate(items[Number(button.dataset.history)].url); closePanels(); };
+          });
+        }
+        function extensionState() {
+          var saved = read(extensionKey, {});
+          return builtinExtensions.map(function (item) { return Object.assign({}, item, { enabled: saved[item.id] === undefined ? item.enabled : saved[item.id] }); });
+        }
+        function applyExtensions() {
+          var frame = document.querySelector("#iframe-container iframe");
+          if (!frame) return;
+          try {
+            var doc = frame.contentDocument;
+            if (!doc || !doc.head) return;
+            var old = doc.getElementById("lithium-browser-extensions");
+            if (old) old.remove();
+            var style = doc.createElement("style");
+            style.id = "lithium-browser-extensions";
+            var active = extensionState().filter(function (item) { return item.enabled; });
+            style.textContent = active.map(function (item) {
+              return item.id === "reader" ? "body{font-family:Georgia,serif!important;line-height:1.65!important} p,article,main{max-width:74ch!important}" : "html{filter:brightness(.84) saturate(.9)!important}";
+            }).join("\n");
+            doc.head.appendChild(style);
+          } catch (e) {}
+        }
+        function renderExtensions() {
+          var list = document.getElementById("extensions-list");
+          list.innerHTML = extensionState().map(function (item) {
+            return '<div class="lethal-item"><span>◈</span><span><strong>' + item.name + '</strong><br><small>' + item.description + '</small></span><button data-extension="' + item.id + '">' + (item.enabled ? "On" : "Off") + '</button></div>';
+          }).join("");
+          list.querySelectorAll("[data-extension]").forEach(function (button) {
+            button.onclick = function () {
+              var state = read(extensionKey, {}); var id = button.dataset.extension;
+              state[id] = !extensionState().find(function (item) { return item.id === id; }).enabled;
+              write(extensionKey, state); renderExtensions(); applyExtensions();
+            };
+          });
+        }
+        function renderTabs() {
+          var items = read(historyKey, []).slice(0, 6);
+          var current = currentUrl();
+          tabs.innerHTML = items.map(function (item) {
+            return '<button class="lethal-tab' + (item.url === current ? ' active' : '') + '" data-tab-url="' + encodeURIComponent(item.url) + '">' + (item.title || domain(item.url)).slice(0, 24) + '</button>';
+          }).join("");
+          tabs.querySelectorAll("[data-tab-url]").forEach(function (button) { button.onclick = function () { navigate(decodeURIComponent(button.dataset.tabUrl)); }; });
+        }
+        function sync() {
+          var url = currentUrl();
+          urlInput.value = url;
+          var items = read(historyKey, []).filter(function (item) { return item.url !== url; });
+          items.unshift({ url: url, title: domain(url), visitedAt: Date.now() });
+          write(historyKey, items.slice(0, 50));
+          renderBookmarks(); renderHistory(); renderExtensions(); renderTabs();
+          setTimeout(applyExtensions, 900);
+          var frame = document.querySelector("#iframe-container iframe");
+          if (frame) frame.addEventListener("load", applyExtensions, { once: true });
+          document.getElementById("lethal-bookmark").textContent = read(bookmarkKey, []).some(function (item) { return item.url === url; }) ? "★" : "☆";
+        }
+        document.getElementById("lethal-back").onclick = function () { window.history.back(); };
+        document.getElementById("lethal-forward").onclick = function () { window.history.forward(); };
+        document.getElementById("lethal-reload").onclick = function () { window.dispatchEvent(new HashChangeEvent("hashchange")); };
+        document.getElementById("lethal-bookmark").onclick = function () {
+          var url = currentUrl(); var items = read(bookmarkKey, []); var existing = items.findIndex(function (item) { return item.url === url; });
+          if (existing >= 0) items.splice(existing, 1); else items.unshift({ url: url, title: domain(url) });
+          write(bookmarkKey, items); sync();
+        };
+        document.getElementById("lethal-bookmarks").onclick = function () { togglePanel("bookmarks-panel"); renderBookmarks(); };
+        document.getElementById("lethal-history").onclick = function () { togglePanel("history-panel"); renderHistory(); };
+        document.getElementById("lethal-extensions").onclick = function () { togglePanel("extensions-panel"); renderExtensions(); };
+        document.getElementById("lethal-nav").addEventListener("submit", function () { closePanels(); });
+        document.getElementById("bookmarks-panel").addEventListener("click", function (event) { if (event.target === this) closePanels(); });
+        urlInput.addEventListener("focus", function () { urlInput.select(); });
+        urlInput.addEventListener("keydown", function (event) { if (event.key === "Escape") urlInput.blur(); });
+        document.addEventListener("click", function (event) {
+          if (!event.target.closest("#lethal-nav, #lethal-panels, #lethal-tabs")) closePanels();
+        });
+        document.addEventListener("keydown", function (event) {
+          var modifier = event.ctrlKey || event.metaKey;
+          if (modifier && event.key.toLowerCase() === "l") {
+            event.preventDefault(); urlInput.focus(); urlInput.select();
+          } else if (modifier && event.key.toLowerCase() === "d") {
+            event.preventDefault(); document.getElementById("lethal-bookmark").click();
+          } else if (event.altKey && event.key === "ArrowLeft") {
+            event.preventDefault(); window.history.back();
+          } else if (event.altKey && event.key === "ArrowRight") {
+            event.preventDefault(); window.history.forward();
+          }
+        });
+        window.addEventListener("hashchange", sync);
+        sync();
       })();
     </script>
   </body>

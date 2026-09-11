@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Lithium Games</title>
+  <title>Lithium GameDeck</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -31,9 +31,9 @@
 </head>
 <body>
   <main class="shell">
-    <header class="header glass"><a class="brand" href="./"><span class="brand-icon">Li</span><span class="brand-text">Lithium<span>.SH / GAMES</span></span></a><div class="header-actions"><button class="icon-btn" id="settings-toggle" title="Settings"><i class="fa-solid fa-sliders"></i></button></div></header>
+    <header class="header glass"><a class="brand" href="./"><span class="brand-icon">L</span><span class="brand-text">Lithium<span>.SH / GAMEDECK</span></span></a><nav aria-label="GameDeck navigation"><span>LIBRARY</span><span>COMMUNITY</span><span>PLAYLISTS</span></nav><div class="header-actions"><button class="icon-btn" id="settings-toggle" title="Settings"><i class="fa-solid fa-sliders"></i></button></div></header>
     <section class="controls"><div class="search-wrap"><i class="fa-solid fa-magnifying-glass"></i><input id="search" placeholder="Search games..." autocomplete="off"></div><select id="category" aria-label="Filter category"><option value="">All categories</option><option value="action">Action</option><option value="racing">Racing</option><option value="skill">Skill</option><option value="classic">Classic</option><option value="sports">Sports</option></select></section>
-    <div class="stats"><span><strong id="count">0</strong> games</span><span>•</span><span>local Lithium library</span></div>
+    <div class="stats"><span><strong id="count">0</strong> games</span><span>•</span><span>local Lithium library</span><span>•</span><span>GameDeck / Steam mode</span></div>
     <section id="container"></section>
   </main>
   <div class="overlay" id="game-overlay"><section class="modal"><header class="modal-head"><span class="modal-title" id="game-title">Lithium Game</span><div class="modal-actions"><button id="game-fullscreen" title="Fullscreen"><i class="fa-solid fa-expand"></i></button><button id="game-newtab" title="Open new tab"><i class="fa-solid fa-up-right-from-square"></i></button><button id="game-close" title="Close"><i class="fa-solid fa-xmark"></i></button></div></header><iframe class="game-frame" id="game-frame" title="Lithium game"></iframe></section></div>
